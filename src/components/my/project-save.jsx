@@ -8,7 +8,9 @@ import classNames from 'classnames';
 const ProjectSaveComponent = props => {
     const {
         onChange,
-        projectName
+        projectName,
+        save,
+        saveAs
     } = props;
 
     return (
@@ -22,12 +24,12 @@ const ProjectSaveComponent = props => {
                 />
             </div>
             <div className={classNames(styles.menuBarItem)}>
-                <Button className={classNames(styles.shareButton)}>
+                <Button className={classNames(styles.shareButton)} onClick={save}>
                     保存
                 </Button>
             </div>
             <div className={classNames(styles.menuBarItem)}>
-                <Button className={classNames(styles.shareButton)}>
+                <Button className={classNames(styles.shareButton)} onClick={saveAs}>
                     另存
                 </Button>
             </div>

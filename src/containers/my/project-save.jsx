@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import ProjectSaveComponent from '../../components/my/project-save.jsx';
-import {getQueryString} from '../../lib/request';
+import request ,{getQueryString, getTargetId} from '../../lib/request';
 
 /**
  * 本组件用于向服务器保存作品
@@ -28,7 +28,8 @@ class ProjectSave extends React.Component {
             'handleChange'
         ]);
         this.state = {
-            projectName: ''
+            projectName: '',
+            id: ''
         };
     }
 
@@ -37,6 +38,14 @@ class ProjectSave extends React.Component {
      * 通过输入链接获取作品信息
      */
     componentDidMount (){
+        const id = getTargetId();
+        if (id !== null){
+            request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
+                if (result.code !== request.NotFindError){
+                    this.setState({id: result.id, workName: result.name, projectName: result.name});
+                }
+            });
+        }
         // 获取作品数据
         // const id = getQueryString('projectId');
         // if (id !== null && typeof id !== 'undefined' && id !== ''){
@@ -54,27 +63,49 @@ class ProjectSave extends React.Component {
     saveProject (isNewProject = true) {
         let filename = '';
         if (this.state.projectName === ''){
-            const date = new Date();
-            const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
-            filename = `未命名作品-${timestamp}.my`;
+            alert('保存失败,请先为作品命名!');
+            return false;
+        }else{
+            filename = this.state.projectName;
         }
-        const saveLink = document.createElement('a');
-        document.body.appendChild(saveLink);
-
         this.props.vm.saveProjectSb3().then(content => {
             // Use special ms version if available to get it working on Edge.
             if (navigator.msSaveOrOpenBlob) {
                 navigator.msSaveOrOpenBlob(content, filename);
                 return;
             }
-
-            const url = window.URL.createObjectURL(content);
-            saveLink.href = url;
-            saveLink.download = filename;
-            saveLink.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(saveLink);
+            let saveData = {
+              'file':content
+            };
+            request.file_request(request.POST, saveData, '/scratch/saveProject', result => {
+                if (result.code == 1){
+                    // 上传成功
+                }
+            });
         });
+        // let filename = '';
+        // if (this.state.projectName === ''){
+        //     const date = new Date();
+        //     const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
+        //     filename = `未命名作品-${timestamp}.my`;
+        // }
+        // const saveLink = document.createElement('a');
+        // document.body.appendChild(saveLink);
+        //
+        // this.props.vm.saveProjectSb3().then(content => {
+        //     // Use special ms version if available to get it working on Edge.
+        //     if (navigator.msSaveOrOpenBlob) {
+        //         navigator.msSaveOrOpenBlob(content, filename);
+        //         return;
+        //     }
+        //
+        //     const url = window.URL.createObjectURL(content);
+        //     saveLink.href = url;
+        //     saveLink.download = filename;
+        //     saveLink.click();
+        //     window.URL.revokeObjectURL(url);
+        //     document.body.removeChild(saveLink);
+        // });
     }
 
     handleChange (event) {
@@ -93,6 +124,8 @@ class ProjectSave extends React.Component {
             <ProjectSaveComponent
                 projectName={this.state.projectName}
                 onChange={this.handleChange}
+                save={this.saveProject.bind(this,true)}
+                saveAs={this.saveProject.bind(this,false)}
             />);
     }
 

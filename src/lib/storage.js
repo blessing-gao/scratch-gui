@@ -4,7 +4,8 @@ import defaultProjectAssets from './default-project';
 
 // const PROJECT_SERVER = 'https://projects.scratch.mit.edu';
 // const ASSET_SERVER = 'https://cdn.assets.scratch.mit.edu';
-const PROJECT_SERVER = 'http://localhost:8080';
+// const PROJECT_SERVER = 'http://localhost:8080';
+const PROJECT_SERVER = 'http://192.168.1.129:8080';
 const ASSET_SERVER = 'http://owkomi1zd.bkt.clouddn.com/';
 // const ASSET_SERVER = 'http://assets.imayuan.com/';
 /**

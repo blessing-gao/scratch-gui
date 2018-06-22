@@ -8,12 +8,18 @@ export const COVER_SERVER = 'http://cdn.imayuan.com/cover/';
 export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
     // return 'http://localhost:8080';
-    return `${window.location.protocol}//${window.location.host}`;
+    // return `${window.location.protocol}//${window.location.host}`;
+    return 'http://192.168.1.129:8080';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
     const r = window.location.search.substr(1).match(reg);
     if (r !== null) return decodeURIComponent(r[2]);
+    return null;
+}
+export function getTargetId(url = window.location.href) {
+    const arr = url.split(/\#|\?/);
+    if(arr.length > 1) return arr[1];
     return null;
 }
 
@@ -104,5 +110,43 @@ export default {
             alert('网络错误，请稍后尝试');
         }
 
+    },
+    file_request: function (func, data, path, callback, asyn = true) {
+        try {
+            const HOST = getHost();
+            if (func == this.POST){
+                var formData = new FormData();
+                if (typeof data === 'object'){
+                    for (const k in data){
+                        formData.append(k,data[k]);
+                    }
+                }
+            }
+            const obj = new XMLHttpRequest();
+            obj.open(func, HOST + path, asyn);
+            obj.send(formData);
+            obj.onreadystatechange = function () {
+                if (obj.readyState == XMLHttpRequest.DONE){
+                    if (obj.status == 200){
+                        const res = JSON.parse(obj.responseText);
+                        if (asyn){
+                            callback(res);
+                        } else {
+                            return res;
+                        }
+                    } else {
+                        callback({error: obj.status});
+                        return {error: obj.status};
+                    }
+                }
+                // else {
+                //     callback({errno: false});
+                // }
+
+            };
+        } catch (e){
+            console.log(e);
+            alert('网络错误，请稍后尝试');
+        }
     }
 };
