@@ -38,7 +38,7 @@ import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
 import SaveModal from '../../containers/my/save-modal.jsx';
-
+import WorkLibrary from '../../containers/my/work-library.jsx';
 const messages = {addExtension: '添加拓展'};
 
 // Cache this value to only retrieve it once the first time.
@@ -74,6 +74,7 @@ const GUIComponent = props => {
         stageSizeMode,
         tipsLibraryVisible,
         vm,
+        workLibraryVisible,
         ...componentProps
     } = omit(props, 'dispatch');
     if (children) {
@@ -110,6 +111,9 @@ const GUIComponent = props => {
                 {previewInfoVisible ? null : null}
                 {saveModalVisible ? (
                     <SaveModal />
+                ) : null}
+                {workLibraryVisible ? (
+                    <WorkLibrary />
                 ) : null}
                 {loading ? (
                     <Loader />
@@ -269,7 +273,8 @@ GUIComponent.propTypes = {
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     targetIsStage: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    workLibraryVisible: PropTypes.bool
 };
 GUIComponent.defaultProps = {
     backpackOptions: {

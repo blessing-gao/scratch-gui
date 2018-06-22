@@ -12,7 +12,7 @@ import Menu from '../../containers/menu.jsx';
 import {MenuItem, MenuSection} from '../menu/menu.jsx';
 import ProjectSaver from '../../containers/project-saver.jsx';
 import ProjectSave from '../../containers/my/project-save.jsx';
-import {closePreviewInfo, openImportInfo, openTipsLibrary, openSaveModal} from '../../reducers/modals';
+import {closePreviewInfo, openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
 import {
     openFileMenu,
@@ -304,6 +304,7 @@ const MenuBar = props => (
                     styles.hoverable,
                     styles.mystuffButton
                 )}
+                onClick={props.onOpenWorkLibrary}
             >
                 <img
                     className={styles.mystuffIcon}
@@ -341,6 +342,7 @@ MenuBar.propTypes = {
     onClickFile: PropTypes.func,
     onOpenSaveModal: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
+    onOpenWorkLibrary: PropTypes.func,
     onRequestCloseEdit: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
     onSeeCommunity: PropTypes.func,
@@ -353,6 +355,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    onOpenWorkLibrary: () => dispatch(openWorkLibrary()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
     onClickFile: () => dispatch(openFileMenu()),
     onRequestCloseFile: () => dispatch(closeFileMenu()),

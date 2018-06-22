@@ -5,8 +5,6 @@ import {getHost} from '../../lib/request';
 import request from '../../lib/request';
 import Box from '../box/box.jsx';
 import styles from './work-library-item.css';
-import {message, Modal, Card} from 'antd';
-
 
 const host = getHost();
 class WorkLibraryItem extends React.PureComponent {
