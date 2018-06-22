@@ -10,6 +10,7 @@ export function getHost () {
     // return 'http://localhost:8080';
     // return `${window.location.protocol}//${window.location.host}`;
     return 'http://192.168.1.129:8080';
+    // return 'http://192.168.1.132:8181';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);

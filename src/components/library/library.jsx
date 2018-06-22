@@ -12,8 +12,9 @@ import TagButton from '../../containers/tag-button.jsx';
 
 import styles from './library.css';
 
-const ALL_TAG_TITLE = 'All';
-const tagListPrefix = [{title: ALL_TAG_TITLE}];
+// const ALL_TAG_TITLE = 'All';
+const ALL_TAG_TITLE = '所有';
+const tagListPrefix = [{id: 0, title: ALL_TAG_TITLE}];
 
 const messages = defineMessages({
     filterPlaceholder: {
@@ -40,7 +41,7 @@ class LibraryComponent extends React.Component {
         this.state = {
             selectedItem: null,
             filterQuery: '',
-            selectedTag: ALL_TAG_TITLE.toLowerCase()
+            selectedTag: ALL_TAG_TITLE
         };
     }
     componentDidUpdate (prevProps, prevState) {
@@ -62,7 +63,7 @@ class LibraryComponent extends React.Component {
     handleTagClick (tag) {
         this.setState({
             filterQuery: '',
-            selectedTag: tag.toLowerCase()
+            selectedTag: tag
         });
     }
     handleMouseEnter (id) {
@@ -74,14 +75,14 @@ class LibraryComponent extends React.Component {
     handleFilterChange (event) {
         this.setState({
             filterQuery: event.target.value,
-            selectedTag: ALL_TAG_TITLE.toLowerCase()
+            selectedTag: ALL_TAG_TITLE
         });
     }
     handleFilterClear () {
         this.setState({filterQuery: ''});
     }
     getFilteredData () {
-        if (this.state.selectedTag === 'all') {
+        if (this.state.selectedTag === '所有') {
             if (!this.state.filterQuery) return this.props.data;
             return this.props.data.filter(dataItem => (
                 (dataItem.tags || [])
