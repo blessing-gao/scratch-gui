@@ -119,6 +119,7 @@ const mapStateToProps = state => ({
     loadingStateVisible: state.scratchGui.modals.loadingProject,
     previewInfoVisible: state.scratchGui.modals.previewInfo,
     saveModalVisible: state.scratchGui.modals.saveModal,
+    workLibraryVisible: state.scratchGui.modals.workLibrary,
     targetIsStage: (
         state.scratchGui.targets.stage &&
         state.scratchGui.targets.stage.id === state.scratchGui.targets.editingTarget

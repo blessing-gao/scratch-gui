@@ -14,8 +14,8 @@ const MODAL_SOUND_LIBRARY = 'soundLibrary';
 const MODAL_SPRITE_LIBRARY = 'spriteLibrary';
 const MODAL_SOUND_RECORDER = 'soundRecorder';
 const MODAL_SAVE_MODAL = 'saveModal';
-
 const MODAL_TIPS_LIBRARY = 'tipsLibrary';
+const MODAL_WORK_LIBRARY = 'workLibrary';
 
 
 const initialState = {
@@ -30,8 +30,8 @@ const initialState = {
     [MODAL_SPRITE_LIBRARY]: false,
     [MODAL_SOUND_RECORDER]: false,
     [MODAL_TIPS_LIBRARY]: false,
-    [MODAL_SAVE_MODAL]: false
-
+    [MODAL_SAVE_MODAL]: false,
+    [MODAL_WORK_LIBRARY]: false
 };
 
 const reducer = function (state, action) {
@@ -62,53 +62,57 @@ const closeModal = function (modal) {
     };
 };
 const openBackdropLibrary = function () {
-    analytics.pageview('/libraries/backdrops');
+    // analytics.pageview('/libraries/backdrops');
     return openModal(MODAL_BACKDROP_LIBRARY);
 };
 const openCameraCapture = function () {
-    analytics.pageview('/modals/camera');
+    // analytics.pageview('/modals/camera');
     return openModal(MODAL_CAMERA_CAPTURE);
 };
 const openCostumeLibrary = function () {
-    analytics.pageview('/libraries/costumes');
+    // analytics.pageview('/libraries/costumes');
     return openModal(MODAL_COSTUME_LIBRARY);
 };
 const openExtensionLibrary = function () {
-    analytics.pageview('/libraries/extensions');
+    // analytics.pageview('/libraries/extensions');
     return openModal(MODAL_EXTENSION_LIBRARY);
 };
 const openImportInfo = function () {
-    analytics.pageview('modals/import');
+    // analytics.pageview('modals/import');
     return openModal(MODAL_IMPORT_INFO);
 };
 const openLoadingProject = function () {
-    analytics.pageview('modals/loading');
+    // analytics.pageview('modals/loading');
     return openModal(MODAL_LOADING_PROJECT);
 };
 const openPreviewInfo = function () {
-    analytics.pageview('/modals/preview');
+    // analytics.pageview('/modals/preview');
     return openModal(MODAL_PREVIEW_INFO);
 };
 const openSoundLibrary = function () {
-    analytics.pageview('/libraries/sounds');
+    // analytics.pageview('/libraries/sounds');
     return openModal(MODAL_SOUND_LIBRARY);
 };
 const openSpriteLibrary = function () {
-    analytics.pageview('/libraries/sprites');
+    // analytics.pageview('/libraries/sprites');
     return openModal(MODAL_SPRITE_LIBRARY);
 };
 const openSoundRecorder = function () {
-    analytics.pageview('/modals/microphone');
+    // analytics.pageview('/modals/microphone');
     return openModal(MODAL_SOUND_RECORDER);
 };
 const openTipsLibrary = function () {
-    analytics.pageview('/modals/tips');
+    // analytics.pageview('/modals/tips');
     return openModal(MODAL_TIPS_LIBRARY);
 };
 const openSaveModal = function () {
-    analytics.pageview('/modals/save');
+    // analytics.pageview('/modals/save');
     return openModal(MODAL_SAVE_MODAL);
-}
+};
+const openWorkLibrary = function () {
+    // analytics.pageview('/modals/work');
+    return openModal(MODAL_WORK_LIBRARY);
+};
 const closeBackdropLibrary = function () {
     return closeModal(MODAL_BACKDROP_LIBRARY);
 };
@@ -145,6 +149,10 @@ const closeTipsLibrary = function () {
 const closeSaveModal = function () {
     return closeModal(MODAL_SAVE_MODAL);
 };
+const closeWorkLibrary = function () {
+    // analytics.pageview('/modals/tips');
+    return closeModal(MODAL_WORK_LIBRARY);
+};
 export {
     reducer as default,
     initialState as modalsInitialState,
@@ -160,6 +168,7 @@ export {
     openSoundRecorder,
     openTipsLibrary,
     openSaveModal,
+    openWorkLibrary,
     closeBackdropLibrary,
     closeCameraCapture,
     closeCostumeLibrary,
@@ -171,5 +180,6 @@ export {
     closeSoundLibrary,
     closeSoundRecorder,
     closeTipsLibrary,
-    closeSaveModal
+    closeSaveModal,
+    closeWorkLibrary
 };
