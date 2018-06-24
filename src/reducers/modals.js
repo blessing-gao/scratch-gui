@@ -150,7 +150,6 @@ const closeSaveModal = function () {
     return closeModal(MODAL_SAVE_MODAL);
 };
 const closeWorkLibrary = function () {
-    // analytics.pageview('/modals/tips');
     return closeModal(MODAL_WORK_LIBRARY);
 };
 export {

@@ -5,6 +5,8 @@ import WorkLibraryItem from './work-library-item.jsx';
 import ModalComponent from '../modal/modal.jsx';
 import styles from './work-library.css';
 import {COVER_SERVER} from '../../lib/request';
+import classNames from "classnames";
+import {intlShape} from "react-intl";
 
 class WorkLibraryComponent extends React.Component {
     constructor (props) {
@@ -21,27 +23,54 @@ class WorkLibraryComponent extends React.Component {
                 filterQuery={''}
                 onRequestClose={this.props.onRequestClose}
             >
-                <div className={styles.libraryScrollGrid}>
-                    {this.props.data.map((dataItem, index) => {
-                        /*
-                             * todo 后期如果需要可添加默认图片地址
-                             * https://cdn.assets.scratch.mit.edu/internalapi/asset/${dataItem.md5}/get/` : dataItem.rawURL;
-                             */
-                        const scratchURL = dataItem.cover ?
-                            `${COVER_SERVER}${dataItem.cover}` : `http://cdn.imayuan.com/b579aeeb143e79c47e2e65cbd3c0fe36.svg`;
-                        return (
-                            <WorkLibraryItem
-                                datetime={dataItem.createDate}
-                                iconURL={scratchURL}
-                                id={dataItem.id}
-                                key={index}
-                                name={dataItem.name}
-                                onDelete={this.props.onDelete}
-                            />);
-                    })
-                    }
-
+                {(this.props.filterable || this.props.tags) && (
+                    <div className={styles.filterBar}>
+                        {this.props.filterable && (
+                            <Filter
+                                className={classNames(
+                                    styles.filterBarItem,
+                                    styles.filter
+                                )}
+                                filterQuery={this.state.filterQuery}
+                                inputClassName={styles.filterInput}
+                                placeholderText={this.props.intl.formatMessage(messages.filterPlaceholder)}
+                                onChange={this.handleFilterChange}
+                                onClear={this.handleFilterClear}
+                            />
+                        )}
+                        {this.props.filterable && this.props.tags && (
+                            <Divider className={classNames(styles.filterBarItem, styles.divider)} />
+                        )}
+                    </div>
+                )}
+                <div
+                    className={classNames(styles.libraryScrollGrid, {
+                        [styles.withFilterBar]: this.props.filterable || this.props.tags
+                    })}
+                    ref={this.setFilteredDataRef}
+                >
                 </div>
+                {/*<div className={styles.filterBar}>*/}
+                    {/*{this.props.data.map((dataItem, index) => {*/}
+                        {/*/**/}
+                             {/** 后期如果需要可添加默认图片地址*/}
+                             {/** https://cdn.assets.scratch.mit.edu/internalapi/asset/${dataItem.md5}/get/` : dataItem.rawURL;*/}
+                             {/**/}
+                        {/*const scratchURL = dataItem.cover ?*/}
+                            {/*`${COVER_SERVER}${dataItem.cover}` : `http://cdn.imayuan.com/b579aeeb143e79c47e2e65cbd3c0fe36.svg`;*/}
+                        {/*return (*/}
+                            {/*<WorkLibraryItem*/}
+                                {/*datetime={dataItem.createDate}*/}
+                                {/*iconURL={scratchURL}*/}
+                                {/*id={dataItem.id}*/}
+                                {/*key={index}*/}
+                                {/*name={dataItem.name}*/}
+                                {/*onDelete={this.props.onDelete}*/}
+                            {/*/>);*/}
+                    {/*})*/}
+                    {/*}*/}
+
+                {/*</div>*/}
             </ModalComponent>
         );
     }
@@ -60,9 +89,20 @@ WorkLibraryComponent.propTypes = {
         })
         /* eslint-enable react/no-unused-prop-types, lines-around-comment */
     ),
-    onRequestClose: PropTypes.func,
+    filterable: PropTypes.bool,
+    id: PropTypes.string.isRequired,
+    intl: intlShape.isRequired,
     onDelete: PropTypes.func,
+    onItemMouseEnter: PropTypes.func,
+    onItemMouseLeave: PropTypes.func,
+    onItemSelected: PropTypes.func,
+    onRequestClose: PropTypes.func,
+    tags: PropTypes.arrayOf(PropTypes.shape(TagButton.propTypes)),
     title: PropTypes.string.isRequired
+};
+
+WorkLibraryComponent.defaultProps = {
+    filterable: true
 };
 
 export default WorkLibraryComponent;

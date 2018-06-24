@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import WorkLibraryComponent from '../../components/my/work-library.jsx';
 import request from '../../lib/request';
-import {closeSaveModal} from "../../reducers/modals";
+import {closeWorkLibrary} from "../../reducers/modals";
 import {connect} from "react-redux";
 
 class WorkLibrary extends React.Component {
@@ -40,20 +40,20 @@ class WorkLibrary extends React.Component {
                 data={this.state.workList}
                 title="我的作品库"
                 onDelete={this.handleDelete}
-                onRequestClose={this.props.closeWorkModal}
+                onRequestClose={this.props.closeWorkLibrary}
             />
         );
     }
 }
 
 WorkLibrary.propTypes = {
-    closeWorkModal: PropTypes.func
+    closeWorkLibrary: PropTypes.func
 };
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
-    closeSaveModal: () => {
-        dispatch(closeWorkModal());
+    closeWorkLibrary: () => {
+        dispatch(closeWorkLibrary());
     }
 });
 
