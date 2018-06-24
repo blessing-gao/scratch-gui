@@ -7,9 +7,10 @@ export const ASSET_SERVER = 'http://owkomi1zd.bkt.clouddn.com/';
 export const COVER_SERVER = 'http://cdn.imayuan.com/cover/';
 export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
-    return 'http://localhost:8080';
+    // return 'http://localhost:8080';
     // return `${window.location.protocol}//${window.location.host}`;
-    // return 'http://192.168.1.129:8080';
+    return 'http://192.168.1.129:8080';
+    // return 'http://192.168.1.132:8181';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
@@ -111,7 +112,6 @@ export default {
         }
 
     },
-    // 用于文件流请求
     file_request: function (func, data, path, callback, asyn = true) {
         try {
             const HOST = getHost();

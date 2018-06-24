@@ -5,10 +5,11 @@ import {injectIntl, intlShape, defineMessages} from 'react-intl';
 import VM from 'scratch-vm';
 
 import analytics from '../lib/analytics';
-import spriteLibraryContent from '../lib/libraries/sprites.json';
+// import spriteLibraryContent from '../lib/libraries/sprites.json';
 import spriteTags from '../lib/libraries/sprite-tags';
 
 import LibraryComponent from '../components/library/library.jsx';
+import request from '../lib/request';
 
 const messages = defineMessages({
     libraryTitle: {
@@ -32,9 +33,28 @@ class SpriteLibrary extends React.PureComponent {
         this.state = {
             activeSprite: null,
             costumeIndex: 0,
-            sprites: spriteLibraryContent
+            sprites: [],
+            tags: null
         };
     }
+
+    componentDidMount () {
+        request.default_request(request.GET, null, `/internalapi/project/getResDict`, result => {
+            if (result.code !== request.NotFindError && result.value) {
+                let tags = [];
+                result.value.map(tag => {
+                    tags.push({id:tag.tagId,title:tag.tagName});
+                });
+                this.setState({tags:tags});
+            }
+        });
+        request.default_request(request.GET, null, `/internalapi/project/getResource?type=2`, result => {
+            if (result.code !== request.NotFindError && result.value) {
+                this.setState({sprites: result.value});
+            }
+        });
+    }
+
     componentWillUnmount () {
         clearInterval(this.intervalId);
     }
@@ -82,7 +102,7 @@ class SpriteLibrary extends React.PureComponent {
             <LibraryComponent
                 data={this.state.sprites}
                 id="spriteLibrary"
-                tags={spriteTags}
+                tags={this.state.tags}
                 title={this.props.intl.formatMessage(messages.libraryTitle)}
                 onItemMouseEnter={this.handleMouseEnter}
                 onItemMouseLeave={this.handleMouseLeave}
