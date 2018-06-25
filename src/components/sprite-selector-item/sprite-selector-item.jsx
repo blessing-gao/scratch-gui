@@ -55,20 +55,12 @@ const SpriteSelectorItem = props => (
             <ContextMenu id={`${props.name}-${contextMenuId++}`}>
                 {props.onDuplicateButtonClick ? (
                     <MenuItem onClick={props.onDuplicateButtonClick}>
-                        <FormattedMessage
-                            defaultMessage="duplicate"
-                            description="Menu item to duplicate in the right click menu"
-                            id="gui.spriteSelectorItem.contextMenuDuplicate"
-                        />
+                        复制
                     </MenuItem>
                 ) : null}
                 {props.onDeleteButtonClick ? (
                     <MenuItem onClick={props.onDeleteButtonClick}>
-                        <FormattedMessage
-                            defaultMessage="delete"
-                            description="Menu item to delete in the right click menu"
-                            id="gui.spriteSelectorItem.contextMenuDelete"
-                        />
+                        删除
                     </MenuItem>
                 ) : null }
             </ContextMenu>

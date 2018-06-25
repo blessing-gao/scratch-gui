@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
-import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import VM from 'scratch-vm';
 
 import AssetPanel from '../components/asset-panel/asset-panel.jsx';
@@ -35,43 +34,15 @@ import searchIcon from '../components/action-menu/icon--search.svg';
 import costumeLibraryContent from '../lib/libraries/costumes.json';
 import backdropLibraryContent from '../lib/libraries/backdrops.json';
 
-const messages = defineMessages({
-    addLibraryBackdropMsg: {
-        defaultMessage: 'Choose a Backdrop',
-        description: 'Button to add a backdrop in the editor tab',
-        id: 'gui.costumeTab.addBackdropFromLibrary'
-    },
-    addLibraryCostumeMsg: {
-        defaultMessage: 'Choose a Costume',
-        description: 'Button to add a costume in the editor tab',
-        id: 'gui.costumeTab.addCostumeFromLibrary'
-    },
-    addBlankCostumeMsg: {
-        defaultMessage: 'Paint',
-        description: 'Button to add a blank costume in the editor tab',
-        id: 'gui.costumeTab.addBlankCostume'
-    },
-    addSurpriseCostumeMsg: {
-        defaultMessage: 'Surprise',
-        description: 'Button to add a surprise costume in the editor tab',
-        id: 'gui.costumeTab.addSurpriseCostume'
-    },
-    addFileBackdropMsg: {
-        defaultMessage: 'Upload Backdrop',
-        description: 'Button to add a backdrop by uploading a file in the editor tab',
-        id: 'gui.costumeTab.addFileBackdrop'
-    },
-    addFileCostumeMsg: {
-        defaultMessage: 'Upload Costume',
-        description: 'Button to add a costume by uploading a file in the editor tab',
-        id: 'gui.costumeTab.addFileCostume'
-    },
-    addCameraCostumeMsg: {
-        defaultMessage: 'Camera',
-        description: 'Button to use the camera to create a costume costume in the editor tab',
-        id: 'gui.costumeTab.addCameraCostume'
-    }
-});
+const messages = {
+    addLibraryBackdropMsg: '选择背景',
+    addLibraryCostumeMsg: '选择造型',
+    addBlankCostumeMsg: '绘制',
+    addSurpriseCostumeMsg: '随机',
+    addFileBackdropMsg: '上传',
+    addFileCostumeMsg: '上传造型',
+    addCameraCostumeMsg:  '相机'
+};
 
 class CostumeTab extends React.Component {
     constructor (props) {
@@ -228,7 +199,6 @@ class CostumeTab extends React.Component {
     }
     render () {
         const {
-            intl,
             onNewCostumeFromCameraClick,
             onNewLibraryBackdropClick,
             onNewLibraryCostumeClick,
@@ -259,17 +229,17 @@ class CostumeTab extends React.Component {
             <AssetPanel
                 buttons={[
                     {
-                        title: intl.formatMessage(addLibraryMessage),
+                        title: addLibraryMessage,
                         img: addLibraryIcon,
                         onClick: addLibraryFunc
                     },
                     {
-                        title: intl.formatMessage(messages.addCameraCostumeMsg),
+                        title: messages.addCameraCostumeMsg,
                         img: cameraIcon,
                         onClick: onNewCostumeFromCameraClick
                     },
                     {
-                        title: intl.formatMessage(addFileMessage),
+                        title: addFileMessage,
                         img: fileUploadIcon,
                         onClick: this.handleFileUploadClick,
                         fileAccept: '.svg, .png, .jpg, .jpeg',
@@ -277,17 +247,17 @@ class CostumeTab extends React.Component {
                         fileInput: this.setFileInput
                     },
                     {
-                        title: intl.formatMessage(messages.addSurpriseCostumeMsg),
+                        title: messages.addSurpriseCostumeMsg,
                         img: surpriseIcon,
                         onClick: addSurpriseFunc
                     },
                     {
-                        title: intl.formatMessage(messages.addBlankCostumeMsg),
+                        title: messages.addBlankCostumeMsg,
                         img: paintIcon,
                         onClick: this.handleNewBlankCostume
                     },
                     {
-                        title: intl.formatMessage(addLibraryMessage),
+                        title: addLibraryMessage,
                         img: searchIcon,
                         onClick: addLibraryFunc
                     }
@@ -321,7 +291,6 @@ class CostumeTab extends React.Component {
 CostumeTab.propTypes = {
     cameraModalVisible: PropTypes.bool,
     editingTarget: PropTypes.string,
-    intl: intlShape,
     onActivateSoundsTab: PropTypes.func.isRequired,
     onNewCostumeFromCameraClick: PropTypes.func.isRequired,
     onNewLibraryBackdropClick: PropTypes.func.isRequired,
@@ -371,8 +340,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default errorBoundaryHOC('Costume Tab')(
-    injectIntl(connect(
+    connect(
         mapStateToProps,
         mapDispatchToProps
-    )(CostumeTab))
+    )(CostumeTab)
 );

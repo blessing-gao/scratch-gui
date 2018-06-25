@@ -1,7 +1,6 @@
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {connect} from 'react-redux';
 import VM from 'scratch-vm';
 
@@ -14,14 +13,6 @@ import analytics from '../lib/analytics';
 import backdropLibraryContent from '../lib/libraries/backdrops.json';
 import backdropTags from '../lib/libraries/backdrop-tags';
 import LibraryComponent from '../components/library/library.jsx';
-
-const messages = defineMessages({
-    libraryTitle: {
-        defaultMessage: 'Choose a Backdrop',
-        description: 'Heading for the backdrop library',
-        id: 'gui.costumeLibrary.chooseABackdrop'
-    }
-});
 
 
 class BackdropLibrary extends React.Component {
@@ -54,7 +45,7 @@ class BackdropLibrary extends React.Component {
                 data={backdropLibraryContent}
                 id="backdropLibrary"
                 tags={backdropTags}
-                title={this.props.intl.formatMessage(messages.libraryTitle)}
+                title="选择背景"
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
             />
@@ -63,7 +54,6 @@ class BackdropLibrary extends React.Component {
 }
 
 BackdropLibrary.propTypes = {
-    intl: intlShape.isRequired,
     onActivateTab: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func,
     stageID: PropTypes.string.isRequired,
@@ -78,7 +68,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateTab: tab => dispatch(activateTab(tab))
 });
 
-export default injectIntl(connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(BackdropLibrary));
+)(BackdropLibrary);

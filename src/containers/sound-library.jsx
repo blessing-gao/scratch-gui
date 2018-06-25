@@ -1,7 +1,6 @@
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import VM from 'scratch-vm';
 import AudioEngine from 'scratch-audio';
 
@@ -13,13 +12,6 @@ import soundIcon from '../components/asset-panel/icon--sound.svg';
 import soundLibraryContent from '../lib/libraries/sounds.json';
 import soundTags from '../lib/libraries/sound-tags';
 
-const messages = defineMessages({
-    libraryTitle: {
-        defaultMessage: 'Choose a Sound',
-        description: 'Heading for the sound library',
-        id: 'gui.soundLibrary.chooseASound'
-    }
-});
 
 class SoundLibrary extends React.PureComponent {
     constructor (props) {
@@ -147,7 +139,7 @@ class SoundLibrary extends React.PureComponent {
                 data={soundLibraryThumbnailData}
                 id="soundLibrary"
                 tags={soundTags}
-                title={this.props.intl.formatMessage(messages.libraryTitle)}
+                title="选择声音"
                 onItemMouseEnter={this.handleItemMouseEnter}
                 onItemMouseLeave={this.handleItemMouseLeave}
                 onItemSelected={this.handleItemSelected}
@@ -158,10 +150,9 @@ class SoundLibrary extends React.PureComponent {
 }
 
 SoundLibrary.propTypes = {
-    intl: intlShape.isRequired,
     onNewSound: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 
-export default injectIntl(SoundLibrary);
+export default SoundLibrary;

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
-import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import VM from 'scratch-vm';
 
 import AssetPanel from '../components/asset-panel/asset-panel.jsx';
@@ -173,52 +172,36 @@ class SoundTab extends React.Component {
             }
         )) : [];
 
-        const messages = defineMessages({
-            fileUploadSound: {
-                defaultMessage: 'Upload Sound',
-                description: 'Button to upload sound from file in the editor tab',
-                id: 'gui.soundTab.fileUploadSound'
-            },
-            surpriseSound: {
-                defaultMessage: 'Surprise',
-                description: 'Button to get a random sound in the editor tab',
-                id: 'gui.soundTab.surpriseSound'
-            },
-            recordSound: {
-                defaultMessage: 'Record',
-                description: 'Button to record a sound in the editor tab',
-                id: 'gui.soundTab.recordSound'
-            },
-            addSound: {
-                defaultMessage: 'Choose a Sound',
-                description: 'Button to add a sound in the editor tab',
-                id: 'gui.soundTab.addSoundFromLibrary'
-            }
-        });
+        const messages = {
+            fileUploadSound: '上传声音',
+            surpriseSound: '随机',
+            recordSound: '录音',
+            addSound: '选择声音',
+        };
 
         return (
             <AssetPanel
                 buttons={[{
-                    title: intl.formatMessage(messages.addSound),
+                    title: messages.addSound,
                     img: addSoundFromLibraryIcon,
                     onClick: onNewSoundFromLibraryClick
                 }, {
-                    title: intl.formatMessage(messages.fileUploadSound),
+                    title: messages.fileUploadSound,
                     img: fileUploadIcon,
                     onClick: this.handleFileUploadClick,
                     fileAccept: '.wav, .mp3',
                     fileChange: this.handleSoundUpload,
                     fileInput: this.setFileInput
                 }, {
-                    title: intl.formatMessage(messages.surpriseSound),
+                    title: messages.surpriseSound,
                     img: surpriseIcon,
                     onClick: this.handleSurpriseSound
                 }, {
-                    title: intl.formatMessage(messages.recordSound),
+                    title: messages.recordSound,
                     img: addSoundFromRecordingIcon,
                     onClick: onNewSoundFromRecordingClick
                 }, {
-                    title: intl.formatMessage(messages.addSound),
+                    title: messages.addSound,
                     img: searchIcon,
                     onClick: onNewSoundFromLibraryClick
                 }]}
@@ -252,7 +235,6 @@ class SoundTab extends React.Component {
 
 SoundTab.propTypes = {
     editingTarget: PropTypes.string,
-    intl: intlShape,
     onActivateCostumesTab: PropTypes.func.isRequired,
     onNewSoundFromLibraryClick: PropTypes.func.isRequired,
     onNewSoundFromRecordingClick: PropTypes.func.isRequired,
@@ -297,8 +279,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default errorBoundaryHOC('Sound Tab')(
-    injectIntl(connect(
+    connect(
         mapStateToProps,
         mapDispatchToProps
-    )(SoundTab))
+    )(SoundTab)
 );
