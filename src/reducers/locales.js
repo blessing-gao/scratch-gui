@@ -9,7 +9,7 @@ const UPDATE_LOCALES = 'scratch-gui/locales/UPDATE_LOCALES';
 const SELECT_LOCALE = 'scratch-gui/locales/SELECT_LOCALE';
 
 const initialState = {
-    locale: 'en',
+    locale: 'zh',
     messagesByLocale: editorMessages,
     messages: editorMessages.en
 };

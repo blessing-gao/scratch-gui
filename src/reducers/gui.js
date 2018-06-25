@@ -15,6 +15,7 @@ import stageSizeReducer, {stageSizeInitialState} from './stage-size';
 import targetReducer, {targetsInitialState} from './targets';
 import toolboxReducer, {toolboxInitialState} from './toolbox';
 import vmReducer, {vmInitialState} from './vm';
+import scratchReducer, {scratchInitialState} from './scratch';
 import throttle from 'redux-throttle';
 
 const guiMiddleware = compose(applyMiddleware(throttle(300, {leading: true, trailing: true})));
@@ -35,7 +36,8 @@ const guiInitialState = {
     monitorLayout: monitorLayoutInitialState,
     targets: targetsInitialState,
     toolbox: toolboxInitialState,
-    vm: vmInitialState
+    vm: vmInitialState,
+    scratch: scratchInitialState
 };
 
 const initPlayer = function (currentState) {
@@ -75,7 +77,8 @@ const guiReducer = combineReducers({
     monitorLayout: monitorLayoutReducer,
     targets: targetReducer,
     toolbox: toolboxReducer,
-    vm: vmReducer
+    vm: vmReducer,
+    scratch: scratchReducer
 });
 
 export {

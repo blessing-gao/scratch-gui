@@ -41,7 +41,6 @@ const ProjectSaveComponent = props => {
 ProjectSaveComponent.propTypes = {
     projectName: PropTypes.string,
     onChange: PropTypes.func.isRequired
-
 };
 ProjectSaveComponent.defaultProps = {
     projectName: ''

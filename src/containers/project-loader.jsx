@@ -85,7 +85,7 @@ class ProjectLoader extends React.Component {
     render () {
         if (this.state.loadingError) {
             throw new Error(
-                `Failed to load project from file: ${this.state.errorMessage}`);
+                `作品导入失败: ${this.state.errorMessage}`);
         }
         const {
             /* eslint-disable no-unused-vars */

@@ -5,6 +5,7 @@ import SaveModalComponent from '../../components/my/save-modal.jsx';
 import {getQueryString} from '../../lib/request';
 import request from '../../lib/request';
 import {closeSaveModal} from '../../reducers/modals';
+
 import {connect} from 'react-redux';
 // import Base64 from 'crypto-js/enc-base64';
 // import UTF_8 from 'crypto-js/enc-utf8';
@@ -27,6 +28,7 @@ class SaveModal extends React.Component {
         };
     }
     componentDidMount (){
+
         // 获取作品数据
         // const id = getQueryString('projectId');
         // if (id !== null && typeof id !== 'undefined' && id !== ''){
@@ -39,6 +41,7 @@ class SaveModal extends React.Component {
     }
 
     handleOnSave (type = true){
+        console.log("save点击")
 
     }
     handleChange (event) {
@@ -61,10 +64,12 @@ class SaveModal extends React.Component {
 }
 
 SaveModal.propTypes = {
-    closeSaveModal: PropTypes.func
+    closeSaveModal: PropTypes.func,
+
 };
 const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
+
     closeSaveModal: () => {
         dispatch(closeSaveModal());
     }

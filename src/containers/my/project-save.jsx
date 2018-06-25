@@ -4,7 +4,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import ProjectSaveComponent from '../../components/my/project-save.jsx';
 import request ,{getQueryString, getTargetId} from '../../lib/request';
-
+import {getWork,setWork} from '../../reducers/scratch';
+import {closeSaveModal} from "../../reducers/modals";
 /**
  * 本组件用于向服务器保存作品
  * Project saver component passes a saveProject function to its child.
@@ -38,14 +39,20 @@ class ProjectSave extends React.Component {
      * 通过输入链接获取作品信息
      */
     componentDidMount (){
-        const id = getTargetId();
-        if (id !== null){
-            request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
-                if (result.code !== request.NotFindError){
-                    this.setState({id: result.id, workName: result.name, projectName: result.name});
-                }
-            });
+        // todo 仅用于赋值参考
+        const work={
+            id: '1234'
         }
+        this.props.setWork(work);
+        console.log(this.props.work1)
+        // const id = getTargetId();
+        // if (id !== null){
+        //     request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
+        //         if (result.code !== request.NotFindError){
+        //             this.setState({id: result.id, workName: result.name, projectName: result.name});
+        //         }
+        //     });
+        // }
         // 获取作品数据
         // const id = getQueryString('projectId');
         // if (id !== null && typeof id !== 'undefined' && id !== ''){
@@ -116,6 +123,7 @@ class ProjectSave extends React.Component {
             /* eslint-disable no-unused-vars */
             children,
             vm,
+            work1,
             /* eslint-enable no-unused-vars */
             ...props
         } = this.props;
@@ -135,14 +143,26 @@ ProjectSave.propTypes = {
     children: PropTypes.func,
     vm: PropTypes.shape({
         saveProjectSb3: PropTypes.func
-    })
+    }),
+    setWork: PropTypes.func,
+    getWork: PropTypes.func,
+    work: PropTypes.object
 };
 
 const mapStateToProps = state => ({
+    work: state.scratchGui.scratch.work,
     vm: state.scratchGui.vm
 });
 
+const mapDispatchToProps = dispatch => ({
+    setWork:work => {
+        dispatch(setWork(work));
+    },
+    getWork:() => {
+        dispatch(getWork());
+    },
+});
 export default connect(
     mapStateToProps,
-    () => ({}) // omit dispatch prop
+    mapDispatchToProps
 )(ProjectSave);

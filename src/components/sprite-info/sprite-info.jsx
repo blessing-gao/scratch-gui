@@ -44,34 +44,10 @@ class SpriteInfo extends React.Component {
             stageSize
         } = this.props;
 
-        const sprite = (
-            <FormattedMessage
-                defaultMessage="Sprite"
-                description="Sprite info label"
-                id="gui.SpriteInfo.sprite"
-            />
-        );
-        const showLabel = (
-            <FormattedMessage
-                defaultMessage="Show"
-                description="Sprite info show label"
-                id="gui.SpriteInfo.show"
-            />
-        );
-        const sizeLabel = (
-            <FormattedMessage
-                defaultMessage="Size"
-                description="Sprite info size label"
-                id="gui.SpriteInfo.size"
-            />
-        );
-        const directionLabel = (
-            <FormattedMessage
-                defaultMessage="Direction"
-                description="Sprite info direction label"
-                id="gui.SpriteInfo.direction"
-            />
-        );
+        const sprite = "角色";
+        const showLabel = "展示";
+        const sizeLabel = "大小";
+        const directionLabel = "方向";
 
         const spriteNameInput = (
             <BufferedInput
