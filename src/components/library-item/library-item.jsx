@@ -44,62 +44,64 @@ class LibraryItem extends React.PureComponent {
         this.props.onMouseLeave(this.props.id);
     }
     render () {
-        return this.props.featured ? <div
-            className={classNames(
-                styles.libraryItem,
-                styles.featuredItem,
-                {
-                    [styles.disabled]: this.props.disabled
-                }
-            )}
-            onClick={this.handleClick}
-        >
-            <div className={styles.featuredImageContainer}>
-                {this.props.disabled ? (
-                    <div className={styles.comingSoonText}>
-                        <FormattedMessage
-                            defaultMessage="Coming Soon"
-                            description="Label for extensions that are not yet implemented"
-                            id="gui.extensionLibrary.comingSoon"
-                        />
-                    </div>
-                ) : null}
-                <img
-                    className={styles.featuredImage}
-                    src={this.props.iconURL}
-                    crossOrigin="anonymous"
-                />
-            </div>
+        return this.props.featured ? (
             <div
-                className={styles.featuredText}
+                className={classNames(
+                    styles.libraryItem,
+                    styles.featuredItem,
+                    {
+                        [styles.disabled]: this.props.disabled
+                    }
+                )}
+                onClick={this.handleClick}
             >
-                <span className={styles.libraryItemName}>{this.props.name}</span>
-                <br/>
-                <span className={styles.featuredDescription}>{this.props.description}</span>
-            </div>
-        </div> : <Box
-            className={styles.libraryItem}
-            role="button"
-            tabIndex="0"
-            onBlur={this.handleBlur}
-            onClick={this.handleClick}
-            onFocus={this.handleFocus}
-            onKeyPress={this.handleKeyPress}
-            onMouseEnter={this.handleMouseEnter}
-            onMouseLeave={this.handleMouseLeave}
-        >
-            {/* Layers of wrapping is to prevent layout thrashing on animation */}
-            <Box className={styles.libraryItemImageContainerWrapper}>
-                <Box className={styles.libraryItemImageContainer}>
+                <div className={styles.featuredImageContainer}>
+                    {this.props.disabled ? (
+                        <div className={styles.comingSoonText}>
+                            <FormattedMessage
+                                defaultMessage="Coming Soon"
+                                description="Label for extensions that are not yet implemented"
+                                id="gui.extensionLibrary.comingSoon"
+                            />
+                        </div>
+                    ) : null}
                     <img
-                        className={styles.libraryItemImage}
+                        className={styles.featuredImage}
                         src={this.props.iconURL}
-                        crossOrigin="anonymous"
                     />
+                </div>
+                <div
+                    className={styles.featuredText}
+                >
+                    <span className={styles.libraryItemName}>{this.props.name}</span>
+                    <br />
+                    <span className={styles.featuredDescription}>{this.props.description}</span>
+                </div>
+            </div>
+        ) : (
+            <Box
+                className={styles.libraryItem}
+                role="button"
+                tabIndex="0"
+                onBlur={this.handleBlur}
+                onClick={this.handleClick}
+                onFocus={this.handleFocus}
+                onKeyPress={this.handleKeyPress}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+            >
+                {/* Layers of wrapping is to prevent layout thrashing on animation */}
+                <Box className={styles.libraryItemImageContainerWrapper}>
+                    <Box className={styles.libraryItemImageContainer}>
+                        <img
+                            className={styles.libraryItemImage}
+                            src={this.props.iconURL}
+                        />
+                    </Box>
                 </Box>
+                <span className={styles.libraryItemName}>{this.props.name}</span>
             </Box>
-            <span className={styles.libraryItemName}>{this.props.name}</span>
-        </Box>;
+        );
     }
 }
 

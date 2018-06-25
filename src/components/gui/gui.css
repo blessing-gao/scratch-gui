@@ -63,12 +63,12 @@
     flex-grow: 1;
     height: 80%;
     margin-bottom: 0;
-    margin-left: -0.2rem;
+    margin-left: -0.5rem;
 
     border-radius: 1rem 1rem 0 0;
     border: 1px solid $ui-black-transparent;
 
-    padding: 0.125rem 0.5rem 0;
+    padding: 0.125rem 1.25rem 0;
     font-size: 0.75rem;
 
     background-color: $ui-tertiary;
