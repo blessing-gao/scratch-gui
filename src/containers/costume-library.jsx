@@ -1,22 +1,12 @@
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import VM from 'scratch-vm';
 
 import analytics from '../lib/analytics';
 import costumeLibraryContent from '../lib/libraries/costumes.json';
 import spriteTags from '../lib/libraries/sprite-tags';
 import LibraryComponent from '../components/library/library.jsx';
-
-const messages = defineMessages({
-    libraryTitle: {
-        defaultMessage: 'Choose a Costume',
-        description: 'Heading for the costume library',
-        id: 'gui.costumeLibrary.chooseACostume'
-    }
-});
-
 
 class CostumeLibrary extends React.PureComponent {
     constructor (props) {
@@ -46,7 +36,7 @@ class CostumeLibrary extends React.PureComponent {
                 data={costumeLibraryContent}
                 id="costumeLibrary"
                 tags={spriteTags}
-                title={this.props.intl.formatMessage(messages.libraryTitle)}
+                title="选择造型"
                 onItemSelected={this.handleItemSelected}
                 onRequestClose={this.props.onRequestClose}
             />
@@ -55,9 +45,8 @@ class CostumeLibrary extends React.PureComponent {
 }
 
 CostumeLibrary.propTypes = {
-    intl: intlShape.isRequired,
     onRequestClose: PropTypes.func,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 
-export default injectIntl(CostumeLibrary);
+export default CostumeLibrary;

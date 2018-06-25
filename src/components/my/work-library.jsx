@@ -7,7 +7,7 @@ import styles from './work-library.css';
 import {COVER_SERVER} from '../../lib/request';
 import classNames from "classnames";
 import {intlShape} from "react-intl";
-
+import TagButton from '../../containers/tag-button.jsx';
 class WorkLibraryComponent extends React.Component {
     constructor (props) {
         super(props);

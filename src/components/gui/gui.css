@@ -68,7 +68,7 @@
     border-radius: 1rem 1rem 0 0;
     border: 1px solid $ui-black-transparent;
 
-    padding: 0.125rem 1.25rem 0;
+    padding: 0.025rem 0.75rem 0;
     font-size: 0.75rem;
 
     background-color: $ui-tertiary;
@@ -190,7 +190,7 @@
     padding-right: $space;
 
     min-height: 0; /* this makes it work in Firefox */
-    
+
     /*
         For making the sprite-selector a scrollable pane
         @todo: Not working in Safari

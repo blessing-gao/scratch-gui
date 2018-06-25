@@ -11,11 +11,6 @@ import LibraryComponent from '../components/library/library.jsx';
 import extensionIcon from '../components/action-menu/icon--sprite.svg';
 
 const messages = defineMessages({
-    extensionTitle: {
-        defaultMessage: 'Choose an Extension',
-        description: 'Heading for the extension library',
-        id: 'gui.extensionLibrary.chooseAnExtension'
-    },
     extensionUrl: {
         defaultMessage: 'Enter the URL of the extension',
         description: 'Prompt for unoffical extension url',
@@ -62,7 +57,7 @@ class ExtensionLibrary extends React.PureComponent {
                 data={extensionLibraryThumbnailData}
                 filterable={false}
                 id="extensionLibrary"
-                title={this.props.intl.formatMessage(messages.extensionTitle)}
+                title="选择拓展"
                 visible={this.props.visible}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
