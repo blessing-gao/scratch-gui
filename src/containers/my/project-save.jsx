@@ -39,38 +39,17 @@ class ProjectSave extends React.Component {
      * 通过输入链接获取作品信息
      */
     componentDidMount (){
-        // todo 仅用于赋值参考
-        const work={
-            id: '1234'
-        }
-        this.props.setWork(work);
-        console.log(this.props.work1)
-        // const id = getTargetId();
-        // if (id !== null){
-        //     request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
-        //         if (result.code !== request.NotFindError){
-        //             this.setState({id: result.id, workName: result.name, projectName: result.name});
-        //         }
-        //     });
-        // }
-        // 获取作品数据
-        // const id = getQueryString('projectId');
-        // if (id !== null && typeof id !== 'undefined' && id !== ''){
-        //     request.default_request(request.GET, null, `/internalapi/project/${id}/getInfo/`, result => {
-        //         if (result.code !== request.NotFindError){
-        //             this.setState({id: result.value.id, workName: result.value.name});
-        //         }
-        //     });
-        // }
+
     }
     /**
      * 作品向服务端保存方法
      * @param isNewProject，true是保存，flase是另存
      */
     saveProject (isNewProject = true) {
+        // todo 待对接，参数通过this.props.work取
         let filename = '';
         if (this.state.projectName === ''){
-            alert('保存失败,请先为作品命名!');
+            alert('请先为作品命名!');
             return false;
         }else{
             filename = this.state.projectName;
@@ -87,6 +66,7 @@ class ProjectSave extends React.Component {
             request.file_request(request.POST, saveData, '/scratch/saveProject', result => {
                 if (result.code == 1){
                     // 上传成功
+                    // todo 保存成功后更新scratch reducer状态
                 }
             });
         });
@@ -145,7 +125,6 @@ ProjectSave.propTypes = {
         saveProjectSb3: PropTypes.func
     }),
     setWork: PropTypes.func,
-    getWork: PropTypes.func,
     work: PropTypes.object
 };
 
@@ -157,10 +136,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setWork:work => {
         dispatch(setWork(work));
-    },
-    getWork:() => {
-        dispatch(getWork());
-    },
+    }
 });
 export default connect(
     mapStateToProps,
