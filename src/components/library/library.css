@@ -58,4 +58,10 @@
     flex-wrap: wrap;
     height: $library-filter-bar-height;
     overflow: hidden;
+    flex: 1;
 }
+
+.flex{
+    display: flex;
+}
+

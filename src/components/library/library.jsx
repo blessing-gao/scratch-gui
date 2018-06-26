@@ -36,12 +36,14 @@ class LibraryComponent extends React.Component {
             'handleMouseLeave',
             'handleSelect',
             'handleTagClick',
+            'handleTypeClick',
             'setFilteredDataRef'
         ]);
         this.state = {
             selectedItem: null,
             filterQuery: '',
-            selectedTag: ALL_TAG_TITLE
+            selectedTag: ALL_TAG_TITLE,
+            selectedType: '1'
         };
     }
     componentDidUpdate (prevProps, prevState) {
@@ -65,6 +67,13 @@ class LibraryComponent extends React.Component {
             filterQuery: '',
             selectedTag: tag
         });
+    }
+    handleTypeClick (tag) {
+        this.setState({
+            filterQuery: '',
+            selectedType: tag
+        });
+        this.props.onTabChange(tag);
     }
     handleMouseEnter (id) {
         if (this.props.onItemMouseEnter) this.props.onItemMouseEnter(this.getFilteredData()[id]);
@@ -149,6 +158,31 @@ class LibraryComponent extends React.Component {
                                 ))}
                             </div>
                         }
+                        <Divider className={classNames(styles.filterBarItem, styles.divider)} />
+                        <div className={classNames(styles.flex, styles.checkTheme)}>
+                            <TagButton
+                                active={this.state.selectedType === '1'}
+                                className={classNames(
+                                            styles.filterBarItem,
+                                            styles.tagButton
+                                        )}
+                                onClick={() => {
+                                    this.handleTypeClick('1');
+                                }}
+                                title="课程素材"
+                            />
+                            <TagButton
+                                active={this.state.selectedType === '2'}
+                                className={classNames(
+                                            styles.filterBarItem,
+                                            styles.tagButton
+                                        )}
+                                onClick={() => {
+                                    this.handleTypeClick('2');
+                                }}
+                                title="默认素材"
+                            />
+                        </div>
                     </div>
                 )}
                 <div

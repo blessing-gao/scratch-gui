@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import VM from 'scratch-vm';
+import request from '../lib/request';
 
 import {
     activateTab,
@@ -10,8 +11,6 @@ import {
 } from '../reducers/editor-tab';
 
 import analytics from '../lib/analytics';
-import backdropLibraryContent from '../lib/libraries/backdrops.json';
-import backdropTags from '../lib/libraries/backdrop-tags';
 import LibraryComponent from '../components/library/library.jsx';
 
 
@@ -19,9 +18,44 @@ class BackdropLibrary extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleItemSelect'
+            'handleItemSelect',
+            'handleChange'
         ]);
+        this.state = {
+            backdrop: [],
+            tags: null
+        };
     }
+
+    handleChange (type){
+        // 课程素材{type=1},默认素材{type=2}切换
+    }
+
+    getResource (type, platFormId, userToken, typeId){
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${platFormId}&userToken=${userToken}&typeId=${typeId}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                this.setState({backdrop: result.result});
+            }
+        });
+    }
+
+    getType (type, platFormId, userToken){
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${platFormId}&userToken=${userToken}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                let tags = [];
+                result.result.map(tag => {
+                    tags.push({id:tag.id,title:tag.name});
+                });
+                this.setState({tags:tags});
+            }
+        });
+    }
+
+    componentDidMount () {
+        this.getType(1,1,1);    // 获取类别 type, platFormId, userToken
+        this.getResource(1,1,1,1);    // 获取素材 type, platFormId, userToken, typeId
+    }
+
     handleItemSelect (item) {
         const vmBackdrop = {
             name: item.name,
@@ -39,15 +73,17 @@ class BackdropLibrary extends React.Component {
             label: item.name
         });
     }
+
     render () {
         return (
             <LibraryComponent
-                data={backdropLibraryContent}
+                data={this.state.backdrop}
                 id="backdropLibrary"
-                tags={backdropTags}
+                tags={this.state.tags}
                 title="选择背景"
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
+                onTabChange={this.handleChange}
             />
         );
     }

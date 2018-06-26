@@ -11,6 +11,7 @@ import soundIcon from '../components/asset-panel/icon--sound.svg';
 
 import soundLibraryContent from '../lib/libraries/sounds.json';
 import soundTags from '../lib/libraries/sound-tags';
+import request from '../lib/request';
 
 
 class SoundLibrary extends React.PureComponent {
@@ -19,8 +20,13 @@ class SoundLibrary extends React.PureComponent {
         bindAll(this, [
             'handleItemSelected',
             'handleItemMouseEnter',
-            'handleItemMouseLeave'
+            'handleItemMouseLeave',
+            'handleChange'
         ]);
+        this.state = {
+            sound: [],
+            tags: null
+        };
 
         /**
          * AudioEngine that will decode and play sounds for us.
@@ -34,10 +40,38 @@ class SoundLibrary extends React.PureComponent {
          */
         this.playingSoundPromise = null;
     }
+
+    handleChange (type){
+        // 课程素材{type=1},默认素材{type=2}切换
+    }
+
+    getResource (type, platFormId, userToken, typeId){
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${platFormId}&userToken=${userToken}&typeId=${typeId}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                this.setState({sound: result.result});
+            }
+        });
+    }
+
+    getType (type, platFormId, userToken){
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${platFormId}&userToken=${userToken}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                let tags = [];
+                result.result.map(tag => {
+                    tags.push({id:tag.id,title:tag.name});
+                });
+                this.setState({tags:tags});
+            }
+        });
+    }
+
     componentDidMount () {
+        this.getType(4,1,1);    // 获取类别 type, platFormId, userToken
+        this.getResource(1,1,1,4);    // 获取素材 type, platFormId, userToken, typeId
         this.audioEngine = new AudioEngine();
         this.playingSoundPromise = null;
     }
+
     componentWillUnmount () {
         this.stopPlayingSound();
     }
@@ -122,7 +156,19 @@ class SoundLibrary extends React.PureComponent {
     }
     render () {
         // @todo need to use this hack to avoid library using md5 for image
-        const soundLibraryThumbnailData = soundLibraryContent.map(sound => {
+        // const soundLibraryThumbnailData = soundLibraryContent.map(sound => {
+        //     const {
+        //         md5,
+        //         ...otherData
+        //     } = sound;
+        //     return {
+        //         _md5: md5,
+        //         rawURL: soundIcon,
+        //         ...otherData
+        //     };
+        // });
+
+        const soundLibraryThumbnailData = this.state.sound.map(sound => {
             const {
                 md5,
                 ...otherData
@@ -138,12 +184,13 @@ class SoundLibrary extends React.PureComponent {
             <LibraryComponent
                 data={soundLibraryThumbnailData}
                 id="soundLibrary"
-                tags={soundTags}
+                tags={this.state.tags}
                 title="选择声音"
                 onItemMouseEnter={this.handleItemMouseEnter}
                 onItemMouseLeave={this.handleItemMouseLeave}
                 onItemSelected={this.handleItemSelected}
                 onRequestClose={this.props.onRequestClose}
+                onTabChange={this.handleChange}
             />
         );
     }

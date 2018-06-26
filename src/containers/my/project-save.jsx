@@ -40,28 +40,26 @@ class ProjectSave extends React.Component {
      */
     componentDidMount (){
         // todo 仅用于赋值参考
-        const work={
-            id: '1234'
+        // const work={
+        //     id: '1234'
+        // }
+        // this.props.setWork(work);
+        // console.log(this.props.work)
+
+        const id = getTargetId();
+        if (id !== null){
+            request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
+                if (result.code !== request.NotFindError){
+                    this.props.setWork({
+                        id: result.id,
+                        workName: result.name,
+                        projectName: result.name
+                    });
+                    console.log(this.props.work);
+                    this.setState({id: result.id, workName: result.name, projectName: result.name});
+                }
+            });
         }
-        this.props.setWork(work);
-        console.log(this.props.work1)
-        // const id = getTargetId();
-        // if (id !== null){
-        //     request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
-        //         if (result.code !== request.NotFindError){
-        //             this.setState({id: result.id, workName: result.name, projectName: result.name});
-        //         }
-        //     });
-        // }
-        // 获取作品数据
-        // const id = getQueryString('projectId');
-        // if (id !== null && typeof id !== 'undefined' && id !== ''){
-        //     request.default_request(request.GET, null, `/internalapi/project/${id}/getInfo/`, result => {
-        //         if (result.code !== request.NotFindError){
-        //             this.setState({id: result.value.id, workName: result.value.name});
-        //         }
-        //     });
-        // }
     }
     /**
      * 作品向服务端保存方法
@@ -82,9 +80,17 @@ class ProjectSave extends React.Component {
                 return;
             }
             let saveData = {
-              'file':content
+                'file':content,
+                'name':filename,
+                'platFormId':'1',
+                'userToken':'1'
             };
-            request.file_request(request.POST, saveData, '/scratch/saveProject', result => {
+            // let saveData = {
+            //     'file':content
+            // };
+            const id = getTargetId();
+            saveData.id = id ? id : '0';
+            request.file_request(request.POST, saveData, '/api/save1', result => {
                 if (result.code == 1){
                     // 上传成功
                 }

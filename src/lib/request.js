@@ -1,5 +1,6 @@
 /* eslint-disable func-style,require-jsdoc */
-
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 /**
  * Created by 26928 on 2017-10-17.
  */
@@ -9,8 +10,7 @@ export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
     // return 'http://localhost:8080';
     // return `${window.location.protocol}//${window.location.host}`;
-    return 'http://192.168.1.129:8080';
-    // return 'http://192.168.1.132:8181';
+    return 'http://192.168.1.112:8080';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
@@ -149,5 +149,42 @@ export default {
             console.log(e);
             alert('网络错误，请稍后尝试');
         }
+    },
+    promise_request: function (url, data, method = 'GET', options = {}) {
+        return new Promise(function (resolve, reject) {
+            if (typeof data === 'object'){
+                const arrs = [];
+                for (const k in data){
+                    arrs.push(`${k}=${data[k]}`);
+                }
+                data = arrs.join('&');
+            }
+            let params = {
+                method: method
+            };
+            if (method === 'GET') { // 如果是GET请求，拼接url
+                url += '?' + data;
+            } else {
+                params.body = data;
+            }
+            if(options.cookie!=undefined){
+                params.credentials='include'
+            }
+            if(options.headers!=undefined && typeof options.headers=="object"){
+                params.headers=new Headers(options.headers);
+            }else{
+                params.headers=new Headers({
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                });
+            }
+            fetch(url, params).then((res) => {
+                if (res.status >= 200 && res.status < 300) {
+                    resolve(res);
+                }else {
+                    reject(res);
+                }
+            });
+        })
     }
 };

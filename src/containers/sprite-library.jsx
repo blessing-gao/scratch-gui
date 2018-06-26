@@ -19,7 +19,8 @@ class SpriteLibrary extends React.PureComponent {
             'handleMouseLeave',
             'rotateCostume',
             'startRotatingCostumes',
-            'stopRotatingCostumes'
+            'stopRotatingCostumes',
+            'handleChange'
         ]);
         this.state = {
             activeSprite: null,
@@ -29,21 +30,29 @@ class SpriteLibrary extends React.PureComponent {
         };
     }
 
-    componentDidMount () {
-        request.default_request(request.GET, null, `/internalapi/project/getResDict`, result => {
-            if (result.code !== request.NotFindError && result.value) {
+    getResource (type, platFormId, userToken, typeId){
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${platFormId}&userToken=${userToken}&typeId=${typeId}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                this.setState({sprites: result.result});
+            }
+        });
+    }
+
+    getType (type, platFormId, userToken){
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${platFormId}&userToken=${userToken}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
-                result.value.map(tag => {
-                    tags.push({id:tag.tagId,title:tag.tagName});
+                result.result.map(tag => {
+                    tags.push({id:tag.id,title:tag.name});
                 });
                 this.setState({tags:tags});
             }
         });
-        request.default_request(request.GET, null, `/internalapi/project/getResource?type=2`, result => {
-            if (result.code !== request.NotFindError && result.value) {
-                this.setState({sprites: result.value});
-            }
-        });
+    }
+
+    componentDidMount () {
+        this.getType(2,1,1);    // 获取类别 type, platFormId, userToken
+        this.getResource(1,1,1,2);    // 获取素材 type, platFormId, userToken, typeId
     }
 
     componentWillUnmount () {
@@ -63,6 +72,9 @@ class SpriteLibrary extends React.PureComponent {
     }
     handleMouseLeave () {
         this.stopRotatingCostumes();
+    }
+    handleChange (type){
+        // 课程素材{type=1},默认素材{type=2}切换
     }
     startRotatingCostumes () {
         if (!this.state.activeSprite) return;
@@ -99,6 +111,7 @@ class SpriteLibrary extends React.PureComponent {
                 onItemMouseLeave={this.handleMouseLeave}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
+                onTabChange={this.handleChange}
             />
         );
     }
