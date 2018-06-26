@@ -1,6 +1,5 @@
 const SET_WORK = 'scratch-gui/Scratch/SET_WORK';
 
-
 const initialState = {
     work:{
         id: null,

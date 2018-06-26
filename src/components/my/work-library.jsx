@@ -8,6 +8,7 @@ import {COVER_SERVER} from '../../lib/request';
 import classNames from "classnames";
 import {intlShape} from "react-intl";
 import TagButton from '../../containers/tag-button.jsx';
+import Filter from '../filter/filter.jsx';
 class WorkLibraryComponent extends React.Component {
     constructor (props) {
         super(props);

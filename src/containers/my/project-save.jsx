@@ -66,9 +66,10 @@ class ProjectSave extends React.Component {
      * @param isNewProject，true是保存，flase是另存
      */
     saveProject (isNewProject = true) {
+        // todo 待对接，参数通过this.props.work取
         let filename = '';
         if (this.state.projectName === ''){
-            alert('保存失败,请先为作品命名!');
+            alert('请先为作品命名!');
             return false;
         }else{
             filename = this.state.projectName;
@@ -93,6 +94,7 @@ class ProjectSave extends React.Component {
             request.file_request(request.POST, saveData, '/api/save1', result => {
                 if (result.code == 1){
                     // 上传成功
+                    // todo 保存成功后更新scratch reducer状态
                 }
             });
         });
@@ -151,7 +153,6 @@ ProjectSave.propTypes = {
         saveProjectSb3: PropTypes.func
     }),
     setWork: PropTypes.func,
-    getWork: PropTypes.func,
     work: PropTypes.object
 };
 
@@ -163,10 +164,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setWork:work => {
         dispatch(setWork(work));
-    },
-    getWork:() => {
-        dispatch(getWork());
-    },
+    }
 });
 export default connect(
     mapStateToProps,

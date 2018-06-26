@@ -4,7 +4,7 @@ import React from 'react';
 import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 import ReactModal from 'react-modal';
-
+import request ,{getTargetId,getQueryString} from '../lib/request';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import {openExtensionLibrary} from '../reducers/modals';
 import {
@@ -23,6 +23,7 @@ import ProjectLoaderHOC from '../lib/project-loader-hoc.jsx';
 import vmListenerHOC from '../lib/vm-listener-hoc.jsx';
 
 import GUIComponent from '../components/gui/gui.jsx';
+import {setWork} from "../reducers/scratch";
 
 class GUI extends React.Component {
     constructor (props) {
@@ -34,6 +35,30 @@ class GUI extends React.Component {
         };
     }
     componentDidMount () {
+        // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
+        const id = getTargetId();
+        const userToken= getQueryString("userToken");
+        const platFormId= getQueryString("platFormId");
+        if (id !== null){
+            request.default_request(request.GET, null, `/api/scratch/getProjectInfo?id=${id}`, result => {
+                if (result.code !== request.NotFindError){
+                    let work={
+                        id: result.id,
+                        name: result.name,
+                        userToken: userToken,
+                        platFormId: platFormId,
+                        description: result.desc,
+                        classId: result.classId,
+                        homeworkId: result.homeworkId,
+                        chapterId: result.chapterId,
+                        type:result.typ
+                    }
+                    this.props.setWork(work);
+                }
+            });
+        }
+
+
         if (this.props.vm.initialized) return;
         this.audioEngine = new AudioEngine();
         this.props.vm.attachAudioEngine(this.audioEngine);
@@ -102,7 +127,8 @@ GUI.propTypes = {
     previewInfoVisible: PropTypes.bool,
     projectData: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     saveModalVisible: PropTypes.bool,
-    vm: PropTypes.instanceOf(VM)
+    vm: PropTypes.instanceOf(VM),
+    setWork: PropTypes.func
 };
 
 GUI.defaultProps = GUIComponent.defaultProps;
@@ -129,6 +155,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setWork:work => {
+        dispatch(setWork(work));
+    },
     onExtensionButtonClick: () => dispatch(openExtensionLibrary()),
     onActivateTab: tab => dispatch(activateTab(tab)),
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),
