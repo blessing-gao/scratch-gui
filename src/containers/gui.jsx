@@ -37,26 +37,51 @@ class GUI extends React.Component {
     componentDidMount () {
         // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
         const id = getTargetId();
-        const userToken= getQueryString("userToken");
-        const platFormId= getQueryString("platFormId");
+        const userToken= getQueryString("userToken") || 'auth_8292e80a84084936940de76102f812f5';
+        const platFormId= getQueryString("platFormId") || '1';
         if (id !== null){
-            request.default_request(request.GET, null, `/api/scratch/getProjectInfo?id=${id}`, result => {
-                if (result.code !== request.NotFindError){
-                    let work={
-                        id: result.id,
-                        name: result.name,
+            request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&platFormId=${platFormId}&userToken=${userToken}`, result => {
+                if (result.code !== request.NotFindError && result.result){
+                    let res = result.result;
+                    let workData = {
+                        id: res.id,
+                        name: res.name,
                         userToken: userToken,
                         platFormId: platFormId,
-                        description: result.desc,
-                        classId: result.classId,
-                        homeworkId: result.homeworkId,
-                        chapterId: result.chapterId,
-                        type:result.typ
-                    }
-                    this.props.setWork(work);
+                        description: res.description,
+                        classId: res.classId,
+                        homeworkId: res.homeworkId,
+                        chapterId: res.chapterId,
+                        type:res.type
+                    };
+                    this.props.setWork(workData);
                 }
             });
+        }else{
+            let workData = {
+                userToken: userToken,
+                platFormId: platFormId
+            };
+            this.props.setWork(workData);
         }
+        // if (id !== null){
+        //     request.default_request(request.GET, null, `/api/scratch/getProjectInfo?id=${id}`, result => {
+        //         if (result.code !== request.NotFindError){
+        //             let work={
+        //                 id: result.id,
+        //                 name: result.name,
+        //                 userToken: userToken,
+        //                 platFormId: platFormId,
+        //                 description: result.desc,
+        //                 classId: result.classId,
+        //                 homeworkId: result.homeworkId,
+        //                 chapterId: result.chapterId,
+        //                 type:result.typ
+        //             };
+        //             this.props.setWork(work);
+        //         }
+        //     });
+        // }
 
 
         if (this.props.vm.initialized) return;
@@ -105,6 +130,7 @@ class GUI extends React.Component {
             loadingStateVisible,
             projectData, // eslint-disable-line no-unused-vars
             vm,
+            setWork,
             ...componentProps
         } = this.props;
         return (

@@ -6,20 +6,39 @@ import ModalComponent from '../modal/modal.jsx';
 import styles from './work-library.css';
 import {COVER_SERVER} from '../../lib/request';
 import classNames from "classnames";
-import {intlShape} from "react-intl";
+import {intlShape, injectIntl, defineMessages} from "react-intl";
 import TagButton from '../../containers/tag-button.jsx';
+import Divider from '../divider/divider.jsx';
 import Filter from '../filter/filter.jsx';
+
+const ALL_TAG_TITLE = '所有';
+const tagListPrefix = [{id: 0, title: ALL_TAG_TITLE}];
+
+const messages = defineMessages({
+    filterPlaceholder: {
+        id: 'gui.library.filterPlaceholder',
+        defaultMessage: 'Search',
+        description: 'Placeholder text for library search field'
+    }
+});
+
 class WorkLibraryComponent extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
 
         ]);
+        this.state = {
+            selectedItem: null,
+            filterQuery: '',
+            selectedTag: ALL_TAG_TITLE,
+            selectedType: '1'
+        };
     }
     render () {
         return (
             <ModalComponent
-                className={styles.modalContent}
+                fullScreen
                 contentLabel={this.props.title}
                 filterQuery={''}
                 onRequestClose={this.props.onRequestClose}
@@ -42,6 +61,23 @@ class WorkLibraryComponent extends React.Component {
                         {this.props.filterable && this.props.tags && (
                             <Divider className={classNames(styles.filterBarItem, styles.divider)} />
                         )}
+                        {this.props.tags &&
+                        <div className={styles.tagWrapper}>
+                            {tagListPrefix.concat(this.props.tags).map((tagProps, id) => (
+                                <TagButton
+                                    active={this.state.selectedTag === tagProps.title.toLowerCase()}
+                                    className={classNames(
+                                            styles.filterBarItem,
+                                            styles.tagButton,
+                                            tagProps.className
+                                        )}
+                                    key={`tag-button-${id}`}
+                                    onClick={this.handleTagClick}
+                                    {...tagProps}
+                                />
+                            ))}
+                        </div>
+                        }
                     </div>
                 )}
                 <div
@@ -106,4 +142,4 @@ WorkLibraryComponent.defaultProps = {
     filterable: true
 };
 
-export default WorkLibraryComponent;
+export default injectIntl(WorkLibraryComponent);

@@ -15,29 +15,32 @@ class WorkLibrary extends React.Component {
 
         ]);
         this.state = {
-            workList: []
+            works: [],
+            tags: []
         };
     }
 
     componentDidMount (){
-        request.default_request(request.GET, {}, '/internalapi/project/list', result => {
-            if (typeof result.value !== 'undefined'){
-                this.setState({workList: result.value});
-            }
-        });
+        // request.default_request(request.GET, {}, '/internalapi/project/list', result => {
+        //     if (typeof result.value !== 'undefined'){
+        //         this.setState({workList: result.value});
+        //     }
+        // });
     }
     handleDelete (){
-        request.default_request(request.GET, {}, '/internalapi/project/list', result => {
-            if (typeof result.value !== 'undefined'){
-                this.setState({workList: result.value});
-            }
-        });
+        // request.default_request(request.GET, {}, '/internalapi/project/list', result => {
+        //     if (typeof result.value !== 'undefined'){
+        //         this.setState({workList: result.value});
+        //     }
+        // });
     }
     render () {
         return (
 
             <WorkLibraryComponent
-                data={this.state.workList}
+                data={this.state.works}
+                tags={this.state.tags}
+                id="workLibrary"
                 title="我的作品库"
                 onDelete={this.handleDelete}
                 onRequestClose={this.props.closeWorkLibrary}

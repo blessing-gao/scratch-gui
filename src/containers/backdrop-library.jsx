@@ -19,7 +19,10 @@ class BackdropLibrary extends React.Component {
         super(props);
         bindAll(this, [
             'handleItemSelect',
-            'handleChange'
+            'handleChange',
+            'getResource',
+            'getDefault',
+            'getType'
         ]);
         this.state = {
             backdrop: [],
@@ -27,8 +30,21 @@ class BackdropLibrary extends React.Component {
         };
     }
 
+    getDefault (){
+        request.default_request(request.GET, null, '/backdrops.json', result => {
+            if (result) {
+                this.setState({backdrop: result});
+            }
+        },'http://owkomi1zd.bkt.clouddn.com');
+    }
+
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
+        if(type == 1){
+            this.getResource(1,1,1,1);
+        }else {
+            this.getDefault();
+        }
     }
 
     getResource (type, platFormId, userToken, typeId){

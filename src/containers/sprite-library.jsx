@@ -20,7 +20,11 @@ class SpriteLibrary extends React.PureComponent {
             'rotateCostume',
             'startRotatingCostumes',
             'stopRotatingCostumes',
-            'handleChange'
+            'handleChange',
+            'getResource',
+            'getDefault',
+            'getType'
+            
         ]);
         this.state = {
             activeSprite: null,
@@ -36,6 +40,14 @@ class SpriteLibrary extends React.PureComponent {
                 this.setState({sprites: result.result});
             }
         });
+    }
+
+    getDefault (){
+        request.default_request(request.GET, null, '/sprites.json', result => {
+            if (result) {
+                this.setState({sprites: result});
+            }
+        },'http://owkomi1zd.bkt.clouddn.com');
     }
 
     getType (type, platFormId, userToken){
@@ -75,6 +87,11 @@ class SpriteLibrary extends React.PureComponent {
     }
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
+        if(type == 1){
+            this.getResource(1,1,1,2);
+        }else {
+            this.getDefault();
+        }
     }
     startRotatingCostumes () {
         if (!this.state.activeSprite) return;

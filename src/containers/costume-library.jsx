@@ -4,16 +4,23 @@ import React from 'react';
 import VM from 'scratch-vm';
 
 import analytics from '../lib/analytics';
-import costumeLibraryContent from '../lib/libraries/costumes.json';
-import spriteTags from '../lib/libraries/sprite-tags';
 import LibraryComponent from '../components/library/library.jsx';
+import request from '../lib/request';
 
 class CostumeLibrary extends React.PureComponent {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleItemSelected'
+            'handleItemSelected',
+            'handleChange',
+            'getResource',
+            'getDefault',
+            'getType'
         ]);
+        this.state = {
+            costumes: [],
+            tags: null
+        };
     }
     handleItemSelected (item) {
         const vmCostume = {
@@ -30,12 +37,55 @@ class CostumeLibrary extends React.PureComponent {
             label: item.name
         });
     }
+
+    getDefault (){
+        request.default_request(request.GET, null, '/costumes.json', result => {
+            if (result) {
+                this.setState({costumes: result});
+            }
+        },'http://owkomi1zd.bkt.clouddn.com');
+    }
+
+    getResource (type, platFormId, userToken, typeId){
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${platFormId}&userToken=${userToken}&typeId=${typeId}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                this.setState({costumes: result.result});
+            }
+        });
+    }
+
+    getType (type, platFormId, userToken){
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${platFormId}&userToken=${userToken}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                let tags = [];
+                result.result.map(tag => {
+                    tags.push({id:tag.id,title:tag.name});
+                });
+                this.setState({tags:tags});
+            }
+        });
+    }
+
+    componentDidMount () {
+        this.getType(3,1,1);    // 获取类别 type, platFormId, userToken
+        this.getResource(1,1,1,3);    // 获取素材 type, platFormId, userToken, typeId
+    }
+
+    handleChange (type){
+        // 课程素材{type=1},默认素材{type=2}切换
+        if(type == 1){
+            this.getResource(1,1,1,3);
+        }else {
+            this.getDefault();
+        }
+    }
+
     render () {
         return (
             <LibraryComponent
-                data={costumeLibraryContent}
+                data={this.state.costumes}
                 id="costumeLibrary"
-                tags={spriteTags}
+                tags={this.state.tags}
                 title="选择造型"
                 onItemSelected={this.handleItemSelected}
                 onRequestClose={this.props.onRequestClose}

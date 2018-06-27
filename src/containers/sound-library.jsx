@@ -21,7 +21,10 @@ class SoundLibrary extends React.PureComponent {
             'handleItemSelected',
             'handleItemMouseEnter',
             'handleItemMouseLeave',
-            'handleChange'
+            'handleChange',
+            'getResource',
+            'getDefault',
+            'getType'
         ]);
         this.state = {
             sound: [],
@@ -41,8 +44,21 @@ class SoundLibrary extends React.PureComponent {
         this.playingSoundPromise = null;
     }
 
+    getDefault (){
+        request.default_request(request.GET, null, '/backdrops.json', result => {
+            if (result) {
+                this.setState({sound: result});
+            }
+        },'http://owkomi1zd.bkt.clouddn.com');
+    }
+
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
+        if(type == 1){
+            this.getResource(1,1,1,4);
+        }else {
+            this.getDefault();
+        }
     }
 
     getResource (type, platFormId, userToken, typeId){

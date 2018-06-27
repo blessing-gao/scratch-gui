@@ -10,7 +10,7 @@ export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
     // return 'http://localhost:8080';
     // return `${window.location.protocol}//${window.location.host}`;
-    return 'http://192.168.1.112:8080';
+    return 'http://192.168.1.106:8080';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
@@ -24,15 +24,17 @@ export function getTargetId(url = window.location.href) {
     return null;
 }
 
+
+
 export default {
     POST: 'POST',
     GET: 'GET',
     SUCCERR: '10000',
     UserError: '10001',
     NotFindError: '10002',
-    default_request: function (func, data, path, callback, asyn = true) {
+    default_request: function (func, data, path, callback, host, asyn = true) {
         try {
-            const HOST = getHost();
+            const HOST = host ? host : getHost();
             if (func == this.POST){
                 if (typeof data === 'object'){
                     const arrs = [];
@@ -42,7 +44,6 @@ export default {
                     data = arrs.join('&');
                 }
             }
-
             const obj = new XMLHttpRequest();
             obj.open(func, HOST + path, asyn);
             obj.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;'); // 添加http头，发送信息至服务器时内容编码类型

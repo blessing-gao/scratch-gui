@@ -46,85 +46,61 @@ class ProjectSave extends React.Component {
         // this.props.setWork(work);
         // console.log(this.props.work)
 
-        const id = getTargetId();
-        if (id !== null){
-            request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
-                if (result.code !== request.NotFindError){
-                    this.props.setWork({
-                        id: result.id,
-                        workName: result.name,
-                        projectName: result.name
-                    });
-                    console.log(this.props.work);
-                    this.setState({id: result.id, workName: result.name, projectName: result.name});
-                }
-            });
-        }
+        // const id = getTargetId();
+        // if (id !== null){
+        //     request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
+        //         if (result.code !== request.NotFindError){
+        //             this.props.setWork({
+        //                 id: result.id,
+        //                 workName: result.name,
+        //                 projectName: result.name
+        //             });
+        //             console.log(this.props.work);
+        //             this.setState({id: result.id, workName: result.name, projectName: result.name});
+        //         }
+        //     });
+        // }
     }
     /**
      * 作品向服务端保存方法
      * @param isNewProject，true是保存，flase是另存
      */
     saveProject (isNewProject = true) {
-        // todo 待对接，参数通过this.props.work取
-        let filename = '';
+        let name = '';
         if (this.state.projectName === ''){
             alert('请先为作品命名!');
             return false;
         }else{
-            filename = this.state.projectName;
+            name = this.state.projectName;
         }
         this.props.vm.saveProjectSb3().then(content => {
             // Use special ms version if available to get it working on Edge.
             if (navigator.msSaveOrOpenBlob) {
-                navigator.msSaveOrOpenBlob(content, filename);
+                navigator.msSaveOrOpenBlob(content, name);
                 return;
             }
+            let work = this.props.work;
             let saveData = {
                 'file':content,
-                'name':filename,
-                'platFormId':'1',
-                'userToken':'1'
+                'name':name,
+                'platFormId':work.platFormId,
+                'userToken':work.userToken,
+                'id':work.id ? work.id : '0'
             };
-            // let saveData = {
-            //     'file':content
-            // };
-            const id = getTargetId();
-            saveData.id = id ? id : '0';
-            request.file_request(request.POST, saveData, '/api/save1', result => {
-                if (result.code == 1){
+            request.file_request(request.POST, saveData, '/api/scratch/save', result => {
+                if (result.code == 1 && result.result){
                     // 上传成功
-                    // todo 保存成功后更新scratch reducer状态
+                    this.props.setWork(result.result);
                 }
             });
         });
-        // let filename = '';
-        // if (this.state.projectName === ''){
-        //     const date = new Date();
-        //     const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
-        //     filename = `未命名作品-${timestamp}.my`;
-        // }
-        // const saveLink = document.createElement('a');
-        // document.body.appendChild(saveLink);
-        //
-        // this.props.vm.saveProjectSb3().then(content => {
-        //     // Use special ms version if available to get it working on Edge.
-        //     if (navigator.msSaveOrOpenBlob) {
-        //         navigator.msSaveOrOpenBlob(content, filename);
-        //         return;
-        //     }
-        //
-        //     const url = window.URL.createObjectURL(content);
-        //     saveLink.href = url;
-        //     saveLink.download = filename;
-        //     saveLink.click();
-        //     window.URL.revokeObjectURL(url);
-        //     document.body.removeChild(saveLink);
-        // });
     }
 
     handleChange (event) {
         this.setState({projectName: event.target.value});
+        let workData = this.props.work;
+        workData.name = event.target.value;
+        this.props.setWork(workData);
     }
     render () {
         const {
@@ -138,7 +114,7 @@ class ProjectSave extends React.Component {
         // return this.props.children(this.saveProject, props);
         return (
             <ProjectSaveComponent
-                projectName={this.state.projectName}
+                projectName={this.props.work.name}
                 onChange={this.handleChange}
                 save={this.saveProject.bind(this,true)}
                 saveAs={this.saveProject.bind(this,false)}
