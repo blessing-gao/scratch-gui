@@ -12,7 +12,7 @@ import {
 
 import analytics from '../lib/analytics';
 import LibraryComponent from '../components/library/library.jsx';
-
+import {setWork} from '../reducers/scratch';
 
 class BackdropLibrary extends React.Component {
     constructor (props) {
@@ -41,22 +41,24 @@ class BackdropLibrary extends React.Component {
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
         if(type == 1){
-            this.getResource(1,1,1,1);
+            this.getResource(1,1);
         }else {
             this.getDefault();
         }
     }
 
-    getResource (type, platFormId, userToken, typeId){
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${platFormId}&userToken=${userToken}&typeId=${typeId}`, result => {
+    getResource (type, typeId){
+        let work = this.props.work;
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}&typeId=${typeId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 this.setState({backdrop: result.result});
             }
         });
     }
 
-    getType (type, platFormId, userToken){
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${platFormId}&userToken=${userToken}`, result => {
+    getType (type){
+        let work = this.props.work;
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
@@ -68,8 +70,8 @@ class BackdropLibrary extends React.Component {
     }
 
     componentDidMount () {
-        this.getType(1,1,1);    // 获取类别 type, platFormId, userToken
-        this.getResource(1,1,1,1);    // 获取素材 type, platFormId, userToken, typeId
+        this.getType(1);    // 获取类别 type, platFormId, userToken
+        this.getResource(1,1);    // 获取素材 type, platFormId, userToken, typeId
     }
 
     handleItemSelect (item) {
@@ -109,11 +111,13 @@ BackdropLibrary.propTypes = {
     onActivateTab: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func,
     stageID: PropTypes.string.isRequired,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    work: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-    stageID: state.scratchGui.targets.stage.id
+    stageID: state.scratchGui.targets.stage.id,
+    work: state.scratchGui.scratch.work
 });
 
 const mapDispatchToProps = dispatch => ({

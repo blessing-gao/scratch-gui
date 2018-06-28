@@ -6,6 +6,8 @@ import VM from 'scratch-vm';
 import analytics from '../lib/analytics';
 import LibraryComponent from '../components/library/library.jsx';
 import request from '../lib/request';
+import {connect} from 'react-redux';
+import {setWork} from '../reducers/scratch';
 
 class CostumeLibrary extends React.PureComponent {
     constructor (props) {
@@ -46,16 +48,18 @@ class CostumeLibrary extends React.PureComponent {
         },'http://owkomi1zd.bkt.clouddn.com');
     }
 
-    getResource (type, platFormId, userToken, typeId){
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${platFormId}&userToken=${userToken}&typeId=${typeId}`, result => {
+    getResource (type, typeId){
+        let work = this.props.work;
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}&typeId=${typeId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 this.setState({costumes: result.result});
             }
         });
     }
 
-    getType (type, platFormId, userToken){
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${platFormId}&userToken=${userToken}`, result => {
+    getType (type){
+        let work = this.props.work;
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
@@ -67,14 +71,14 @@ class CostumeLibrary extends React.PureComponent {
     }
 
     componentDidMount () {
-        this.getType(3,1,1);    // 获取类别 type, platFormId, userToken
-        this.getResource(1,1,1,3);    // 获取素材 type, platFormId, userToken, typeId
+        this.getType(3);    // 获取类别 type, platFormId, userToken
+        this.getResource(1,3);    // 获取素材 type, platFormId, userToken, typeId
     }
 
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
         if(type == 1){
-            this.getResource(1,1,1,3);
+            this.getResource(1,3);
         }else {
             this.getDefault();
         }
@@ -96,7 +100,18 @@ class CostumeLibrary extends React.PureComponent {
 
 CostumeLibrary.propTypes = {
     onRequestClose: PropTypes.func,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    work: PropTypes.object
 };
 
-export default CostumeLibrary;
+const mapStateToProps = state => ({
+    work: state.scratchGui.scratch.work
+});
+
+const mapDispatchToProps = dispatch => ({
+    
+});
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CostumeLibrary);

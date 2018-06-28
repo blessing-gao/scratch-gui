@@ -2,7 +2,8 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import VM from 'scratch-vm';
-
+import {connect} from 'react-redux';
+import {setWork} from '../reducers/scratch';
 import analytics from '../lib/analytics';
 // import spriteLibraryContent from '../lib/libraries/sprites.json';
 import spriteTags from '../lib/libraries/sprite-tags';
@@ -24,7 +25,7 @@ class SpriteLibrary extends React.PureComponent {
             'getResource',
             'getDefault',
             'getType'
-            
+
         ]);
         this.state = {
             activeSprite: null,
@@ -34,8 +35,9 @@ class SpriteLibrary extends React.PureComponent {
         };
     }
 
-    getResource (type, platFormId, userToken, typeId){
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${platFormId}&userToken=${userToken}&typeId=${typeId}`, result => {
+    getResource (type, typeId){
+        let work = this.props.work;
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}&typeId=${typeId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 this.setState({sprites: result.result});
             }
@@ -50,8 +52,9 @@ class SpriteLibrary extends React.PureComponent {
         },'http://owkomi1zd.bkt.clouddn.com');
     }
 
-    getType (type, platFormId, userToken){
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${platFormId}&userToken=${userToken}`, result => {
+    getType (type){
+        let work = this.props.work;
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
@@ -63,8 +66,8 @@ class SpriteLibrary extends React.PureComponent {
     }
 
     componentDidMount () {
-        this.getType(2,1,1);    // 获取类别 type, platFormId, userToken
-        this.getResource(1,1,1,2);    // 获取素材 type, platFormId, userToken, typeId
+        this.getType(2);    // 获取类别 type
+        this.getResource(1,2);    // 获取素材 type, typeId
     }
 
     componentWillUnmount () {
@@ -88,7 +91,7 @@ class SpriteLibrary extends React.PureComponent {
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
         if(type == 1){
-            this.getResource(1,1,1,2);
+            this.getResource(1,2);
         }else {
             this.getDefault();
         }
@@ -136,7 +139,22 @@ class SpriteLibrary extends React.PureComponent {
 
 SpriteLibrary.propTypes = {
     onRequestClose: PropTypes.func,
-    vm: PropTypes.instanceOf(VM).isRequired
+    vm: PropTypes.instanceOf(VM).isRequired,
+    work: PropTypes.object
 };
 
-export default SpriteLibrary;
+const mapStateToProps = state => ({
+    work: state.scratchGui.scratch.work
+});
+
+const mapDispatchToProps = dispatch => ({
+    setWork:work => {
+        dispatch(setWork(work));
+    }
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SpriteLibrary);
+

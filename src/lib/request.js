@@ -10,7 +10,7 @@ export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
     // return 'http://localhost:8080';
     // return `${window.location.protocol}//${window.location.host}`;
-    return 'http://192.168.1.106:8080';
+    return 'http://47.96.67.149:8080';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
@@ -32,7 +32,7 @@ export default {
     SUCCERR: '10000',
     UserError: '10001',
     NotFindError: '10002',
-    default_request: function (func, data, path, callback, host, asyn = true) {
+    default_request: function (func, data, path, callback, host, header, asyn = true) {
         try {
             const HOST = host ? host : getHost();
             if (func == this.POST){
@@ -46,7 +46,7 @@ export default {
             }
             const obj = new XMLHttpRequest();
             obj.open(func, HOST + path, asyn);
-            obj.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;'); // 添加http头，发送信息至服务器时内容编码类型
+            obj.setRequestHeader('Content-type', header ? header : 'application/x-www-form-urlencoded;'); // 添加http头，发送信息至服务器时内容编码类型
             obj.send(data);
             obj.onreadystatechange = function () {
                 if (obj.readyState == XMLHttpRequest.DONE){

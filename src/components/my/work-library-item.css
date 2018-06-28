@@ -42,73 +42,43 @@
     text-align: center;
     cursor: pointer;
     border-color: #1dacf4;
-    opacity:0.5;
+    /*opacity:0.5;*/
 }
 
+.text-center{
+    text-align: center;
+}
 .menu {
-    margin-top: -88px;
+    margin-top: -75px;
     opacity:0;
     display: none;
 }
 .menuhover {
-    margin-top: -88px;
+    margin-top: -75px;
     opacity:1;
     display: block;
 }
-
-
-.menu-edit {
+.menu-btn{
+    color: #fff;
+    background-color: #ffc019;
     outline:none;
     position: relative;
-    color: black;
-    margin-left: 14px;
-    margin-top: -88px;
-    border-radius: 0.25rem;
-    background: white;
+    border: none;
+    border-radius: 0.6rem;
     font-weight: 600;
-    font-size: 0.85rem;
-}
-
-.menu-edit:hover{
-    border: 2px solid #4C97FF;
-}
-.menu-edit:active{
-    background: gray;
+    font-size: 0.75rem;
+    cursor: pointer;
+    line-height: 1.2rem;
 }
 .menu-share {
-    outline:none;
-    position: relative;
-    color: black;
-    margin-left: 8.2px;
-    margin-top: -88px;
-    border-radius: 0.25rem;
-    background: white;
-    font-weight: 600;
-    font-size: 0.85rem;
+    margin: 0 8px;
 }
-.menu-share:hover{
-    border: 2px solid #4C97FF;
-}
-.menu-share:active{
-    background: gray;
-}
-.menu-delete {
-    outline:none;
-    position: relative;
-    color: black;
-    margin-left: 8.2px;
-    margin-top: -88px;
-    border-radius: 0.25rem;
-    background: white;
-    font-weight: 600;
-    font-size: 0.85rem;
-}
-.menu-delete:hover{
-    border: 2px solid red;
-}
-.menu-delete:active{
-    border: 0px solid red;
-}
+/*.menu-delete:hover{*/
+    /*border: 2px solid red;*/
+/*}*/
+/*.menu-delete:active{*/
+    /*border: 0px solid red;*/
+/*}*/
 .library-item-over {
     opacity:0;
 }

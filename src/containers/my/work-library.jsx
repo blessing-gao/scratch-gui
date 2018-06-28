@@ -5,6 +5,7 @@ import WorkLibraryComponent from '../../components/my/work-library.jsx';
 import request from '../../lib/request';
 import {closeWorkLibrary} from "../../reducers/modals";
 import {connect} from "react-redux";
+import {setWork} from '../../reducers/scratch';
 
 class WorkLibrary extends React.Component {
     constructor (props) {
@@ -20,7 +21,43 @@ class WorkLibrary extends React.Component {
         };
     }
 
-    componentDidMount (){
+    getResource (){
+        let work = this.props.work;
+        let data = {
+            "pagination": {
+                "number": 20,
+                "start": 21
+            },
+            "search": {},
+            "sort": {
+                "predicate" : "create_time"
+            },
+            "platFormId": work.platFormId,
+            "userToken": work.userToken
+        };
+        request.default_request(request.POST, JSON.stringify(data), `/api/scratch/worksList`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                this.setState({works: result.result.records});
+            }
+        },"","application/json");
+    }
+
+    getType (type){
+        let work = this.props.work;
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
+            if (result.code !== request.NotFindError && result.result) {
+                let tags = [];
+                result.result.map(tag => {
+                    tags.push({id:tag.id,title:tag.name});
+                });
+                this.setState({tags:tags});
+            }
+        });
+    }
+
+    componentDidMount () {
+        this.getType(5);    // 获取类别 type, platFormId, userToken
+        this.getResource();
         // request.default_request(request.GET, {}, '/internalapi/project/list', result => {
         //     if (typeof result.value !== 'undefined'){
         //         this.setState({workList: result.value});
@@ -50,13 +87,19 @@ class WorkLibrary extends React.Component {
 }
 
 WorkLibrary.propTypes = {
-    closeWorkLibrary: PropTypes.func
+    closeWorkLibrary: PropTypes.func,
+    work: PropTypes.object
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = state => ({
+    work: state.scratchGui.scratch.work
+});
 const mapDispatchToProps = dispatch => ({
     closeWorkLibrary: () => {
         dispatch(closeWorkLibrary());
+    },
+    setWork:work => {
+        dispatch(setWork(work));
     }
 });
 

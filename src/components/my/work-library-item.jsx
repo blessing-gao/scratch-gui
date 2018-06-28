@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -5,6 +6,9 @@ import {getHost} from '../../lib/request';
 import request from '../../lib/request';
 import Box from '../box/box.jsx';
 import styles from './work-library-item.css';
+import {connect} from 'react-redux';
+import {setWork} from '../../reducers/scratch';
+
 
 const host = getHost();
 class WorkLibraryItem extends React.PureComponent {
@@ -58,10 +62,13 @@ class WorkLibraryItem extends React.PureComponent {
     }
 
     handleDeleteClick () {
+        let work = this.props.work;
         const data = {
-            id: this.props.id
+            scratchId: this.props.id,
+            userToken: work.userToken,
+            platFormId: work.platFormId
         };
-        request.default_request(request.POST, data, '/internalapi/project/delete', result => {
+        request.default_request(request.POST, data, '/api/scratch/delete', result => {
             // 更新列表
             if (result){
                 console.log(result);
@@ -105,22 +112,22 @@ class WorkLibraryItem extends React.PureComponent {
                     {/* <span className={styles.libraryItemName}>{this.props.name}</span>*/}
                 </Box>
                 <Box
-                    className={this.state.status ? `${styles.menuhover} ` : `${styles.menu} `}
+                    className={classNames((this.state.status ? `${styles.menuhover} ` : `${styles.menu} `), styles.textCenter)}
                     onMouseEnter={this.handleMouseEnter}
                     onMouseLeave={this.handleMouseLeave}
                 >
                     <button
-                        className={styles.menuEdit}
+                        className={classNames(styles.menuEdit, styles.menuBtn)}
                         onClick={this.handleEditClick}
                     >
                         编辑
                     </button>
                     <button
-                        className={styles.menuShare}
+                        className={classNames(styles.menuShare, styles.menuBtn)}
                         onClick={this.handleShareClick}
                     >分享</button>
                     <button
-                        className={styles.menuDelete}
+                        className={classNames(styles.menuDelete, styles.menuBtn)}
                         onClick={this.handleDeleteClick}
                     >删除</button>
                 </Box>
@@ -134,8 +141,23 @@ WorkLibraryItem.propTypes = {
     iconURL: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    onDelete: PropTypes.func
+    onDelete: PropTypes.func,
+    work: PropTypes.object
 
 };
 
-export default WorkLibraryItem;
+const mapStateToProps = state => ({
+    work: state.scratchGui.scratch.work
+});
+
+const mapDispatchToProps = dispatch => ({
+    setWork:work => {
+        dispatch(setWork(work));
+    }
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(WorkLibraryItem);
+
