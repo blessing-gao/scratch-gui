@@ -16,13 +16,9 @@ import styles from './library.css';
 const ALL_TAG_TITLE = '所有';
 const tagListPrefix = [{id: 0, title: ALL_TAG_TITLE}];
 
-const messages = defineMessages({
-    filterPlaceholder: {
-        id: 'gui.library.filterPlaceholder',
-        defaultMessage: 'Search',
-        description: 'Placeholder text for library search field'
-    }
-});
+const messages = {
+    filterPlaceholder: '搜索'
+};
 
 class LibraryComponent extends React.Component {
     constructor (props) {
@@ -133,7 +129,7 @@ class LibraryComponent extends React.Component {
                                 )}
                                 filterQuery={this.state.filterQuery}
                                 inputClassName={styles.filterInput}
-                                placeholderText={this.props.intl.formatMessage(messages.filterPlaceholder)}
+                                placeholderText={messages.filterPlaceholder}
                                 onChange={this.handleFilterChange}
                                 onClear={this.handleFilterClear}
                             />

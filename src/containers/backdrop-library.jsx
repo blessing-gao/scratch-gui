@@ -35,7 +35,7 @@ class BackdropLibrary extends React.Component {
             if (result) {
                 this.setState({backdrop: result});
             }
-        },'http://owkomi1zd.bkt.clouddn.com');
+        },'http://cdn.imayuan.com');
     }
 
     handleChange (type){

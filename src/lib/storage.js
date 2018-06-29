@@ -5,9 +5,9 @@ import defaultProjectAssets from './default-project';
 // const PROJECT_SERVER = 'https://projects.scratch.mit.edu';
 // const ASSET_SERVER = 'https://cdn.assets.scratch.mit.edu';
 // const PROJECT_SERVER = 'http://localhost:8080';
-const PROJECT_SERVER = 'http://mayuan-lib.oss-cn-hangzhou.aliyuncs.com/project/fa02bd81a8eae6742250e1d3fa18759f.json';
-const ASSET_SERVER = 'http://owkomi1zd.bkt.clouddn.com/';
-// const ASSET_SERVER = 'http://cdn.imayuan.com/';
+const PROJECT_SERVER = 'http://cdn.imayuan.com/project/';
+// const ASSET_SERVER = 'http://owkomi1zd.bkt.clouddn.com/';
+const ASSET_SERVER = 'http://cdn.imayuan.com/';
 /**
  * Wrapper for ScratchStorage which adds default web sources.
  * @todo make this more configurable
@@ -20,8 +20,8 @@ class Storage extends ScratchStorage {
             projectAsset => {
                 const [projectId, revision] = projectAsset.assetId.split('.');
                 return revision ?
-                    `${PROJECT_SERVER}` :
-                    `${PROJECT_SERVER}`;
+                    `${PROJECT_SERVER}${projectId}.json` :
+                    `${PROJECT_SERVER}${projectId}.json`;
             }
         );
         this.addWebSource(

@@ -45,7 +45,7 @@ class CostumeLibrary extends React.PureComponent {
             if (result) {
                 this.setState({costumes: result});
             }
-        },'http://owkomi1zd.bkt.clouddn.com');
+        },'http://cdn.imayuan.com');
     }
 
     getResource (type, typeId){
@@ -109,7 +109,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    
+
 });
 export default connect(
     mapStateToProps,
