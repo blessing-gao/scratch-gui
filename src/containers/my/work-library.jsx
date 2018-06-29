@@ -12,23 +12,34 @@ class WorkLibrary extends React.Component {
         super(props);
         bindAll(this, [
             'componentDidMount',
-            'handleDelete'
-
+            'handleDelete',
+            'getLast',
+            'getNext',
+            'handleSearch',
+            'handleClear',
+            'handleKeyDown'
         ]);
         this.state = {
             works: [],
-            tags: []
+            tags: [],
+            nowPage: 1,
+            totalPage: 0,
+            numbers: 10,
+            searchContent: '',
+            searchHis: ''
         };
     }
 
-    getResource (){
+    getResource (nowPage = this.state.nowPage){
         let work = this.props.work;
         let data = {
             "pagination": {
-                "number": 20,
-                "start": 21
+                "number": this.state.numbers,
+                "start": (nowPage - 1) * this.state.numbers
             },
-            "search": {},
+            "search": {
+                "name": this.state.searchContent || null
+            },
             "sort": {
                 "predicate" : "create_time"
             },
@@ -37,7 +48,11 @@ class WorkLibrary extends React.Component {
         };
         request.default_request(request.POST, JSON.stringify(data), `/api/scratch/worksList`, result => {
             if (result.code !== request.NotFindError && result.result) {
-                this.setState({works: result.result.records});
+                this.setState({
+                    works: result.result.records,
+                    nowPage: result.result.current,
+                    totalPage: result.result.pages
+                });
             }
         },"","application/json");
     }
@@ -55,6 +70,46 @@ class WorkLibrary extends React.Component {
         });
     }
 
+    handleSearch(event){
+        this.setState({searchContent: event.target.value});
+    }
+
+    handleKeyDown(event){
+        // console.log(event.keyCode);
+        if(event.keyCode == 13){
+            this.getResource(1);
+        }
+        this.setState({searchHis: event.target.value});
+    }
+
+    handleClear(){
+        this.setState({searchContent: ''}, () => {
+            if(this.state.searchHis != ''){
+                this.getResource(1);
+                this.setState({searchHis: ''});
+            }
+        });
+    }
+
+    getLast(){
+        if(this.state.nowPage != 1){
+            this.getResource(this.state.nowPage - 1);
+        }
+        // this.setState({ nowPage: this.state.nowPage - 1 }, () => {
+        //     this.getResource();
+        // });
+    }
+
+    getNext(){
+        if(this.state.nowPage != this.state.totalPage && this.state.totalPage != 0){
+            this.getResource(this.state.nowPage + 1);
+        }
+        // this.getResource(this.state.nowPage + 1);
+        // this.setState({ nowPage: this.state.nowPage + 1 }, () => {
+        //     this.getResource();
+        // });
+    }
+
     componentDidMount () {
         this.getType(5);    // 获取类别 type, platFormId, userToken
         this.getResource();
@@ -65,11 +120,7 @@ class WorkLibrary extends React.Component {
         // });
     }
     handleDelete (){
-        // request.default_request(request.GET, {}, '/internalapi/project/list', result => {
-        //     if (typeof result.value !== 'undefined'){
-        //         this.setState({workList: result.value});
-        //     }
-        // });
+        this.getResource(1);
     }
     render () {
         return (
@@ -81,6 +132,14 @@ class WorkLibrary extends React.Component {
                 title="我的作品库"
                 onDelete={this.handleDelete}
                 onRequestClose={this.props.closeWorkLibrary}
+                getLast={this.getLast}
+                getNext={this.getNext}
+                nowPage={this.state.nowPage}
+                totalPage={this.state.totalPage}
+                handleFilterChange={this.handleSearch}
+                handleFilterKeyDown={this.handleKeyDown}
+                handleFilterClear={this.handleClear}
+                filterQuery={this.state.searchContent}
             />
         );
     }

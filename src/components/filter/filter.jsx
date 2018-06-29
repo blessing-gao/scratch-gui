@@ -13,7 +13,8 @@ const FilterComponent = props => {
         onClear,
         placeholderText,
         filterQuery,
-        inputClassName
+        inputClassName,
+        onKeyDown
     } = props;
     return (
         <div
@@ -31,6 +32,7 @@ const FilterComponent = props => {
                 type="text"
                 value={filterQuery}
                 onChange={onChange}
+                onKeyDown={onKeyDown}
             />
             <div
                 className={styles.xIconWrapper}
@@ -50,6 +52,7 @@ FilterComponent.propTypes = {
     filterQuery: PropTypes.string,
     inputClassName: PropTypes.string,
     onChange: PropTypes.func,
+    onKeyDown: PropTypes.func,
     onClear: PropTypes.func,
     placeholderText: PropTypes.string
 };

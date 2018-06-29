@@ -5,25 +5,33 @@ import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 import {setWork} from '../reducers/scratch';
 import request from '../lib/request';
-import paginationComponent from '../components/pagination/pagination'
+import PaginationComponent from '../components/pagination/pagination.jsx'
 
-class pagination extends React.PureComponent {
+class Pagination extends React.PureComponent {
     constructor (props){
         super(props);
         bindAll(this,[
-            'getLastPage',
-            'getNextPage'
+
         ]);
-        this.state = {
-            nowPage : 1
-        };
     }
 
     render (){
         return (
-            <paginationComponent />
+            <PaginationComponent
+                getLast={this.props.getLast}
+                getNext={this.props.getNext}
+                nowPage={this.props.nowPage}
+                totalPage={this.props.totalPage}
+            />
         );
     }
 }
 
-export default pagination;
+Pagination.propTypes = {
+    getLast: PropTypes.func,
+    getNext: PropTypes.func,
+    nowPage: PropTypes.number,
+    totalPage: PropTypes.number
+};
+
+export default Pagination;

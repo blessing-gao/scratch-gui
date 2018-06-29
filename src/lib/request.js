@@ -10,7 +10,7 @@ export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
     // return 'http://localhost:8080';
     // return `${window.location.protocol}//${window.location.host}`;
-    return 'http://47.96.67.149:8080';
+    return 'http://192.168.0.126:8080';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
@@ -19,6 +19,7 @@ export function getQueryString (name) {
     return null;
 }
 export function getTargetId(url = window.location.href) {
+    if(url.indexOf("#") < 0) return null;
     const arr = url.split(/\#|\?/);
     if(arr.length > 1) return arr[1];
     return null;

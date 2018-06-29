@@ -8,6 +8,7 @@ import {COVER_SERVER} from '../../lib/request';
 import classNames from "classnames";
 import {intlShape, injectIntl, defineMessages} from "react-intl";
 import TagButton from '../../containers/tag-button.jsx';
+import Pagination from '../../containers/pagination.jsx'
 import Divider from '../divider/divider.jsx';
 import Filter from '../filter/filter.jsx';
 
@@ -47,11 +48,12 @@ class WorkLibraryComponent extends React.Component {
                                     styles.filterBarItem,
                                     styles.filter
                                 )}
-                                filterQuery={this.state.filterQuery}
+                                filterQuery={this.props.filterQuery}
                                 inputClassName={styles.filterInput}
                                 placeholderText={messages.filterPlaceholder}
-                                onChange={this.handleFilterChange}
-                                onClear={this.handleFilterClear}
+                                onChange={this.props.handleFilterChange}
+                                onClear={this.props.handleFilterClear}
+                                onKeyDown={this.props.handleFilterKeyDown}
                             />
                         )}
                         {this.props.filterable && this.props.tags && (
@@ -96,6 +98,14 @@ class WorkLibraryComponent extends React.Component {
                                 />);
                         })
                         }
+                    <div className={styles.pagesBox}>
+                        <Pagination
+                            getLast={this.props.getLast}
+                            getNext={this.props.getNext}
+                            nowPage={this.props.nowPage}
+                            totalPage={this.props.totalPage}
+                        />
+                    </div>
                 </div>
                 {/*<div className={styles.filterBar}>*/}
                     {/*{this.props.data.map((dataItem, index) => {*/}

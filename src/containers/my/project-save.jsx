@@ -66,12 +66,13 @@ class ProjectSave extends React.Component {
      * @param isNewProject，true是保存，flase是另存
      */
     saveProject (isNewProject = true) {
+        let work = this.props.work;
         let name = '';
-        if (this.state.projectName === ''){
+        if (work.name === ''){
             alert('请先为作品命名!');
             return false;
         }else{
-            name = this.state.projectName;
+            name = work.name;
         }
         this.props.vm.saveProjectSb3().then(content => {
             // Use special ms version if available to get it working on Edge.
@@ -79,7 +80,6 @@ class ProjectSave extends React.Component {
                 navigator.msSaveOrOpenBlob(content, name);
                 return;
             }
-            let work = this.props.work;
             let saveData = {
                 'file':content,
                 'name':name,

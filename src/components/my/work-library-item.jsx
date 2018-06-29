@@ -8,7 +8,7 @@ import Box from '../box/box.jsx';
 import styles from './work-library-item.css';
 import {connect} from 'react-redux';
 import {setWork} from '../../reducers/scratch';
-
+import Card from '../../containers/cards.jsx'
 
 const host = getHost();
 class WorkLibraryItem extends React.PureComponent {
@@ -73,7 +73,6 @@ class WorkLibraryItem extends React.PureComponent {
             if (result){
                 console.log(result);
                 this.props.onDelete();
-                message.info('删除成功');
             }
         });
     }
