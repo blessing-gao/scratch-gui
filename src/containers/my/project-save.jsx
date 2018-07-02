@@ -63,12 +63,12 @@ class ProjectSave extends React.Component {
     }
     /**
      * 作品向服务端保存方法
-     * @param isNewProject，true是保存，flase是另存
+     * @param notNewProject，true是保存，flase是另存
      */
-    saveProject (isNewProject = true) {
+    saveProject (notNewProject = true) {
         let work = this.props.work;
         let name = '';
-        if (work.name === ''){
+        if (!work.name){
             alert('请先为作品命名!');
             return false;
         }else{
@@ -85,7 +85,7 @@ class ProjectSave extends React.Component {
                 'name':name,
                 'platFormId':work.platFormId,
                 'userToken':work.userToken,
-                'id':work.id ? work.id : '0'
+                'id':work.id && notNewProject ? work.id : '0'
             };
             request.file_request(request.POST, saveData, '/api/scratch/save', result => {
                 if (result.code == 1 && result.result){

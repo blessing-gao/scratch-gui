@@ -8,7 +8,8 @@ import Box from '../box/box.jsx';
 import styles from './work-library-item.css';
 import {connect} from 'react-redux';
 import {setWork} from '../../reducers/scratch';
-import Card from '../../containers/cards.jsx'
+import Card from '../../containers/cards.jsx';
+import QRCode from 'qrcode.react';
 
 const host = getHost();
 class WorkLibraryItem extends React.PureComponent {

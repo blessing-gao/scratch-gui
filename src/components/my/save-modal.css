@@ -8,7 +8,7 @@
     right: 0;
     bottom: 0;
     z-index: 1000;
-    background-color: $ui-modal-overlay;
+    background-color: rgba(0,0,0,.6);
 }
 
 .modal-content {
@@ -25,7 +25,7 @@
 }
 
 .body {
-    background: $ui-pane-gray;
+    background: #FFF;
     padding: 1.5rem 2.25rem;
     text-align: center;
 }
@@ -36,7 +36,7 @@
 }
 
 .input {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     width: 100%;
     border: 1px solid rgba(0,0,0,.1);
     border-radius: 5px;
@@ -44,6 +44,39 @@
     height: 3rem;
     color: #6b6b6b;
     font-size: .875rem;
+    outline: none;
+}
+
+.textarea{
+    padding: .8rem 1rem;
+    height: 6rem;
+    margin-bottom: .6rem;
+}
+
+.label-title{
+    font-size: 1.2rem;
+}
+
+.class-title{
+    font-size: .9rem;
+    text-align: left;
+    margin: 0;
+}
+
+.class-box{
+    text-align: left;
+    padding: .8rem 0;
+    margin-bottom: 1.5rem;
+}
+
+.class-btn{
+    display: inline-block;
+    padding: .4rem 1rem;
+    border: 1px dashed #ccc;
+    border-radius: .2rem;
+    font-size: .8rem;
+    margin: 0 .6rem .4rem 0;
+    cursor: pointer;
 }
 
 .button-row {
@@ -52,7 +85,7 @@
 }
 
 .button-row button {
-    padding: 0.75rem 1rem;
+    padding: .7rem 1.8rem;
     border-radius: 0.25rem;
     background: white;
     border: 1px solid $ui-pane-border;
@@ -68,4 +101,9 @@
 
 .button-row button + button {
     margin-left: 0.5rem;
+}
+
+.class-btn:hover, .active-btn{
+    color: #1dacf4;
+    border-color: #1dacf4;
 }

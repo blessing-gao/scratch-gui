@@ -32,6 +32,7 @@ import dropdownCaret from '../language-selector/dropdown-caret.svg';
 import scratchLogo from './logo.png';
 
 import helpIcon from './icon--help.svg';
+import backIcon from './icon--back.svg';
 import {getHost} from '../../lib/request';
 
 const host = getHost();
@@ -288,6 +289,19 @@ const MenuBar = props => (
         {/* </a>*/}
         {/* </div>*/}
         <div className={styles.accountInfoWrapper}>
+            <div
+                className={classNames(
+                    styles.menuBarItem,
+                    styles.hoverable,
+                    styles.mystuffButton
+                )}
+                onClick={props.handleBack}
+            >
+                <img
+                    className={styles.myBackIcon}
+                    src={backIcon}
+                />
+            </div>
             <div
                 aria-label="How-to Library"
                 className={classNames(styles.menuBarItem, styles.hoverable)}

@@ -75,6 +75,7 @@ const GUIComponent = props => {
         tipsLibraryVisible,
         vm,
         workLibraryVisible,
+        handleBack,
         ...componentProps
     } = omit(props, 'dispatch');
     if (children) {
@@ -142,7 +143,7 @@ const GUIComponent = props => {
                         onRequestClose={onRequestCloseBackdropLibrary}
                     />
                 ) : null}
-                <MenuBar enableCommunity={enableCommunity} />
+                <MenuBar enableCommunity={enableCommunity} handleBack={handleBack}/>
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
                         <Box className={styles.editorWrapper}>

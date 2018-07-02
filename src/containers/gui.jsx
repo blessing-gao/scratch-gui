@@ -7,6 +7,7 @@ import ReactModal from 'react-modal';
 import request ,{getTargetId,getQueryString} from '../lib/request';
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import {openExtensionLibrary} from '../reducers/modals';
+import bindAll from 'lodash.bindall';
 import {
     activateTab,
     BLOCKS_TAB_INDEX,
@@ -28,6 +29,9 @@ import {setWork} from "../reducers/scratch";
 class GUI extends React.Component {
     constructor (props) {
         super(props);
+        bindAll(this, [
+            'handleBack'
+        ]);
         this.state = {
             loading: !props.vm.initialized,
             loadingError: false,
@@ -38,7 +42,7 @@ class GUI extends React.Component {
         // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
         const id = getTargetId();
         const userToken= getQueryString("userToken") || 'auth_7db8a90571484975bd1822d0f49baf32';
-        const platFormId= getQueryString("platFormId") || '2';
+        const platFormId= getQueryString("platFormId") || '1';
         const deviceIdentify = '1';
         if (id !== null){
             request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&platFormId=${platFormId}&userToken=${userToken}&deviceIdentify=${deviceIdentify}`, result => {
@@ -124,6 +128,16 @@ class GUI extends React.Component {
     componentWillUnmount () {
         this.props.vm.stopAll();
     }
+    handleBack (){
+        // 返回上一页
+        // console.log(window.history.length);
+        // console.log(document.referrer); // 来源url
+        if(window.history.length > 1 && document.referrer){
+            window.history.go(-1);
+        }else{
+            return false;
+        }
+    }
     render () {
         if (this.state.loadingError) {
             throw new Error(
@@ -142,6 +156,7 @@ class GUI extends React.Component {
             <GUIComponent
                 loading={fetchingProject || this.state.loading || loadingStateVisible}
                 vm={vm}
+                handleBack={this.handleBack}
                 {...componentProps}
             >
                 {children}
