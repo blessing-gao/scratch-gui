@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import omit from 'lodash.omit';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {injectIntl, intlShape} from 'react-intl';
+import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 import {connect} from 'react-redux';
 import MediaQuery from 'react-responsive';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
@@ -49,9 +49,9 @@ const GUIComponent = props => {
     const {
         activeTabIndex,
         basePath,
+        backdropLibraryVisible,
         backpackOptions,
         blocksTabVisible,
-        backdropLibraryVisible,
         cardsVisible,
         children,
         costumeLibraryVisible,
@@ -67,6 +67,7 @@ const GUIComponent = props => {
         onActivateTab,
         onRequestCloseBackdropLibrary,
         onRequestCloseCostumeLibrary,
+        onSeeCommunity,
         previewInfoVisible,
         targetIsStage,
         saveModalVisible,
@@ -143,7 +144,11 @@ const GUIComponent = props => {
                         onRequestClose={onRequestCloseBackdropLibrary}
                     />
                 ) : null}
-                <MenuBar enableCommunity={enableCommunity} handleBack={handleBack}/>
+                <MenuBar
+                    enableCommunity={enableCommunity}
+                    handleBack={handleBack}
+                    onSeeCommunity={onSeeCommunity}
+                />
                 <Box className={styles.bodyWrapper}>
                     <Box className={styles.flexWrapper}>
                         <Box className={styles.editorWrapper}>
@@ -161,7 +166,7 @@ const GUIComponent = props => {
                                             draggable={false}
                                             src={codeIcon}
                                         />
-                                        代码
+                                        脚本
                                     </Tab>
                                     <Tab
                                         className={tabClassNames.tab}
@@ -181,7 +186,7 @@ const GUIComponent = props => {
                                             draggable={false}
                                             src={soundsIcon}
                                         />
-                                       声音
+                                        声音
                                     </Tab>
                                 </TabList>
                                 <TabPanel className={tabClassNames.tabPanel}>
@@ -217,9 +222,9 @@ const GUIComponent = props => {
                                     {soundsTabVisible ? <SoundTab vm={vm} /> : null}
                                 </TabPanel>
                             </Tabs>
-                            {/*{backpackOptions.visible ? (*/}
-                                {/*<Backpack host={backpackOptions.host} />*/}
-                            {/*) : null}*/}
+                            {backpackOptions.visible ? (
+                                <Backpack host={backpackOptions.host} />
+                            ) : null}
                         </Box>
 
                         <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
@@ -267,6 +272,7 @@ GUIComponent.propTypes = {
     onExtensionButtonClick: PropTypes.func,
     onRequestCloseBackdropLibrary: PropTypes.func,
     onRequestCloseCostumeLibrary: PropTypes.func,
+    onSeeCommunity: PropTypes.func,
     onTabSelect: PropTypes.func,
     previewInfoVisible: PropTypes.bool,
     saveModalVisible: PropTypes.bool,
