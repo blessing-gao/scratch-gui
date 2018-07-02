@@ -193,10 +193,6 @@ class SoundTab extends React.Component {
                     fileChange: this.handleSoundUpload,
                     fileInput: this.setFileInput
                 }, {
-                    title: messages.surpriseSound,
-                    img: surpriseIcon,
-                    onClick: this.handleSurpriseSound
-                }, {
                     title: messages.recordSound,
                     img: addSoundFromRecordingIcon,
                     onClick: onNewSoundFromRecordingClick
@@ -204,7 +200,13 @@ class SoundTab extends React.Component {
                     title: messages.addSound,
                     img: searchIcon,
                     onClick: onNewSoundFromLibraryClick
-                }]}
+                }
+                    // {
+                    //     title: messages.surpriseSound,
+                    //     img: surpriseIcon,
+                    //     onClick: this.handleSurpriseSound
+                    // },
+                ]}
                 dragType={DragConstants.SOUND}
                 items={sounds}
                 selectedItemIndex={this.state.selectedSoundIndex}

@@ -90,7 +90,9 @@ class ProjectSave extends React.Component {
             request.file_request(request.POST, saveData, '/api/scratch/save', result => {
                 if (result.code == 1 && result.result){
                     // 上传成功
-                    this.props.setWork(result.result);
+                    let workData = this.props.work;
+                    workData.id = result.result.id;
+                    this.props.setWork(workData);
                 }
             });
         });

@@ -102,11 +102,13 @@ const SpriteSelectorComponent = function (props) {
                         fileAccept: '.svg, .png, .jpg, .jpeg, .sprite2', // TODO add sprite 3
                         fileChange: onSpriteUpload,
                         fileInput: spriteFileInput
-                    }, {
-                        title: messages.addSpriteFromSurprise,
-                        img: surpriseIcon,
-                        onClick: onSurpriseSpriteClick // TODO need real function for this
-                    }, {
+                    },
+                    // {
+                    //     title: messages.addSpriteFromSurprise,
+                    //     img: surpriseIcon,
+                    //     onClick: onSurpriseSpriteClick // TODO need real function for this
+                    // },
+                    {
                         title: messages.addSpriteFromPaint,
                         img: paintIcon,
                         onClick: onPaintSpriteClick // TODO need real function for this

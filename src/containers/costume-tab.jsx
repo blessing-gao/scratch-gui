@@ -246,11 +246,11 @@ class CostumeTab extends React.Component {
                         fileChange: this.handleCostumeUpload,
                         fileInput: this.setFileInput
                     },
-                    {
-                        title: messages.addSurpriseCostumeMsg,
-                        img: surpriseIcon,
-                        onClick: addSurpriseFunc
-                    },
+                    // {
+                    //     title: messages.addSurpriseCostumeMsg,
+                    //     img: surpriseIcon,
+                    //     onClick: addSurpriseFunc
+                    // },
                     {
                         title: messages.addBlankCostumeMsg,
                         img: paintIcon,

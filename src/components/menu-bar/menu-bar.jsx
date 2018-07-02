@@ -325,25 +325,25 @@ const MenuBar = props => (
                     src={mystuffIcon}
                 />
             </div>
-            <div
-                className={classNames(
-                    styles.menuBarItem,
-                    styles.hoverable,
-                    styles.accountNavMenu
-                )}
-            >
-                <img
-                    className={styles.profileIcon}
-                    src={profileIcon}
-                />
-                <span>
-                    {'阿尔法猿'}
-                </span>
-                <img
-                    className={styles.dropdownCaretIcon}
-                    src={dropdownCaret}
-                />
-            </div>
+            {/*<div*/}
+                {/*className={classNames(*/}
+                    {/*styles.menuBarItem,*/}
+                    {/*styles.hoverable,*/}
+                    {/*styles.accountNavMenu*/}
+                {/*)}*/}
+            {/*>*/}
+                {/*<img*/}
+                    {/*className={styles.profileIcon}*/}
+                    {/*src={profileIcon}*/}
+                {/*/>*/}
+                {/*<span>*/}
+                    {/*{'阿尔法猿'}*/}
+                {/*</span>*/}
+                {/*<img*/}
+                    {/*className={styles.dropdownCaretIcon}*/}
+                    {/*src={dropdownCaret}*/}
+                {/*/>*/}
+            {/*</div>*/}
         </div>
     </Box>
 );

@@ -28,14 +28,7 @@ class WorkLibraryItem extends React.PureComponent {
         };
     }
     handleEditClick () {
-        const createDate = this.props.datetime.substring(0, 10);
-        const scratch1 = '2017-12-08';
-        if (new Date(createDate.replace(/-/g, '/')) < new Date(scratch1.replace(/-/g, '/'))){
-            console.log(new Date(createDate.replace(/-/g, '/')) + new Date(scratch1.replace(/-/g, '/')));
-            window.location.href = `${host}/scratch_old/ide.html?projectId=${this.props.id}`;
-        } else {
-            window.location.href = `${host}/scratch/ide.html?projectId=${this.props.id}`;
-        }
+        window.location.href = `${host}/?id=${this.props.id}&userToken=${this.props.work.userToken}&platFormId=${this.props.work.platFormId}`;
         // window.location.href = `${host}/scratch/ide.html?projectId=${this.props.id}`;
         // console.log(`http://localhost:8080/scratch/ide.html?projectId=${this.props.id}`)
         // window.location.href = `http://localhost:8080/scratch/ide.html?projectId=${this.props.id}`;

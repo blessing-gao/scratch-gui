@@ -97,6 +97,7 @@ class LibraryItem extends React.PureComponent {
                         <img
                             className={styles.libraryItemImage}
                             src={this.props.iconURL}
+                            crossOrigin="anonymous"
                         />
                     </Box>
                 </Box>

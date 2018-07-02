@@ -49,19 +49,19 @@
       "currentCostume": 0,
       "costumes": [
         {
-          "assetId": "09dc888b0b7df19f70d81588ae73420e",
+          "assetId": "04d2540cc9564c05a30648e58a0947a3",
           "name": "costume1",
           "bitmapResolution": 1,
-          "md5ext": "09dc888b0b7df19f70d81588ae73420e.svg",
+          "md5ext": "04d2540cc9564c05a30648e58a0947a3.svg",
           "dataFormat": "svg",
           "rotationCenterX": 47,
           "rotationCenterY": 55
         },
         {
-          "assetId": "3696356a03a8d938318876a593572843",
+          "assetId": "71590f39c5774209ac8cdc2eda2e7dce",
           "name": "costume2",
           "bitmapResolution": 1,
-          "md5ext": "3696356a03a8d938318876a593572843.svg",
+          "md5ext": "71590f39c5774209ac8cdc2eda2e7dce.svg",
           "dataFormat": "svg",
           "rotationCenterX": 47,
           "rotationCenterY": 55

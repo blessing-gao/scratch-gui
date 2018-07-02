@@ -40,7 +40,7 @@ upstream    https://github.com/wabish/fork-demo.git (push)
 3、合并到本地分支。切换到 master 分支，合并 upstream/master 分支。
 ➜ git merge upstream/master
 如果提示： fatal: refusing to merge unrelated histories
-git merge upstream/develop --allow-unrelated-histories
+git merge upstream/master --allow-unrelated-histories
 
 4、提交推送。根据自己情况提交推送自己项目的代码。➜ git push origin master
 由于项目已经配置了上游项目的地址，所以如果 fork 的项目再次更新，重复步骤 2、3、4即可。

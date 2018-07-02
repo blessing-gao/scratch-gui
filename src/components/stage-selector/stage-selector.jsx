@@ -77,12 +77,14 @@ const StageSelector = props => {
                         fileAccept: '.svg, .png, .jpg, .jpeg', // Bitmap coming soon
                         fileChange: onBackdropFileUpload,
                         fileInput: fileInputRef
-                    }, {
-                        title: messages.addBackdropFromSurprise,
-                        img: surpriseIcon,
-                        onClick: onSurpriseBackdropClick
-
-                    }, {
+                    },
+                    // {
+                    //     title: messages.addBackdropFromSurprise,
+                    //     img: surpriseIcon,
+                    //     onClick: onSurpriseBackdropClick
+                    //
+                    // },
+                    {
                         title: messages.addBackdropFromPaint,
                         img: paintIcon,
                         onClick: onEmptyBackdropClick

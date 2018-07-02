@@ -1,5 +1,6 @@
 import React from 'react';
 import bindAll from 'lodash.bindall';
+import {getQueryString} from './request';
 
 /* Higher Order Component to get the project id from location.hash
  * @param {React.Component} WrappedComponent component to receive projectData prop
@@ -24,8 +25,11 @@ const HashParserHOC = function (WrappedComponent) {
             window.removeEventListener('hashchange', this.handleHashChange);
         }
         handleHashChange () {
-            const hashMatch = window.location.hash.match(/#(\d+)/);
-            const projectId = hashMatch === null ? 0 : hashMatch[1];
+            const hashMatch = getQueryString("id");
+            // const hashMatch = window.location.hash.match(/#(\d+)/);
+            console.log('hash'+hashMatch)
+            const projectId = hashMatch === null ? 0 : hashMatch;
+
             if (projectId !== this.state.projectId) {
                 this.setState({projectId: projectId});
             }
