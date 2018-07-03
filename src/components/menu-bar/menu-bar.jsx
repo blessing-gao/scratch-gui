@@ -300,6 +300,7 @@ const MenuBar = props => (
                 <img
                     className={styles.myBackIcon}
                     src={backIcon}
+                    title="返回"
                 />
             </div>
             <div
@@ -310,6 +311,7 @@ const MenuBar = props => (
                 <img
                     className={styles.helpIcon}
                     src={helpIcon}
+                    title="帮助"
                 />
             </div>
             <div
@@ -323,6 +325,7 @@ const MenuBar = props => (
                 <img
                     className={styles.mystuffIcon}
                     src={mystuffIcon}
+                    title="我的作品库"
                 />
             </div>
             {/*<div*/}

@@ -16,6 +16,7 @@ import targetReducer, {targetsInitialState} from './targets';
 import toolboxReducer, {toolboxInitialState} from './toolbox';
 import vmReducer, {vmInitialState} from './vm';
 import scratchReducer, {scratchInitialState} from './scratch';
+import conformReducer, {conformInitialState} from './confirm';
 import throttle from 'redux-throttle';
 
 const guiMiddleware = compose(applyMiddleware(throttle(300, {leading: true, trailing: true})));
@@ -37,7 +38,8 @@ const guiInitialState = {
     targets: targetsInitialState,
     toolbox: toolboxInitialState,
     vm: vmInitialState,
-    scratch: scratchInitialState
+    scratch: scratchInitialState,
+    confirm: conformInitialState
 };
 
 const initPlayer = function (currentState) {
@@ -78,7 +80,8 @@ const guiReducer = combineReducers({
     targets: targetReducer,
     toolbox: toolboxReducer,
     vm: vmReducer,
-    scratch: scratchReducer
+    scratch: scratchReducer,
+    confirm: conformReducer
 });
 
 export {

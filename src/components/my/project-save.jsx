@@ -4,6 +4,7 @@ import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import styles from './project-save.css';
 import classNames from 'classnames';
+import Confirm from '../confirm/confirm.jsx'
 
 const ProjectSaveComponent = props => {
     const {

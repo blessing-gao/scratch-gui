@@ -141,7 +141,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setWork:work => {
+    setWork:(work) => {
         dispatch(setWork(work));
     }
 });

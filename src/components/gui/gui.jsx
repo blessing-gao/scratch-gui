@@ -9,7 +9,7 @@ import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import tabStyles from 'react-tabs/style/react-tabs.css';
 import VM from 'scratch-vm';
 import Renderer from 'scratch-render';
-
+import ConfirmMsg from '../../containers/confirm.jsx'
 import Blocks from '../../containers/blocks.jsx';
 import CostumeTab from '../../containers/costume-tab.jsx';
 import TargetPane from '../../containers/target-pane.jsx';
@@ -77,6 +77,7 @@ const GUIComponent = props => {
         vm,
         workLibraryVisible,
         handleBack,
+        confirmVisibe,
         ...componentProps
     } = omit(props, 'dispatch');
     if (children) {
@@ -110,6 +111,7 @@ const GUIComponent = props => {
                 className={styles.pageWrapper}
                 {...componentProps}
             >
+                {confirmVisibe && <ConfirmMsg type={2} message="操作成功" status={1}/>}
                 {previewInfoVisible ? null : null}
                 {saveModalVisible ? (
                     <SaveModal />
@@ -281,7 +283,8 @@ GUIComponent.propTypes = {
     targetIsStage: PropTypes.bool,
     tipsLibraryVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
-    workLibraryVisible: PropTypes.bool
+    workLibraryVisible: PropTypes.bool,
+    confirmVisibe: PropTypes.bool
 };
 GUIComponent.defaultProps = {
     backpackOptions: {
