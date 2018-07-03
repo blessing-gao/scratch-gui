@@ -5,9 +5,9 @@ import defaultProjectAssets from './default-project';
 // const PROJECT_SERVER = 'https://projects.scratch.mit.edu';
 // const ASSET_SERVER = 'https://cdn.assets.scratch.mit.edu';
 // const PROJECT_SERVER = 'http://localhost:8080';
-const PROJECT_SERVER = 'http://cdn.imayuan.com/project/';
+const PROJECT_SERVER = '//cdn.imayuan.com/project/';
 // const ASSET_SERVER = 'http://owkomi1zd.bkt.clouddn.com/';
-const ASSET_SERVER = 'http://cdn.imayuan.com/';
+const ASSET_SERVER = '//cdn.imayuan.com/';
 /**
  * Wrapper for ScratchStorage which adds default web sources.
  * @todo make this more configurable

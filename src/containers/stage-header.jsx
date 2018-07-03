@@ -15,8 +15,10 @@ class StageHeader extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleKeyPress'
+            'handleKeyPress',
+            'quickScreenshot'
         ]);
+        this.renderer = this.props.vm.runtime.renderer;
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);
@@ -29,6 +31,15 @@ class StageHeader extends React.Component {
             this.props.onSetStageUnFull(false);
         }
     }
+    quickScreenshot (){
+        // const shotBtn = document.getElementById('shotBtn');
+        // fireKeyEvent(shotBtn, 'keydown', 16);
+        // console.log('fireKeyEvent');
+        var img = new Image();
+        img.src = this.renderer._gl.canvas.toDataURL('image/png',0.7);
+        window.sessionStorage.setItem("coverImg",img.src);
+        // this.props.vm.render
+    }
     render () {
         const {
             ...props
@@ -37,6 +48,7 @@ class StageHeader extends React.Component {
             <StageHeaderComponent
                 {...props}
                 onKeyPress={this.handleKeyPress}
+                onQuickScreenshot={this.quickScreenshot}
             />
         );
     }

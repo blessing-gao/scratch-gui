@@ -15,7 +15,7 @@ import fullScreenIcon from './icon--fullscreen.svg';
 import largeStageIcon from './icon--large-stage.svg';
 import smallStageIcon from './icon--small-stage.svg';
 import unFullScreenIcon from './icon--unfullscreen.svg';
-
+import screenShot from './icon--screenshot.svg';
 import styles from './stage-header.css';
 
 const messages = defineMessages({
@@ -56,6 +56,7 @@ const StageHeaderComponent = function (props) {
         onSetStageFull,
         onSetStageUnFull,
         stageSizeMode,
+        onQuickScreenshot,
         vm
     } = props;
 
@@ -92,6 +93,23 @@ const StageHeaderComponent = function (props) {
                 []
             ) : (
                 <div className={styles.stageSizeToggleGroup}>
+                    <div>
+                        <Button
+                            className={classNames(
+                                styles.stageButton,
+                                styles.stageButtonRight,
+                                (stageSizeMode === STAGE_SIZE_MODES.large) ? null : styles.stageButtonToggledOff
+                            )}
+                            id={'shotBtn'}
+                            onClick={onQuickScreenshot}
+                        >
+                            <img
+                                className={styles.stageButtonIcon}
+                                src={screenShot}
+                                title="截屏"
+                            />
+                        </Button>
+                    </div>
                     <div>
                         <Button
                             className={classNames(
@@ -172,6 +190,7 @@ StageHeaderComponent.propTypes = {
     onSetStageSmall: PropTypes.func.isRequired,
     onSetStageUnFull: PropTypes.func.isRequired,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
+    onQuickScreenshot: PropTypes.func.isRequired,
     vm: PropTypes.instanceOf(VM).isRequired
 };
 

@@ -49,7 +49,7 @@ class SpriteLibrary extends React.PureComponent {
             if (result) {
                 this.setState({sprites: result});
             }
-        },'http://cdn.imayuan.com');
+        },'//cdn.imayuan.com');
     }
 
     getType (type){

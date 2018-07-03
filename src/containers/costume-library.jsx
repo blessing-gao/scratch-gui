@@ -45,7 +45,7 @@ class CostumeLibrary extends React.PureComponent {
             if (result) {
                 this.setState({costumes: result});
             }
-        },'http://cdn.imayuan.com');
+        },'//cdn.imayuan.com');
     }
 
     getResource (type, typeId){
