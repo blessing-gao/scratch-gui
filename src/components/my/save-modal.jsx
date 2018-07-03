@@ -39,40 +39,47 @@ class SaveModalComponent extends React.Component {
                     <Box className={styles.label}>
                         <h2 className={styles.labelTitle}>{messages.label}</h2>
                     </Box>
-                    <Box>
-                        <input
-                            autoFocus
-                            className={styles.input}
-                            placeholder={this.props.placeholder}
-                            value={this.props.workName}
-                            onChange={this.props.onChangeName}
-                        />
-                    </Box>
-                    <Box>
-                    <textarea
-                        className={classNames(styles.input, styles.textarea)}
-                        placeholder={this.props.desPlaceholder}
-                        value={this.props.describe}
-                        onChange={this.props.onChangeDesc}
-                    />
-                    </Box>
-                    <Box>
-                        <p className={styles.classTitle}>作品分类:</p>
-                        <div className={styles.classBox}>
-                            {this.props.tags.map((tagProps,id) => (
-                                <span
-                                    className={classNames(
-                                    styles.classBtn,
-                                    (this.state.selectedTag == tagProps.title ? styles.activeBtn : '')
-                                )}
-                                    onClick={this.handleTagClick.bind(this,tagProps.title)}
-                                    key={tagProps.id}
-                                >
-                                {tagProps.title}
-                            </span>
-                            ))}
+                    <div className={styles.contentBox}>
+                        <div className={styles.coverImg}>
+                            <img src={this.props.coverSrc}/>
                         </div>
-                    </Box>
+                        <div className={styles.mainBox}>
+                            <Box>
+                                <input
+                                    autoFocus
+                                    className={styles.input}
+                                    placeholder={this.props.placeholder}
+                                    value={this.props.workName}
+                                    onChange={this.props.onChangeName}
+                                />
+                            </Box>
+                            <Box>
+                            <textarea
+                                className={classNames(styles.input, styles.textarea)}
+                                placeholder={this.props.desPlaceholder}
+                                value={this.props.describe}
+                                onChange={this.props.onChangeDesc}
+                            />
+                            </Box>
+                            <Box>
+                                <p className={styles.classTitle}>作品分类:</p>
+                                <div className={styles.classBox}>
+                                    {this.props.tags.map((tagProps,id) => (
+                                        <span
+                                            className={classNames(
+                                                styles.classBtn,
+                                                (this.state.selectedTag == tagProps.title ? styles.activeBtn : '')
+                                            )}
+                                                        onClick={this.handleTagClick.bind(this,tagProps.title)}
+                                                        key={tagProps.id}
+                                                    >
+                                            {tagProps.title}
+                                        </span>
+                                    ))}
+                                </div>
+                            </Box>
+                        </div>
+                    </div>
                     <Box className={styles.buttonRow}>
                         <button
                             className={styles.cancelButton}
@@ -82,6 +89,7 @@ class SaveModalComponent extends React.Component {
                         </button>
                         <button
                             className={styles.okButton}
+                            onClick={this.props.handleOnSave}
                         >
                             发布
                         </button>
@@ -96,6 +104,7 @@ SaveModalComponent.propTypes = {
     label: PropTypes.string.isRequired,
     // onChange: PropTypes.func,
     handleCancel: PropTypes.func.isRequired,
+    handleOnSave: PropTypes.func.isRequired,
     // onSave: PropTypes.func,
     // onKeyPress: PropTypes.func.isRequired,
     placeholder: PropTypes.string,

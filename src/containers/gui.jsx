@@ -40,8 +40,8 @@ class GUI extends React.Component {
     }
     componentDidMount () {
         // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
-        const id = getQueryString("id") || '0';
-        const userToken= getQueryString("userToken") || 'auth_7db8a90571484975bd1822d0f49baf32';
+        const id = getQueryString("id");
+        const userToken= getQueryString("userToken") || 'auth_7f5e7a1272fc43f79e091be373271800';
         const platFormId= getQueryString("platFormId") || '1';
         const deviceIdentify = '1';
         if (id !== null){

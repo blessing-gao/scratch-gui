@@ -29,6 +29,7 @@ class SaveModal extends React.Component {
             id: '',
             workName: '',
             describe: '',
+            selectedTag: '',
             shotSrc: '',
             isShow: false,
             tags: []
@@ -57,26 +58,17 @@ class SaveModal extends React.Component {
     }
 
     handleTagClick(tag){
-        console.log(tag);
+        this.setState({selectedTag: tag});
     }
 
     componentDidMount (){
         // todo: 更换分类,获取作品分类type为5
         this.getType(1);    // 获取作品分类
-        // 获取作品数据
-        // const id = getQueryString('projectId');
-        // if (id !== null && typeof id !== 'undefined' && id !== ''){
-        //     request.default_request(request.GET, null, `/internalapi/project/${id}/getInfo/`, result => {
-        //         if (result.code !== request.NotFindError){
-        //             this.setState({id: result.value.id, workName: result.value.name});
-        //         }
-        //     });
-        // }
+        this.setState({workName: this.props.work.name || ''});
     }
 
-    handleOnSave (type = true){
+    handleOnSave (){
         console.log("save点击")
-
     }
     handleChange (event) {
         this.setState({workName: event.target.value});
@@ -92,6 +84,7 @@ class SaveModal extends React.Component {
                 label={'作品名称'}
                 placeholder={'输入作品名称'}
                 desPlaceholder={'描述作品的操作说明'}
+                coverSrc={this.state.coverSrc}
                 title="保存作品"
                 workName={this.state.workName}
                 describe={this.state.describe}
@@ -99,6 +92,7 @@ class SaveModal extends React.Component {
                 handleTagClick={this.handleTagClick}
                 onChangeName={this.handleChangeName}
                 onChangeDesc={this.handleChangeDesc}
+                handleOnSave={this.handleOnSave}
             />);
     }
 }

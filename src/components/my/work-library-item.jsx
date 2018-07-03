@@ -56,19 +56,24 @@ class WorkLibraryItem extends React.PureComponent {
     }
 
     handleDeleteClick () {
-        let work = this.props.work;
-        const data = {
-            scratchId: this.props.id,
-            userToken: work.userToken,
-            platFormId: work.platFormId
-        };
-        request.default_request(request.POST, data, '/api/scratch/delete', result => {
-            // 更新列表
-            if (result){
-                console.log(result);
-                this.props.onDelete();
-            }
-        });
+        const conf = confirm('是否确认删除');
+        if(conf === true){
+            let work = this.props.work;
+            const data = {
+                scratchId: this.props.id,
+                userToken: work.userToken,
+                platFormId: work.platFormId
+            };
+            request.default_request(request.POST, data, '/api/scratch/delete', result => {
+                // 更新列表
+                if (result){
+                    console.log(result);
+                    this.props.onDelete();
+                }
+            });
+        }else{
+            return false;
+        }
     }
     handleMouseEnter () {
         const that = this;
@@ -100,29 +105,25 @@ class WorkLibraryItem extends React.PureComponent {
                             />
                         </Box>
                     </Box>
+                    <Box className={styles.btnBox}>
+                        <button
+                            className={classNames(styles.menuEdit, styles.menuBtn)}
+                            onClick={this.handleEditClick}
+                        >
+                            编辑
+                        </button>
+                        <button
+                            className={classNames(styles.menuShare, styles.menuBtn)}
+                            onClick={this.handleShareClick}
+                        >分享</button>
+                        <button
+                            className={classNames(styles.menuDelete, styles.menuBtn)}
+                            onClick={this.handleDeleteClick}
+                        >删除</button>
+                    </Box>
                     <span className={styles.libraryItemName}>{this.props.name}</span>
                     {/* <br />*/}
                     {/* <span className={styles.libraryItemName}>{this.props.name}</span>*/}
-                </Box>
-                <Box
-                    className={classNames((this.state.status ? `${styles.menuhover} ` : `${styles.menu} `), styles.textCenter)}
-                    onMouseEnter={this.handleMouseEnter}
-                    onMouseLeave={this.handleMouseLeave}
-                >
-                    <button
-                        className={classNames(styles.menuEdit, styles.menuBtn)}
-                        onClick={this.handleEditClick}
-                    >
-                        编辑
-                    </button>
-                    <button
-                        className={classNames(styles.menuShare, styles.menuBtn)}
-                        onClick={this.handleShareClick}
-                    >分享</button>
-                    <button
-                        className={classNames(styles.menuDelete, styles.menuBtn)}
-                        onClick={this.handleDeleteClick}
-                    >删除</button>
                 </Box>
             </Box>
         );

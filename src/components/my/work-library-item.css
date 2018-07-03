@@ -6,11 +6,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-basis: 160px;
-    width: 160px;
-    height: 160px;
+    flex-basis: 200px;
+    width: 180px;
+    height: 200px;
     margin: $space;
-    padding: 1rem 1rem 0 1rem;
+    padding: .8rem .8rem 0 .8rem;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $text-primary;
     background: white;
@@ -27,11 +27,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-basis: 160px;
-    width: 160px;
-    height: 160px;
+    flex-basis: 200px;
+    width: 180px;
+    height: 200px;
     margin: $space;
-    padding: 1rem 1rem 0 1rem;
+    padding: .8rem .8rem 0 .8rem;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: $text-primary;
     background: white;
@@ -49,12 +49,12 @@
     text-align: center;
 }
 .menu {
-    margin-top: -75px;
+    /*margin-top: -75px;*/
     opacity:0;
     display: none;
 }
 .menuhover {
-    margin-top: -75px;
+    /*margin-top: -75px;*/
     opacity:1;
     display: block;
 }
@@ -71,7 +71,7 @@
     line-height: 1.2rem;
 }
 .menu-share {
-    margin: 0 8px;
+    margin: 0 .5rem;
 }
 /*.menu-delete:hover{*/
     /*border: 2px solid red;*/
@@ -139,4 +139,8 @@
 .featured-description {
     font-weight: normal;
     line-height: 2;
+}
+
+.btn-box{
+    margin: .6rem 0 .4rem;
 }
