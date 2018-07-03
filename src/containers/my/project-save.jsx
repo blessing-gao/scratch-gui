@@ -88,11 +88,12 @@ class ProjectSave extends React.Component {
                 'id':work.id && notNewProject ? work.id : '0'
             };
             request.file_request(request.POST, saveData, '/api/scratch/save', result => {
-                if (result.code == 1 && result.result){
+                if (result.code == 0 && result.result){
                     // 上传成功
                     let workData = this.props.work;
                     workData.id = result.result.id;
                     this.props.setWork(workData);
+                    alert("保存成功");
                 }
             });
         });

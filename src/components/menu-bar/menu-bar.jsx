@@ -39,7 +39,7 @@ const host = getHost();
 const newWork = function (){
     const r = confirm('离开前请确定作品已经保存');
     if (r === true) {
-        window.location.href = `${host}/scratch/ide.html`;
+        window.location.href = `${host}/?userToken=${this.props.work.userToken}&platFormId=${this.props.work.platFormId}`;
     } else {
         return;
     }
@@ -227,15 +227,15 @@ const MenuBar = props => (
                     作品发布
                     </Button>
                 </div>
-                <div className={classNames(styles.menuBarItem)}>
-                    <Button
-                        className={classNames(styles.shareButton)}
-                        title="viewproject"
-                        onClick={props.onViewProject}
-                    >
-                   查看2.0项目
-                    </Button>
-                </div>
+                {/*<div className={classNames(styles.menuBarItem)}>*/}
+                    {/*<Button*/}
+                        {/*className={classNames(styles.shareButton)}*/}
+                        {/*title="viewproject"*/}
+                        {/*onClick={props.onViewProject}*/}
+                    {/*>*/}
+                   {/*查看2.0项目*/}
+                    {/*</Button>*/}
+                {/*</div>*/}
                 <Divider className={classNames(styles.divider)} />
 
                 {/* <div className={classNames(styles.menuBarItem, styles.communityButtonWrapper)}>*/}
@@ -360,10 +360,12 @@ MenuBar.propTypes = {
     onRequestCloseEdit: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
     onSeeCommunity: PropTypes.func,
-    onViewProject: PropTypes.func
+    onViewProject: PropTypes.func,
+    work: PropTypes.object
 };
 
 const mapStateToProps = state => ({
+    work: state.scratchGui.scratch.work,
     fileMenuOpen: fileMenuOpen(state),
     editMenuOpen: editMenuOpen(state)
 });
