@@ -9,7 +9,7 @@ import styles from './work-library-item.css';
 import {connect} from 'react-redux';
 import {setWork} from '../../reducers/scratch';
 import Card from '../../containers/cards.jsx';
-// import {Modal} from 'antd';
+import {Modal} from 'antd';
 import QRCode from 'qrcode.react';
 
 const host = getHost();

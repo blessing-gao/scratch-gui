@@ -13,7 +13,11 @@ import Divider from '../divider/divider.jsx';
 import Filter from '../filter/filter.jsx';
 
 const ALL_TAG_TITLE = '所有';
-const tagListPrefix = [{id: 0, title: ALL_TAG_TITLE}];
+const tagListPrefix = [
+    {id: 0, title: ALL_TAG_TITLE},
+    {id: 1, title: '已发布'},
+    {id: 2, title: '未发布'}
+];
 
 const messages = {
     filterPlaceholder: '搜索',
@@ -23,7 +27,7 @@ class WorkLibraryComponent extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-
+            'handleTagClick'
         ]);
         this.state = {
             selectedItem: null,
@@ -32,6 +36,13 @@ class WorkLibraryComponent extends React.Component {
             selectedType: '1'
         };
     }
+
+    handleTagClick(tag){
+        this.state = {
+            selectedTag: tag
+        }
+    }
+
     render () {
         return (
             <ModalComponent

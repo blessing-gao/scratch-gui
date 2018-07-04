@@ -131,6 +131,7 @@
     }
   },
   "dependencies": {
+    "antd": "^3.6.5",
     "qrcode.react": "^0.8.0"
   }
 }
