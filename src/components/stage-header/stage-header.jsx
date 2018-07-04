@@ -95,11 +95,7 @@ const StageHeaderComponent = function (props) {
                 <div className={styles.stageSizeToggleGroup}>
                     <div>
                         <Button
-                            className={classNames(
-                                styles.stageButton,
-                                styles.stageButtonRight,
-                                (stageSizeMode === STAGE_SIZE_MODES.large) ? null : styles.stageButtonToggledOff
-                            )}
+                            className={styles.stageButton}
                             id={'shotBtn'}
                             onClick={onQuickScreenshot}
                         >

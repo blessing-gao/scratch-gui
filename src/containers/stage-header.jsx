@@ -35,9 +35,20 @@ class StageHeader extends React.Component {
         // const shotBtn = document.getElementById('shotBtn');
         // fireKeyEvent(shotBtn, 'keydown', 16);
         // console.log('fireKeyEvent');
-        var img = new Image();
-        img.src = this.renderer._gl.canvas.toDataURL('image/png',0.7);
-        window.sessionStorage.setItem("coverImg",img.src);
+        const c= document.createElement('canvas');
+        //创建image对象
+        let imgObj = new Image();
+        imgObj.src = "http://cdn.imayuan.com/04d2540cc9564c05a30648e58a0947a3.svg";
+        //待图片加载完后，将其显示在canvas上
+        imgObj.onload = function(){
+            let ctx = c.getContext('2d');
+            ctx.drawImage(imgObj, 0, 0);//this即是imgObj,保持图片的原始大小：470*480
+            //ctx.drawImage(this, 0, 0,1024,768);//改变图片的大小到1024*768
+        }
+        let img = new Image();
+        img.src = c.toDataURL('image/jpg',0.7);
+        console.log(img.src)
+        // window.sessionStorage.setItem("coverImg",img.src);
         // this.props.vm.render
     }
     render () {
