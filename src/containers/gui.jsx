@@ -41,7 +41,7 @@ class GUI extends React.Component {
     componentDidMount () {
         // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
         const id = getQueryString("id");
-        const userToken= getQueryString("userToken") || 'auth_7f5e7a1272fc43f79e091be373271800';
+        const userToken= getQueryString("userToken") || 'auth_6a919a533c3f41b5b4a146e89a881de9';
         const platFormId= getQueryString("platFormId") || '1';
         const deviceIdentify = '1';
         if (id !== null){
@@ -52,17 +52,9 @@ class GUI extends React.Component {
                 };
                 if (result.code !== request.NotFindError && result.result){
                     let res = result.result;
-                    workData = {
-                        id: res.id,
-                        name: res.name,
-                        userToken: userToken,
-                        platFormId: platFormId,
-                        description: res.description,
-                        classId: res.classId,
-                        homeworkId: res.homeworkId,
-                        chapterId: res.chapterId,
-                        type:res.type
-                    };
+                    for(let x in res){
+                        workData[x] = res[x];
+                    }
                 }
                 this.props.setWork(workData);
             });
@@ -199,13 +191,16 @@ const mapStateToProps = state => ({
     ),
     soundsTabVisible: state.scratchGui.editorTab.activeTabIndex === SOUNDS_TAB_INDEX,
     tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
-    confirmVisibe: state.scratchGui.confirm.confirmConf.show
+    confirmVisibe: state.scratchGui.confirm.confirmConf.show,
+    confirmType: state.scratchGui.confirm.confirmConf.type,
+    confirmMessage: state.scratchGui.confirm.confirmConf.message,
+    confirmStatus: state.scratchGui.confirm.confirmConf.status,
+    confirmTimeout: state.scratchGui.confirm.confirmConf.timeout,
+    confirmHandleSure: state.scratchGui.confirm.confirmConf.sure
 });
 
 const mapDispatchToProps = dispatch => ({
-    setWork:work => {
-        dispatch(setWork(work));
-    },
+    setWork:work => {dispatch(setWork(work));},
     onExtensionButtonClick: () => dispatch(openExtensionLibrary()),
     onActivateTab: tab => dispatch(activateTab(tab)),
     onActivateCostumesTab: () => dispatch(activateTab(COSTUMES_TAB_INDEX)),

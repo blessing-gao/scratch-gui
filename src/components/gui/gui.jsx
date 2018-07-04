@@ -78,6 +78,11 @@ const GUIComponent = props => {
         workLibraryVisible,
         handleBack,
         confirmVisibe,
+        confirmType,
+        confirmMessage,
+        confirmStatus,
+        confirmHandleSure,
+        confirmTimeout,
         ...componentProps
     } = omit(props, 'dispatch');
     if (children) {
@@ -111,7 +116,13 @@ const GUIComponent = props => {
                 className={styles.pageWrapper}
                 {...componentProps}
             >
-                {confirmVisibe && <ConfirmMsg type={2} message="操作成功" status={1}/>}
+                {confirmVisibe && <ConfirmMsg
+                    type={confirmType}
+                    message={confirmMessage}
+                    status={confirmStatus}
+                    handleSure={confirmHandleSure}
+                    timeout={confirmTimeout}/>
+                }
                 {previewInfoVisible ? null : null}
                 {saveModalVisible ? (
                     <SaveModal />
@@ -284,7 +295,12 @@ GUIComponent.propTypes = {
     tipsLibraryVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
     workLibraryVisible: PropTypes.bool,
-    confirmVisibe: PropTypes.bool
+    confirmVisibe: PropTypes.bool,
+    confirmType: PropTypes.number,
+    confirmMessage: PropTypes.string,
+    confirmStatus: PropTypes.number,
+    confirmTimeout: PropTypes.number,
+    confirmHandleSure: PropTypes.func
 };
 GUIComponent.defaultProps = {
     backpackOptions: {

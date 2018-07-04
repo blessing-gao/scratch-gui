@@ -18,17 +18,19 @@ class ConfirmMsg extends React.PureComponent {
 
     handleCancel(){
         // 点击关闭
-        let confirm = this.props.confirmConf;
+        let confirm = JSON.parse(JSON.stringify(this.props.confirmConf));
         confirm.show = false;
+        confirm.selected = "no";
         this.props.setConfirm(confirm);
     }
 
     handleSure(){
         // 点击确定时
         // this.props.setConfirmBack(this.props.handleSure);
-        this.props.setConfirmBack(function () {
-            alert("ok");
-        });
+        let confirm = JSON.parse(JSON.stringify(this.props.confirmConf));
+        confirm.show = false;
+        confirm.selected = "yes";
+        this.props.setConfirm(confirm);
     }
 
     componentDidMount(){

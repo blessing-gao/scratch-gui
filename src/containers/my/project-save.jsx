@@ -6,6 +6,7 @@ import ProjectSaveComponent from '../../components/my/project-save.jsx';
 import request ,{getQueryString, getTargetId} from '../../lib/request';
 import {getWork,setWork} from '../../reducers/scratch';
 import {closeSaveModal} from "../../reducers/modals";
+import {setConfirm,setConfirmBack} from '../../reducers/confirm';
 /**
  * 本组件用于向服务器保存作品
  * Project saver component passes a saveProject function to its child.
@@ -83,17 +84,51 @@ class ProjectSave extends React.Component {
             let saveData = {
                 'file':content,
                 'name':name,
-                'platFormId':work.platFormId,
-                'userToken':work.userToken,
-                'id':work.id && notNewProject ? work.id : '0'
+                'platFormId1':work.platFormId,
+                'userToken':work.userToken
             };
+            if(work.id && notNewProject){
+                saveData.scratchFile = JSON.stringify(work);
+            }
+            // let msg = {
+            //     type: 2,
+            //     message: '保存成功',
+            //     show: true,
+            //     selected: ''
+            // };
+            // this.props.setConfirm(msg);
+            // this.timer = setInterval(()=>{
+            //     let selected = this.props.confirm.selected;
+            //     if(selected == 'yes'){
+            //         clearInterval(this.timer);
+            //     }else if(selected == 'no'){
+            //         clearInterval(this.timer);
+            //     }
+            // },1000);
+            // return false;
             request.file_request(request.POST, saveData, '/api/scratch/save', result => {
                 if (result.code == 0 && result.result){
                     // 上传成功
                     let workData = this.props.work;
                     workData.id = result.result.id;
                     this.props.setWork(workData);
-                    alert("保存成功");
+                    let msg = {
+                        type: 1,
+                        message: '保存成功',
+                        status: 1,
+                        timeout: 3000,
+                        show: true
+                    };
+                    this.props.setConfirm(msg);
+                }else{
+                    let msg = {
+                        type: 1,
+                        message: '保存失败',
+                        status: 2,
+                        timeout: 3000,
+                        show: true
+                    };
+                    this.props.setConfirm(msg);
                 }
             });
         });
@@ -132,18 +167,22 @@ ProjectSave.propTypes = {
         saveProjectSb3: PropTypes.func
     }),
     setWork: PropTypes.func,
-    work: PropTypes.object
+    work: PropTypes.object,
+    confirm: PropTypes.object
 };
 
 const mapStateToProps = state => ({
     work: state.scratchGui.scratch.work,
-    vm: state.scratchGui.vm
+    vm: state.scratchGui.vm,
+    confirm: state.scratchGui.confirm.confirmConf
 });
 
 const mapDispatchToProps = dispatch => ({
     setWork:(work) => {
         dispatch(setWork(work));
-    }
+    },
+    setConfirm:(confirm) => {dispatch(setConfirm(confirm));},
+    setConfirmBack:() => {dispatch(setConfirmBack());}
 });
 export default connect(
     mapStateToProps,

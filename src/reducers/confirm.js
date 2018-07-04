@@ -9,7 +9,8 @@ const initialState = {
         message: '',    // 展示信息
         status: 1,  // 1: success, 2: error
         timeout: 3000,   // 延时关闭时间
-        show: true // 是否默认展示
+        show: false, // 是否默认展示,
+        selected: ''
     }
 };
 
@@ -40,6 +41,12 @@ const setConfirmBack = function (func) {
         func: func
     };
 };
+
+// const setConfirmBack = function () {
+//     return {
+//         type: SET_CONFIRM_BACK
+//     };
+// };
 
 const setConfirm = function (confirmConf) {
     return {
