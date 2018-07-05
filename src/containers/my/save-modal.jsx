@@ -5,10 +5,11 @@ import SaveModalComponent from '../../components/my/save-modal.jsx';
 import {getQueryString} from '../../lib/request';
 import request from '../../lib/request';
 import {closeSaveModal} from '../../reducers/modals';
-
+import VM from 'scratch-vm';
 import {connect} from 'react-redux';
 import {setWork} from '../../reducers/scratch';
 import {setConfirm,setConfirmBack} from '../../reducers/confirm';
+import fireKeyEvent from '../../lib/key-map';
 // import Base64 from 'crypto-js/enc-base64';
 // import UTF_8 from 'crypto-js/enc-utf8';
 // import fireKeyEvent from '../lib/key-map';
@@ -32,6 +33,7 @@ class SaveModal extends React.Component {
             describe: '',
             selectedTag: '',
             shotSrc: '',
+            coverSrc: '',
             isShow: false,
             tags: []
         };
@@ -66,6 +68,9 @@ class SaveModal extends React.Component {
         // todo: 更换分类,获取作品分类type为5
         this.getType(1);    // 获取作品分类
         this.setState({workName: this.props.work.name || ''});
+        const shotBtn = document.getElementById('shotBtn');
+        fireKeyEvent(shotBtn, 'keydown', 16);
+        this.state.coverSrc = sessionStorage.getItem('coverImg');
     }
 
     handleOnSave (){
@@ -87,6 +92,7 @@ class SaveModal extends React.Component {
             saveData.name = this.state.workName;
             saveData.remarks = this.state.describe;
             saveData.type = this.state.selectedTag;
+            saveData.cover = sessionStorage.getItem('coverImg');
             saveData.release = 1;
             request.file_request(request.POST, saveData, '/api/scratch/save', result => {
                 if (result.code == 0 && result.result){

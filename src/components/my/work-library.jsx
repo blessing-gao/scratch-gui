@@ -97,7 +97,7 @@ class WorkLibraryComponent extends React.Component {
                 >
                         {this.props.data.map((dataItem, index) => {
                             const scratchURL = dataItem.cover ?
-                                `${COVER_SERVER}${dataItem.cover}` : `http://cdn.imayuan.com/b579aeeb143e79c47e2e65cbd3c0fe36.svg`;
+                                `${dataItem.cover}` : `http://cdn.imayuan.com/b579aeeb143e79c47e2e65cbd3c0fe36.svg`;
                             return (
                                 <WorkLibraryItem
                                     datetime={dataItem.createDate}
