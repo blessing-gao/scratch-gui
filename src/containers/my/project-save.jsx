@@ -88,7 +88,8 @@ class ProjectSave extends React.Component {
                 'userToken':work.userToken
             };
             if(work.id && notNewProject){
-                saveData.scratchFile = JSON.stringify(work);
+                // saveData.scratchFile = JSON.stringify(work);
+                saveData.id = work.id;
             }
             // let msg = {
             //     type: 2,
