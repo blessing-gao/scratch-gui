@@ -65,6 +65,7 @@ class GUI extends React.Component {
             };
             this.props.setWork(workData);
         }
+        window.sessionStorage.setItem("coverImg","");
         // if (id !== null){
         //     request.default_request(request.GET, null, `/api/scratch/getProjectInfo?id=${id}`, result => {
         //         if (result.code !== request.NotFindError){
