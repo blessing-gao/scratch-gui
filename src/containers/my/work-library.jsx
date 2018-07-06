@@ -17,16 +17,18 @@ class WorkLibrary extends React.Component {
             'getNext',
             'handleSearch',
             'handleClear',
-            'handleKeyDown'
+            'handleKeyDown',
+            'handleTagClick'
         ]);
         this.state = {
             works: [],
             tags: [],
             nowPage: 1,
             totalPage: 0,
-            numbers: 10,
+            numbers: 14,
             searchContent: '',
-            searchHis: ''
+            searchHis: '',
+            searchType: ''
         };
     }
 
@@ -38,7 +40,8 @@ class WorkLibrary extends React.Component {
                 "start": (nowPage - 1) * this.state.numbers
             },
             "search": {
-                "name": this.state.searchContent || null
+                "name": this.state.searchContent || null,
+                "type": this.state.searchType || null
             },
             "sort": {
                 "predicate" : "create_time"
@@ -46,6 +49,9 @@ class WorkLibrary extends React.Component {
             "platFormId": work.platFormId,
             "userToken": work.userToken
         };
+        if(this.state.searchType === 0){
+            data.search.type = 0;
+        }
         request.default_request(request.POST, JSON.stringify(data), `/api/scratch/worksList`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 this.setState({
@@ -67,6 +73,19 @@ class WorkLibrary extends React.Component {
                 });
                 this.setState({tags:tags});
             }
+        });
+    }
+
+    handleTagClick (tag){
+        if(tag == '已发布'){
+            tag = '1';
+        }else if(tag == '未发布'){
+            tag = '0';
+        }else if(tag == '所有'){
+            tag = '';
+        }
+        this.setState({searchType: tag}, () => {
+            this.getResource(1);
         });
     }
 
@@ -140,6 +159,7 @@ class WorkLibrary extends React.Component {
                 handleFilterKeyDown={this.handleKeyDown}
                 handleFilterClear={this.handleClear}
                 filterQuery={this.state.searchContent}
+                handleTagClick={this.handleTagClick}
             />
         );
     }

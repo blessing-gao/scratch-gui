@@ -38,9 +38,8 @@ class WorkLibraryComponent extends React.Component {
     }
 
     handleTagClick(tag){
-        this.state = {
-            selectedTag: tag
-        }
+        this.setState({selectedTag: tag});
+        this.props.handleTagClick(tag);
     }
 
     render () {
@@ -74,7 +73,7 @@ class WorkLibraryComponent extends React.Component {
                         <div className={styles.tagWrapper}>
                             {tagListPrefix.concat(this.props.tags).map((tagProps, id) => (
                                 <TagButton
-                                    active={this.state.selectedTag === tagProps.title.toLowerCase()}
+                                    active={this.state.selectedTag === tagProps.title}
                                     className={classNames(
                                             styles.filterBarItem,
                                             styles.tagButton,
@@ -166,7 +165,8 @@ WorkLibraryComponent.propTypes = {
     onItemSelected: PropTypes.func,
     onRequestClose: PropTypes.func,
     tags: PropTypes.arrayOf(PropTypes.shape(TagButton.propTypes)),
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    handleTagClick: PropTypes.func
 };
 
 WorkLibraryComponent.defaultProps = {

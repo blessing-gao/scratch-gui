@@ -94,7 +94,7 @@ class SaveModal extends React.Component {
             saveData.type = this.state.selectedTag;
             saveData.cover = sessionStorage.getItem('coverImg');
             // saveData.xOssProcess = 'style/cover';
-            saveData.release = 1;
+            saveData.isRelease = 1;
             request.file_request(request.POST, saveData, '/api/scratch/save', result => {
                 if (result.code == 0 && result.result){
                     // 上传成功

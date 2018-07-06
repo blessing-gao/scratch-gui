@@ -41,7 +41,7 @@ class GUI extends React.Component {
     componentDidMount () {
         // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
         const id = getQueryString("id");
-        const userToken= getQueryString("userToken") || 'auth_4a8ba31310df479f88a1347fcc2f7062';
+        const userToken= getQueryString("userToken") || 'auth_bb73e6724cdd4576add8776e0d28658e';
         const platFormId= getQueryString("platFormId") || '1';
         const deviceIdentify = '1';
         if (id !== null){
@@ -66,25 +66,6 @@ class GUI extends React.Component {
             this.props.setWork(workData);
         }
         window.sessionStorage.setItem("coverImg","");
-        // if (id !== null){
-        //     request.default_request(request.GET, null, `/api/scratch/getProjectInfo?id=${id}`, result => {
-        //         if (result.code !== request.NotFindError){
-        //             let work={
-        //                 id: result.id,
-        //                 name: result.name,
-        //                 userToken: userToken,
-        //                 platFormId: platFormId,
-        //                 description: result.desc,
-        //                 classId: result.classId,
-        //                 homeworkId: result.homeworkId,
-        //                 chapterId: result.chapterId,
-        //                 type:result.typ
-        //             };
-        //             this.props.setWork(work);
-        //         }
-        //     });
-        // }
-
 
         if (this.props.vm.initialized) return;
         this.audioEngine = new AudioEngine();
