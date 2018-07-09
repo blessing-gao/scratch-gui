@@ -11,7 +11,9 @@ const ProjectSaveComponent = props => {
         onChange,
         projectName,
         save,
-        saveAs
+        saveAs,
+        iDisable,
+        handleHover
     } = props;
 
     return (
@@ -25,12 +27,12 @@ const ProjectSaveComponent = props => {
                 />
             </div>
             <div className={classNames(styles.menuBarItem)}>
-                <Button className={classNames(styles.shareButton)} onClick={save}>
+                <Button className={classNames(styles.shareButton)} disabled={iDisable} onClick={save} onMouseOver={handleHover}>
                     保存
                 </Button>
             </div>
             <div className={classNames(styles.menuBarItem)}>
-                <Button className={classNames(styles.shareButton)} onClick={saveAs}>
+                <Button className={classNames(styles.shareButton)} disabled={iDisable} onClick={saveAs} onMouseOver={handleHover}>
                     另存
                 </Button>
             </div>

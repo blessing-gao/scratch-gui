@@ -7,6 +7,7 @@ import request ,{getQueryString, getTargetId} from '../../lib/request';
 import {getWork,setWork} from '../../reducers/scratch';
 import {closeSaveModal} from "../../reducers/modals";
 import {setConfirm,setConfirmBack} from '../../reducers/confirm';
+import fireKeyEvent from '../../lib/key-map';
 /**
  * 本组件用于向服务器保存作品
  * Project saver component passes a saveProject function to its child.
@@ -27,11 +28,14 @@ class ProjectSave extends React.Component {
         super(props);
         bindAll(this, [
             'saveProject',
-            'handleChange'
+            'handleChange',
+            'saveCover'
         ]);
         this.state = {
             projectName: '',
-            id: ''
+            id: '',
+            iDisable: false,
+            cover: ''
         };
     }
 
@@ -40,27 +44,7 @@ class ProjectSave extends React.Component {
      * 通过输入链接获取作品信息
      */
     componentDidMount (){
-        // todo 仅用于赋值参考
-        // const work={
-        //     id: '1234'
-        // }
-        // this.props.setWork(work);
-        // console.log(this.props.work)
 
-        // const id = getTargetId();
-        // if (id !== null){
-        //     request.default_request(request.GET, null, `/scratch/getProjectInfo?id=${id}`, result => {
-        //         if (result.code !== request.NotFindError){
-        //             this.props.setWork({
-        //                 id: result.id,
-        //                 workName: result.name,
-        //                 projectName: result.name
-        //             });
-        //             console.log(this.props.work);
-        //             this.setState({id: result.id, workName: result.name, projectName: result.name});
-        //         }
-        //     });
-        // }
     }
     /**
      * 作品向服务端保存方法
@@ -75,6 +59,7 @@ class ProjectSave extends React.Component {
         }else{
             name = work.name;
         }
+        this.setState({iDixsable: true});
         this.props.vm.saveProjectSb3().then(content => {
             // Use special ms version if available to get it working on Edge.
             if (navigator.msSaveOrOpenBlob) {
@@ -85,7 +70,8 @@ class ProjectSave extends React.Component {
                 'file':content,
                 'name':name,
                 'platFormId1':work.platFormId,
-                'userToken':work.userToken
+                'userToken':work.userToken,
+                'cover' :sessionStorage.getItem('coverImg')
             };
             if(work.id && notNewProject){
                 // saveData.scratchFile = JSON.stringify(work);
@@ -106,8 +92,8 @@ class ProjectSave extends React.Component {
             //         clearInterval(this.timer);
             //     }
             // },1000);
-            // return false;
             request.file_request(request.POST, saveData, '/api/scratch/save', result => {
+                this.setState({iDisable:false});
                 if (result.code == 0 && result.result){
                     // 上传成功
                     let workData = this.props.work;
@@ -135,12 +121,18 @@ class ProjectSave extends React.Component {
         });
     }
 
+    saveCover(){
+        const shotBtn = document.getElementById('shotBtn');
+        fireKeyEvent(shotBtn, 'keydown', 16);
+    }
+
     handleChange (event) {
         this.setState({projectName: event.target.value});
         let workData = this.props.work;
         workData.name = event.target.value;
         this.props.setWork(workData);
     }
+
     render () {
         const {
             /* eslint-disable no-unused-vars */
@@ -157,6 +149,8 @@ class ProjectSave extends React.Component {
                 onChange={this.handleChange}
                 save={this.saveProject.bind(this,true)}
                 saveAs={this.saveProject.bind(this,false)}
+                iDisable={this.state.iDisable}
+                handleHover={this.saveCover}
             />);
     }
 
