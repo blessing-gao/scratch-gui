@@ -50,7 +50,7 @@ class SoundLibrary extends React.PureComponent {
             if (result) {
                 this.setState({sound: result});
             }
-        },'http://cdn.imayuan.com');
+        },'//cdn.imayuan.com');
     }
 
     handleChange (type){
