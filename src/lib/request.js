@@ -8,9 +8,9 @@ export const ASSET_SERVER = '//owkomi1zd.bkt.clouddn.com/';
 export const COVER_SERVER = '//cdn.imayuan.com/cover/';
 export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
-    // return '//scratch.imayuan.com';
+    return '//scratch.imayuan.com';
     // return `${window.location.protocol}//${window.location.host}`;
-    return 'http://192.168.1.107:8080';
+    // return 'http://192.168.1.107:8080';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
