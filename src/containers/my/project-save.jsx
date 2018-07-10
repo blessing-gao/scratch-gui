@@ -59,7 +59,7 @@ class ProjectSave extends React.Component {
         }else{
             name = work.name;
         }
-        this.setState({iDixsable: true});
+        this.setState({iDisable: true});
         this.props.vm.saveProjectSb3().then(content => {
             // Use special ms version if available to get it working on Edge.
             if (navigator.msSaveOrOpenBlob) {

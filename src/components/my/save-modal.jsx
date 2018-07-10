@@ -81,6 +81,7 @@ class SaveModalComponent extends React.Component {
                         </div>
                     </div>
                     <Box className={styles.buttonRow}>
+                        <Box className={styles.iAnon}><input type="checkbox" value="1" onClick={this.props.handleAnon}/> 是否匿名发布</Box>
                         <button
                             className={styles.cancelButton}
                             onClick={this.props.handleCancel}
@@ -110,7 +111,8 @@ SaveModalComponent.propTypes = {
     placeholder: PropTypes.string,
     shotSrc: PropTypes.string,
     title: PropTypes.string,
-    workName: PropTypes.string
+    workName: PropTypes.string,
+    handleAnon: PropTypes.func
 };
 SaveModalComponent.defaultProps = {
     workName: '作品',

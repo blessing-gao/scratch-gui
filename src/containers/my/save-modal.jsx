@@ -25,7 +25,8 @@ class SaveModal extends React.Component {
             'getType',
             'handleTagClick',
             'handleChangeName',
-            'handleChangeDesc'
+            'handleChangeDesc',
+            'handleAnon'
         ]);
         this.state = {
             id: '',
@@ -35,8 +36,13 @@ class SaveModal extends React.Component {
             shotSrc: '',
             coverSrc: '',
             isShow: false,
-            tags: []
+            tags: [],
+            iAnon: false
         };
+    }
+
+    handleAnon(){
+        this.setState({iAnon: !this.state.iAnon})
     }
 
     getType (type){
@@ -93,8 +99,8 @@ class SaveModal extends React.Component {
             saveData.remarks = this.state.describe;
             saveData.type = this.state.selectedTag;
             saveData.cover = sessionStorage.getItem('coverImg');
-            // saveData.xOssProcess = 'style/cover';
             saveData.isRelease = 1;
+            saveData.isAnon = this.state.iAnon - 0;
             request.file_request(request.POST, saveData, '/api/scratch/save', result => {
                 if (result.code == 0 && result.result){
                     // 上传成功
@@ -148,6 +154,7 @@ class SaveModal extends React.Component {
                 onChangeName={this.handleChangeName}
                 onChangeDesc={this.handleChangeDesc}
                 handleOnSave={this.handleOnSave}
+                handleAnon={this.handleAnon}
             />);
     }
 }

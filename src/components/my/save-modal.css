@@ -67,7 +67,7 @@
 .class-box{
     text-align: left;
     padding: .8rem 0;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .class-btn{
@@ -129,4 +129,10 @@
 .main-box{
     float: left;
     width: 50%;
+}
+
+.i-anon{
+    float: left;
+    font-size: 14px;
+    line-height: 40px;
 }

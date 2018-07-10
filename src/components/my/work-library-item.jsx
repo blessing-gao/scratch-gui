@@ -8,11 +8,24 @@ import Box from '../box/box.jsx';
 import styles from './work-library-item.css';
 import {connect} from 'react-redux';
 import {setWork} from '../../reducers/scratch';
-import Card from '../../containers/cards.jsx';
-import {Modal} from 'antd';
+import Modal from 'react-modal';
 import QRCode from 'qrcode.react';
 
 const host = getHost();
+
+const customStyles = {
+    content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)',
+        padding               : '1.5rem',
+        borderRadius          : '.5rem'
+    }
+};
+
 class WorkLibraryItem extends React.PureComponent {
     constructor (props) {
         super(props);
@@ -21,11 +34,14 @@ class WorkLibraryItem extends React.PureComponent {
             'handleShareClick',
             'handleDeleteClick',
             'handleMouseEnter',
-            'handleMouseLeave'
+            'handleMouseLeave',
+            'handleShareClose'
         ]);
 
         this.state = {
-            status: false
+            status: false,
+            isModal: false,
+            codeSrc: ""
         };
     }
     handleEditClick () {
@@ -37,23 +53,12 @@ class WorkLibraryItem extends React.PureComponent {
         // window.location.href = 'http://www.baidu.com';
     }
     handleShareClick () {
-        const ercode = `http://imayuan.com/QcodeShare?projectId=${this.props.id}.jpg`;
-        Modal.success({
-            title: this.props.name,
-            content: (
-                <Card
-                    hoverable
-                    style={{width: 350}}
-                >
-                    <img
-                        alt="example"
-                        src={ercode}
-                    />
-                </Card>
-            ),
-            width: 480,
-            footer: {}
-        });
+        const ercode = `http://scratch.imayuan.com/mobile/game.html?projectId=${this.props.id}`;
+        this.setState({isModal: true,codeSrc: ercode});
+    }
+
+    handleShareClose(){
+        this.setState({isModal: false});
     }
 
     handleDeleteClick () {
@@ -126,6 +131,17 @@ class WorkLibraryItem extends React.PureComponent {
                     {/* <br />*/}
                     {/* <span className={styles.libraryItemName}>{this.props.name}</span>*/}
                 </Box>
+                <Modal
+                    isOpen={this.state.isModal}
+                    onRequestClose={this.handleShareClose}
+                    contentLabel="Example Modal"
+                    style={customStyles}
+                    overlayClassName={styles.modalOverlay}
+                >
+                    <QRCode size={200} value={this.state.codeSrc}/>
+                    <div className={styles.closeBtn} onClick={this.handleShareClose}>关闭</div>
+                </Modal>
+
             </Box>
         );
     }

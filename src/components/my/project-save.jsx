@@ -27,7 +27,10 @@ const ProjectSaveComponent = props => {
                 />
             </div>
             <div className={classNames(styles.menuBarItem)}>
-                <Button className={classNames(styles.shareButton)} disabled={iDisable} onClick={save} onMouseOver={handleHover}>
+                <Button className={
+                    classNames(styles.shareButton,
+                    (iDisable && styles.shareButtonDisable)
+                    )} disabled={iDisable} onClick={save} onMouseOver={handleHover}>
                     保存
                 </Button>
             </div>

@@ -144,3 +144,24 @@
 .btn-box{
     margin: .6rem 0 .4rem;
 }
+
+.modal-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 520;
+    background: rgba(0,0,0,.3);
+}
+
+.close-btn{
+    text-align: center;
+    padding: .625rem 1rem;
+    background: hsla(215, 100%, 65%, 1);
+    border-radius: 1.375rem;
+    color: hsla(0, 100%, 100%, 1);
+    height: 2.5rem;
+    margin-top: 1.5rem;
+    cursor: pointer;
+}

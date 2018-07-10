@@ -171,3 +171,6 @@
     border-color: $pen-primary;
     color: white;
 }
+.share-button-disable{
+    cursor: wait;
+}
