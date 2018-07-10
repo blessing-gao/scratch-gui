@@ -21,7 +21,7 @@ const customStyles = {
         bottom                : 'auto',
         marginRight           : '-50%',
         transform             : 'translate(-50%, -50%)',
-        padding               : '1.5rem',
+        padding               : '1.5rem 2rem',
         borderRadius          : '.5rem'
     }
 };
@@ -138,6 +138,7 @@ class WorkLibraryItem extends React.PureComponent {
                     style={customStyles}
                     overlayClassName={styles.modalOverlay}
                 >
+                    <p className={styles.shareTitle}>{this.props.name}</p>
                     <QRCode size={200} value={this.state.codeSrc}/>
                     <div className={styles.closeBtn} onClick={this.handleShareClose}>关闭</div>
                 </Modal>

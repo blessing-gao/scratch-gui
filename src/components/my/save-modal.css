@@ -119,6 +119,8 @@
     width: 46%;
     margin-right: 4%;
     float: left;
+    border: 1px dashed #ccc;
+    font-size: 0;
 }
 
 .cover-img img{
