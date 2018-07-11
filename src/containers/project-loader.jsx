@@ -2,14 +2,9 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-
 import analytics from '../lib/analytics';
-
-import {
-    openLoadingProject,
-    closeLoadingProject
-} from '../reducers/modals';
-
+import {openLoadingProject, closeLoadingProject} from '../reducers/modals';
+import {setWork} from '../reducers/scratch';
 /**
  * Project loader component passes a file input, load handler and props to its child.
  * It expects this child to be a function with the signature
@@ -56,6 +51,12 @@ class ProjectLoader extends React.Component {
                 // Reset the file input after project is loaded
                 // This is necessary in case the user wants to reload a project
                 thisFileInput.value = null;
+                const work = this.props.work;
+                const newWork = {
+                    userToken: work.userToken,
+                    platFormId: work.platFormId
+                };
+                this.props.setWork(newWork);
             })
             .catch(error => {
                 this.setState({loadingError: true, errorMessage: error});
@@ -106,16 +107,19 @@ ProjectLoader.propTypes = {
     openLoadingState: PropTypes.func,
     vm: PropTypes.shape({
         loadProject: PropTypes.func
-    })
+    }),
+    work: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-    vm: state.scratchGui.vm
+    vm: state.scratchGui.vm,
+    work: state.scratchGui.scratch.work
 });
 
 const mapDispatchToProps = dispatch => ({
     closeLoadingState: () => dispatch(closeLoadingProject()),
-    openLoadingState: () => dispatch(openLoadingProject())
+    openLoadingState: () => dispatch(openLoadingProject()),
+    setWork: work => dispatch(setWork(work))
 });
 
 export default connect(
