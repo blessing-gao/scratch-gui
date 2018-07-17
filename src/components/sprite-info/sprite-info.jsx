@@ -152,7 +152,7 @@ class SpriteInfo extends React.Component {
                                 /> :
                                 null
                         }
-                        <div>
+                        <div className={styles.radioWrapper}>
                             <div
                                 className={classNames(
                                     styles.radio,

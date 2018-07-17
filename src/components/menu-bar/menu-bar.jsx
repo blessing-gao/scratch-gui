@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import {connect} from 'react-redux';
+import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
+import bindAll from 'lodash.bindall';
 import React from 'react';
 
 import Box from '../box/box.jsx';
@@ -26,12 +28,27 @@ import {
 
 import styles from './menu-bar.css';
 
+import helpIcon from '../../lib/assets/icon--tutorials.svg';
 import mystuffIcon from './icon--mystuff.png';
 import profileIcon from './icon--profile.png';
 import dropdownCaret from '../language-selector/dropdown-caret.svg';
+import languageIcon from '../language-selector/language-icon.svg';
+
 import scratchLogo from './logo.png';
 
-import helpIcon from './icon--help.svg';
+const ariaMessages = defineMessages({
+    language: {
+        id: 'gui.menuBar.LanguageSelector',
+        defaultMessage: 'language selector',
+        description: 'accessibility text for the language selection menu'
+    },
+    tutorials: {
+        id: 'gui.menuBar.tutorialsLibrary',
+        defaultMessage: 'Tutorials',
+        description: 'accessibility text for the tutorials button'
+    }
+});
+
 import backIcon from './icon--back.svg';
 import {getHost} from '../../lib/request';
 
@@ -44,7 +61,6 @@ const newWork = function (){
         return;
     }
 };
-
 const MenuBarItemTooltip = ({
     children,
     className,

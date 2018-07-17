@@ -270,12 +270,12 @@ const looks = function (isStage, targetId) {
 const sound = function (isStage, targetId) {
     return `
     <category name="声音" id="sound" colour="#D65CD6" secondaryColour="#BD42BD">
-        <block id="${targetId}_sound_play" type="sound_play">
+        <block id="${targetId}_sound_playuntildone" type="sound_playuntildone">
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu"/>
             </value>
         </block>
-        <block id="${targetId}_sound_playuntildone" type="sound_playuntildone">
+        <block id="${targetId}_sound_play" type="sound_play">
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu"/>
             </value>
@@ -320,7 +320,7 @@ const sound = function (isStage, targetId) {
 
 const events = function (isStage) {
     return `
-    <category name="事件" id="events" colour="#FFD500" secondaryColour="#CC9900">
+    <category name="%{BKY_CATEGORY_EVENTS}" id="events" colour="#FFD500" secondaryColour="#CC9900">
         <block type="event_whenflagclicked"/>
         <block type="event_whenkeypressed">
         </block>
@@ -359,7 +359,7 @@ const events = function (isStage) {
 
 const control = function (isStage) {
     return `
-    <category name="控制" id="control" colour="#FFAB19" secondaryColour="#CF8B17">
+    <category name="%{BKY_CATEGORY_CONTROL}" id="control" colour="#FFAB19" secondaryColour="#CF8B17">
         <block type="control_wait">
             <value name="DURATION">
                 <shadow type="math_positive_number">
@@ -405,9 +405,9 @@ const control = function (isStage) {
 };
 
 const sensing = function (isStage) {
-    const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', '你叫什么名字啊?');
+    const name = ScratchBlocks.ScratchMsgs.translate('SENSING_ASK_TEXT', 'What\'s your name?');
     return `
-    <category name="侦测" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
+    <category name="%{BKY_CATEGORY_SENSING}" id="sensing" colour="#4CBFE6" secondaryColour="#2E8EB8">
         ${isStage ? '' : `
             <block type="sensing_touchingobject">
                 <value name="TOUCHINGOBJECTMENU">
@@ -478,11 +478,11 @@ const sensing = function (isStage) {
 };
 
 const operators = function () {
-    const apple = ScratchBlocks.ScratchMsgs.translate('OPERATORS_JOIN_APPLE', '苹果');
-    const banana = ScratchBlocks.ScratchMsgs.translate('OPERATORS_JOIN_BANANA', '香蕉');
+    const apple = ScratchBlocks.ScratchMsgs.translate('OPERATORS_JOIN_APPLE', 'apple');
+    const banana = ScratchBlocks.ScratchMsgs.translate('OPERATORS_JOIN_BANANA', 'banana');
     const letter = ScratchBlocks.ScratchMsgs.translate('OPERATORS_LETTEROF_APPLE', 'a');
     return `
-    <category name="运算" id="operators" colour="#40BF4A" secondaryColour="#389438">
+    <category name="%{BKY_CATEGORY_OPERATORS}" id="operators" colour="#40BF4A" secondaryColour="#389438">
         <block type="operator_add">
             <value name="NUM1">
                 <shadow type="math_number">
@@ -553,7 +553,7 @@ const operators = function () {
             </value>
             <value name="OPERAND2">
                 <shadow type="text">
-                    <field name="TEXT">100</field>
+                    <field name="TEXT">50</field>
                 </shadow>
             </value>
         </block>
@@ -565,7 +565,7 @@ const operators = function () {
             </value>
             <value name="OPERAND2">
                 <shadow type="text">
-                    <field name="TEXT">100</field>
+                    <field name="TEXT">50</field>
                 </shadow>
             </value>
         </block>
@@ -577,7 +577,7 @@ const operators = function () {
             </value>
             <value name="OPERAND2">
                 <shadow type="text">
-                    <field name="TEXT">100</field>
+                    <field name="TEXT">50</field>
                 </shadow>
             </value>
         </block>
@@ -665,7 +665,7 @@ const operators = function () {
 const variables = function () {
     return `
     <category
-        name="变量"
+        name="%{BKY_CATEGORY_VARIABLES}"
         id="variables"
         colour="#FF8C1A"
         secondaryColour="#DB6E00"
@@ -677,7 +677,7 @@ const variables = function () {
 const myBlocks = function () {
     return `
     <category
-        name="更多"
+        name="%{BKY_CATEGORY_MYBLOCKS}"
         id="myBlocks"
         colour="#FF6680"
         secondaryColour="#FF4D6A"
