@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import {connect} from 'react-redux';
-import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import React from 'react';
@@ -14,7 +13,7 @@ import Menu from '../../containers/menu.jsx';
 import {MenuItem, MenuSection} from '../menu/menu.jsx';
 import ProjectSaver from '../../containers/project-saver.jsx';
 import ProjectSave from '../../containers/my/project-save.jsx';
-import {closePreviewInfo, openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal} from '../../reducers/modals';
+import {openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
 import {
     openFileMenu,
@@ -23,7 +22,6 @@ import {
     openEditMenu,
     closeEditMenu,
     editMenuOpen,
-    languageMenuOpen
 } from '../../reducers/menus';
 
 import styles from './menu-bar.css';
@@ -36,18 +34,6 @@ import languageIcon from '../language-selector/language-icon.svg';
 
 import scratchLogo from './logo.png';
 
-const ariaMessages = defineMessages({
-    language: {
-        id: 'gui.menuBar.LanguageSelector',
-        defaultMessage: 'language selector',
-        description: 'accessibility text for the language selection menu'
-    },
-    tutorials: {
-        id: 'gui.menuBar.tutorialsLibrary',
-        defaultMessage: 'Tutorials',
-        description: 'accessibility text for the tutorials button'
-    }
-});
 
 import backIcon from './icon--back.svg';
 import {getHost} from '../../lib/request';

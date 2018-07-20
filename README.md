@@ -38,7 +38,7 @@ upstream    https://github.com/wabish/fork-demo.git (push)
 2、获取上游项目更新。使用 fetch 命令更新，fetch 后会被存储在一个本地分支 upstream/master 上。
 ➜ git fetch upstream
 3、合并到本地分支。切换到 master 分支，合并 upstream/master 分支。
-➜ git merge upstream/master
+➜ git merge upstream/master 
 如果提示： fatal: refusing to merge unrelated histories
 git merge upstream/master --allow-unrelated-histories
 
