@@ -2,8 +2,16 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
+
 import analytics from '../lib/analytics';
-import {openLoadingProject, closeLoadingProject} from '../reducers/modals';
+import log from '../lib/log';
+
+import {
+    openLoadingProject,
+    closeLoadingProject
+} from '../reducers/modals';
+
 import {setWork} from '../reducers/scratch';
 /**
  * Project loader component passes a file input, load handler and props to its child.
@@ -21,6 +29,15 @@ import {setWork} from '../reducers/scratch';
  *     </MyCoolComponent>
  * )}</ProjectLoader>
  */
+
+const messages = defineMessages({
+    loadError: {
+        id: 'gui.projectLoader.loadError',
+        defaultMessage: 'The project file that was selected failed to load.',
+        description: 'An error that displays when a local project file fails to load.'
+    }
+});
+
 class ProjectLoader extends React.Component {
     constructor (props) {
         super(props);
@@ -30,10 +47,6 @@ class ProjectLoader extends React.Component {
             'handleChange',
             'handleClick'
         ]);
-        this.state = {
-            loadingError: false,
-            errorMessage: ''
-        };
     }
     handleChange (e) {
         // Remove the hash if any (without triggering a hash change event or a reload)
@@ -59,7 +72,12 @@ class ProjectLoader extends React.Component {
                 this.props.setWork(newWork);
             })
             .catch(error => {
-                this.setState({loadingError: true, errorMessage: error});
+                log.warn(error);
+                alert(this.props.intl.formatMessage(messages.loadError)); // eslint-disable-line no-alert
+                this.props.closeLoadingState();
+                // Reset the file input after project is loaded
+                // This is necessary in case the user wants to reload a project
+                thisFileInput.value = null;
             });
         if (thisFileInput.files) { // Don't attempt to load if no file was selected
             this.props.openLoadingState();
@@ -84,10 +102,6 @@ class ProjectLoader extends React.Component {
         );
     }
     render () {
-        if (this.state.loadingError) {
-            throw new Error(
-                `作品导入失败: ${this.state.errorMessage}`);
-        }
         const {
             /* eslint-disable no-unused-vars */
             children,
@@ -104,6 +118,7 @@ class ProjectLoader extends React.Component {
 ProjectLoader.propTypes = {
     children: PropTypes.func,
     closeLoadingState: PropTypes.func,
+    intl: intlShape.isRequired,
     openLoadingState: PropTypes.func,
     vm: PropTypes.shape({
         loadProject: PropTypes.func
@@ -125,4 +140,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ProjectLoader);
+)(injectIntl(ProjectLoader));
