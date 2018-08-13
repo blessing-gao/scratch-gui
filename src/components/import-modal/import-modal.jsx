@@ -2,25 +2,37 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactModal from 'react-modal';
 import Box from '../box/box.jsx';
-import {injectIntl, intlShape, FormattedMessage} from 'react-intl';
+import {defineMessages, injectIntl, intlShape, FormattedMessage} from 'react-intl';
 import classNames from 'classnames';
 
 import CloseButton from '../close-button/close-button.jsx';
 
 import styles from './import-modal.css';
 
-const messages = {
-    title: '查看2.0项目',
-    formDescription: 'Enter a link to one of your shared Scratch projects.' +
-    ' Changes made in this 3.0 Preview will not be saved.',
-    invalidFormatError: 'Uh oh, that project link or id doesn\'t look quite right.'
-};
+const messages = defineMessages({
+    title: {
+        id: 'gui.importInfo.title',
+        defaultMessage: 'View a Scratch 2.0 Project',
+        description: 'Scratch 2.0 import modal label - for accessibility'
+    },
+    formDescription: {
+        defaultMessage:
+            'Enter a link to one of your shared Scratch projects. Changes made in this 3.0 Preview will not be saved.',
+        description: 'Import project message',
+        id: 'gui.importInfo.message'
+    },
+    invalidFormatError: {
+        id: 'gui.importInfo.invalidFormatError',
+        defaultMessage: 'Uh oh, that project link or id doesn\'t look quite right.',
+        description: 'Invalid project link or id message'
+    }
+});
 
-const ImportModal = ({...props}) => (
+const ImportModal = ({intl, ...props}) => (
     <ReactModal
         isOpen
         className={styles.modalContent}
-        contentLabel={messages.title}
+        contentLabel={intl.formatMessage({...messages.title})}
         overlayClassName={styles.modalOverlay}
         onRequestClose={props.onCancel}
     >
@@ -45,7 +57,7 @@ const ImportModal = ({...props}) => (
                     )}
                 >
                     <h2>
-                        {messages.title}
+                        {intl.formatMessage({...messages.title})}
                     </h2>
                 </div>
                 <div className={classNames(styles.headerItem, styles.headerItemFilter)}>
@@ -56,7 +68,7 @@ const ImportModal = ({...props}) => (
 
         <Box className={styles.body}>
             <p>
-                {messages.formDescription}
+                {intl.formatMessage({...messages.formDescription})}
             </p>
             <Box
                 className={classNames(styles.inputRow,
@@ -85,7 +97,9 @@ const ImportModal = ({...props}) => (
             {props.hasValidationError ?
                 <Box className={styles.errorRow}>
                     <p>
-                        {messages.invalidFormatError}
+                        <FormattedMessage
+                            {...messages[`${props.errorMessage}`]}
+                        />
                     </p>
                 </Box> : null
             }
@@ -109,12 +123,12 @@ const ImportModal = ({...props}) => (
                         previewFaqLink: (
                             <a
                                 className={styles.faqLink}
-                                href="//scratch.mit.edu/preview-faq"
+                                href="//scratch.mit.edu/3faq"
                             >
                                 <FormattedMessage
-                                    defaultMessage="Preview FAQ"
-                                    description="link to Scratch 3.0 preview FAQ page"
-                                    id="gui.importInfo.previewfaqlink"
+                                    defaultMessage="FAQ"
+                                    description="link to Scratch 3.0 FAQ page"
+                                    id="gui.importInfo.previewfaqlinktext"
                                 />
                             </a>
                         )

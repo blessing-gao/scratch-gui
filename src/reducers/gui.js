@@ -15,6 +15,7 @@ import stageSizeReducer, {stageSizeInitialState} from './stage-size';
 import targetReducer, {targetsInitialState} from './targets';
 import toolboxReducer, {toolboxInitialState} from './toolbox';
 import vmReducer, {vmInitialState} from './vm';
+import vmStatusReducer, {vmStatusInitialState} from './vm-status';
 import scratchReducer, {scratchInitialState} from './scratch';
 import conformReducer, {conformInitialState} from './confirm';
 import throttle from 'redux-throttle';
@@ -38,6 +39,7 @@ const guiInitialState = {
     targets: targetsInitialState,
     toolbox: toolboxInitialState,
     vm: vmInitialState,
+    vmStatus: vmStatusInitialState
     scratch: scratchInitialState,
     confirm: conformInitialState
 };
@@ -80,6 +82,7 @@ const guiReducer = combineReducers({
     targets: targetReducer,
     toolbox: toolboxReducer,
     vm: vmReducer,
+    vmStatus: vmStatusReducer
     scratch: scratchReducer,
     confirm: conformReducer
 });

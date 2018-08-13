@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Box from '../box/box.jsx';
 import ActionMenu from '../action-menu/action-menu.jsx';
-import CostumeCanvas from '../costume-canvas/costume-canvas.jsx';
 import styles from './stage-selector.css';
 
 import backdropIcon from '../action-menu/icon--backdrop.svg';
@@ -55,11 +54,9 @@ const StageSelector = props => {
                 </div>
             </div>
             {url ? (
-                <CostumeCanvas
+                <img
                     className={styles.costumeCanvas}
-                    height={48}
-                    url={url}
-                    width={64}
+                    src={url}
                 />
             ) : null}
             <div className={styles.label}>
