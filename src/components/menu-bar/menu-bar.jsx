@@ -18,7 +18,6 @@ import ProjectSave from '../../containers/my/project-save.jsx';
 import {openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal} from '../../reducers/modals';
 import TurboMode from '../../containers/turbo-mode.jsx';
 
-import {openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
 import {
     openFileMenu,
@@ -47,7 +46,6 @@ import scratchLogo from './logo.png';
 
 import backIcon from './icon--back.svg';
 import {getHost} from '../../lib/request';
-import {defineMessages} from "react-intl";
 
 const host = getHost();
 const newWork = function (){
@@ -174,16 +172,16 @@ class MenuBar extends React.Component {
                         <Divider className={classNames(styles.divider)} />
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
-                                [styles.active]: props.fileMenuOpen
+                                [styles.active]: this.props.fileMenuOpen
                             })}
-                            onMouseUp={props.onClickFile}
+                            onMouseUp={this.props.onClickFile}
                         >
                             <div className={classNames(styles.fileMenu)}>
                                 文件
                             </div>
                             <MenuBarMenu
-                                open={props.fileMenuOpen}
-                                onRequestClose={props.onRequestCloseFile}
+                                open={this.props.fileMenuOpen}
+                                onRequestClose={this.props.onRequestCloseFile}
                             >
                                 <MenuSection>
                                     <MenuItem onClick={newWork}>
@@ -211,7 +209,7 @@ class MenuBar extends React.Component {
                         <div className={classNames(styles.menuBarItem)}>
                             <Button
                                 className={classNames(styles.shareButton)}
-                                onClick={props.onOpenSaveModal}
+                                onClick={this.props.onOpenSaveModal}
                             >
                                 作品发布
                             </Button>
@@ -219,124 +217,12 @@ class MenuBar extends React.Component {
 
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
-                                [styles.active]: this.props.languageMenuOpen
-                            })}
-                            onMouseUp={this.handleLanguageMouseUp}
-                        >
-                            {/* @TODO: remove coming soon tooltip wrapper  https://github.com/LLK/scratch-gui/issues/2664  */}
-                            <MenuBarItemTooltip
-                                enable
-                                id="menubar-selector"
-                                place="right"
-                            >
-                                <div
-                                    aria-label={this.props.intl.formatMessage(ariaMessages.language)}
-                                    className={classNames(styles.languageMenu)}
-                                >
-                                    <img
-                                        className={styles.languageIcon}
-                                        src={languageIcon}
-                                    />
-                                    <img
-                                        className={styles.dropdownCaret}
-                                        src={dropdownCaret}
-                                    />
-                                </div>
-                                <MenuBarMenu
-                                    open={this.props.languageMenuOpen}
-                                    onRequestClose={this.props.onRequestCloseLanguage}
-                                >
-                                    <LanguageSelector />
-                                </MenuBarMenu>
-
-                            </MenuBarItemTooltip>
-                        </div>
-                        <div
-                            className={classNames(styles.menuBarItem, styles.hoverable, {
-                                [styles.active]: this.props.fileMenuOpen
-                            })}
-                            onMouseUp={this.props.onClickFile}
-                        >
-                            <div className={classNames(styles.fileMenu)}>
-                                <FormattedMessage
-                                    defaultMessage="File"
-                                    description="Text for file dropdown menu"
-                                    id="gui.menuBar.file"
-                                />
-                            </div>
-                            <MenuBarMenu
-                                open={this.props.fileMenuOpen}
-                                onRequestClose={this.props.onRequestCloseFile}
-                            >
-                                <MenuItemTooltip id="new">
-                                    <MenuItem>
-                                        <FormattedMessage
-                                            defaultMessage="New"
-                                            description="Menu bar item for creating a new project"
-                                            id="gui.menuBar.new"
-                                        />
-                                    </MenuItem>
-                                </MenuItemTooltip>
-                                <MenuSection>
-                                    <MenuItemTooltip id="save">
-                                        <MenuItem>
-                                            <FormattedMessage
-                                                defaultMessage="Save now"
-                                                description="Menu bar item for saving now"
-                                                id="gui.menuBar.saveNow"
-                                            />
-                                        </MenuItem>
-                                    </MenuItemTooltip>
-                                    <MenuItemTooltip id="copy">
-                                        <MenuItem>
-                                            <FormattedMessage
-                                                defaultMessage="Save as a copy"
-                                                description="Menu bar item for saving as a copy"
-                                                id="gui.menuBar.saveAsCopy"
-                                            /></MenuItem>
-                                    </MenuItemTooltip>
-                                </MenuSection>
-                                <MenuSection>
-                                    <ProjectLoader>{(renderFileInput, loadProject, loadProps) => (
-                                        <MenuItem
-                                            onClick={loadProject}
-                                            {...loadProps}
-                                        >
-                                            <FormattedMessage
-                                                defaultMessage="Load from your computer"
-                                                description="Menu bar item for uploading a project from your computer"
-                                                id="gui.menuBar.uploadFromComputer"
-                                            />
-                                            {renderFileInput()}
-                                        </MenuItem>
-                                    )}</ProjectLoader>
-                                    <ProjectSaver>{(saveProject, saveProps) => (
-                                        <MenuItem
-                                            onClick={saveProject}
-                                            {...saveProps}
-                                        >
-                                            <FormattedMessage
-                                                defaultMessage="Save to your computer"
-                                                description="Menu bar item for downloading a project to your computer"
-                                                id="gui.menuBar.downloadToComputer"
-                                            />
-                                        </MenuItem>
-                                    )}</ProjectSaver>
-                                </MenuSection>
-                            </MenuBarMenu>
-                        </div>
-                        <div
-                            className={classNames(styles.menuBarItem, styles.hoverable, {
                                 [styles.active]: this.props.editMenuOpen
                             })}
                             onMouseUp={this.props.onClickEdit}
                         >
                             <div className={classNames(styles.editMenu)}>
-                                <FormattedMessage
-                                    defaultMessage="Edit"
-                                    description="Text for edit dropdown menu"
-                                    id="gui.menuBar.edit"
-                                />
+                               编辑
                             </div>
                             <MenuBarMenu
                                 open={this.props.editMenuOpen}
@@ -364,17 +250,9 @@ class MenuBar extends React.Component {
                                     <TurboMode>{(toggleTurboMode, {turboMode}) => (
                                         <MenuItem onClick={toggleTurboMode}>
                                             {turboMode ? (
-                                                <FormattedMessage
-                                                    defaultMessage="Turn off Turbo Mode"
-                                                    description="Menu bar item for turning off turbo mode"
-                                                    id="gui.menuBar.turboModeOff"
-                                                />
+                                                "开启加速"
                                             ) : (
-                                                <FormattedMessage
-                                                    defaultMessage="Turn on Turbo Mode"
-                                                    description="Menu bar item for turning on turbo mode"
-                                                    id="gui.menuBar.turboModeOn"
-                                                />
+                                                "关闭加速"
                                             )}
                                         </MenuItem>
                                     )}</TurboMode>
@@ -389,7 +267,7 @@ class MenuBar extends React.Component {
                             styles.hoverable,
                             styles.mystuffButton
                         )}
-                        onClick={props.handleBack}
+                        onClick={this.props.handleBack}
                     >
                         <img
                             className={styles.myBackIcon}
@@ -403,7 +281,7 @@ class MenuBar extends React.Component {
                             styles.hoverable,
                             styles.mystuffButton
                         )}
-                        onClick={props.onOpenWorkLibrary}
+                        onClick={this.props.onOpenWorkLibrary}
                     >
                         <img
                             className={styles.mystuffIcon}
@@ -423,75 +301,26 @@ class MenuBar extends React.Component {
                         <FormattedMessage {...ariaMessages.tutorials} />
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    <div className={classNames(styles.menuBarItem)}>
-                        <MenuBarItemTooltip id="title-field">
-                            <input
-                                disabled
-                                className={classNames(styles.titleField)}
-                                placeholder="Untitled-1"
-                            />
-                        </MenuBarItemTooltip>
-                    </div>
-                    <div className={classNames(styles.menuBarItem)}>
-                        <MenuBarItemTooltip id="share-button">
-                            <Button className={classNames(styles.shareButton)}>
-                                <FormattedMessage
-                                    defaultMessage="Share"
-                                    description="Label for project share button"
-                                    id="gui.menuBar.share"
-                                />
-                            </Button>
-                        </MenuBarItemTooltip>
-                    </div>
-                    <div className={classNames(styles.menuBarItem, styles.communityButtonWrapper)}>
-                        {this.props.enableCommunity ?
-                            <Button
-                                className={classNames(styles.communityButton)}
-                                iconClassName={styles.communityButtonIcon}
-                                iconSrc={communityIcon}
-                                onClick={this.props.onSeeCommunity}
-                            >
-                                <FormattedMessage
-                                    defaultMessage="See Community"
-                                    description="Label for see community button"
-                                    id="gui.menuBar.seeCommunity"
-                                />
-                            </Button> :
-                            <MenuBarItemTooltip id="community-button">
-                                <Button
-                                    className={classNames(styles.communityButton)}
-                                    iconClassName={styles.communityButtonIcon}
-                                    iconSrc={communityIcon}
-                                >
-                                    <FormattedMessage
-                                        defaultMessage="See Community"
-                                        description="Label for see community button"
-                                        id="gui.menuBar.seeCommunity"
-                                    />
-                                </Button>
-                            </MenuBarItemTooltip>
-                        }
-                    </div>
                 </div>
-                <div className={classNames(styles.menuBarItem, styles.feedbackButtonWrapper)}>
-                    <a
-                        className={styles.feedbackLink}
-                        href="https://scratch.mit.edu/discuss/57/"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        <Button
-                            className={styles.feedbackButton}
-                            iconSrc={feedbackIcon}
-                        >
-                            <FormattedMessage
-                                defaultMessage="Give Feedback"
-                                description="Label for feedback form modal button"
-                                id="gui.menuBar.giveFeedback"
-                            />
-                        </Button>
-                    </a>
-                </div>
+                {/*<div className={classNames(styles.menuBarItem, styles.feedbackButtonWrapper)}>*/}
+                    {/*<a*/}
+                        {/*className={styles.feedbackLink}*/}
+                        {/*href="https://scratch.mit.edu/discuss/57/"*/}
+                        {/*rel="noopener noreferrer"*/}
+                        {/*target="_blank"*/}
+                    {/*>*/}
+                        {/*<Button*/}
+                            {/*className={styles.feedbackButton}*/}
+                            {/*iconSrc={feedbackIcon}*/}
+                        {/*>*/}
+                            {/*<FormattedMessage*/}
+                                {/*defaultMessage="Give Feedback"*/}
+                                {/*description="Label for feedback form modal button"*/}
+                                {/*id="gui.menuBar.giveFeedback"*/}
+                            {/*/>*/}
+                        {/*</Button>*/}
+                    {/*</a>*/}
+                {/*</div>*/}
                 <div className={styles.accountInfoWrapper}>
                     <MenuBarItemTooltip id="mystuff">
                         <div

@@ -39,7 +39,7 @@ const guiInitialState = {
     targets: targetsInitialState,
     toolbox: toolboxInitialState,
     vm: vmInitialState,
-    vmStatus: vmStatusInitialState
+    vmStatus: vmStatusInitialState,
     scratch: scratchInitialState,
     confirm: conformInitialState
 };
@@ -82,7 +82,7 @@ const guiReducer = combineReducers({
     targets: targetReducer,
     toolbox: toolboxReducer,
     vm: vmReducer,
-    vmStatus: vmStatusReducer
+    vmStatus: vmStatusReducer,
     scratch: scratchReducer,
     confirm: conformReducer
 });
