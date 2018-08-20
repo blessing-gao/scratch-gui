@@ -159,7 +159,7 @@ class SpriteInfo extends React.Component {
                             <div
                                 className={classNames(
                                     styles.radio,
-                                    styles.radioLeft,
+                                    styles.radioFirst,
                                     styles.iconWrapper,
                                     {
                                         [styles.isActive]: this.props.visible && !this.props.disabled,
@@ -178,7 +178,7 @@ class SpriteInfo extends React.Component {
                             <div
                                 className={classNames(
                                     styles.radio,
-                                    styles.radioRight,
+                                    styles.radioLast,
                                     styles.iconWrapper,
                                     {
                                         [styles.isActive]: !this.props.visible && !this.props.disabled,

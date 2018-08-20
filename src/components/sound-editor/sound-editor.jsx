@@ -64,6 +64,7 @@ const SoundEditor = props => (
                         onClick={props.onUndo}
                     >
                         <img
+                            className={styles.undoIcon}
                             draggable={false}
                             src={undoIcon}
                         />
@@ -75,6 +76,7 @@ const SoundEditor = props => (
                         onClick={props.onRedo}
                     >
                         <img
+                            className={styles.redoIcon}
                             draggable={false}
                             src={redoIcon}
                         />
@@ -110,7 +112,7 @@ const SoundEditor = props => (
                 />
             </div>
         </div>
-        <div className={styles.row}>
+        <div className={classNames(styles.row, styles.rowReverse)}>
             <div className={styles.inputGroup}>
                 {props.playhead ? (
                     <button

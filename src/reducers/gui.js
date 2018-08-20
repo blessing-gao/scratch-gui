@@ -11,6 +11,7 @@ import modalReducer, {modalsInitialState} from './modals';
 import modeReducer, {modeInitialState} from './mode';
 import monitorReducer, {monitorsInitialState} from './monitors';
 import monitorLayoutReducer, {monitorLayoutInitialState} from './monitor-layout';
+import restoreDeletionReducer, {restoreDeletionInitialState} from './restore-deletion';
 import stageSizeReducer, {stageSizeInitialState} from './stage-size';
 import targetReducer, {targetsInitialState} from './targets';
 import toolboxReducer, {toolboxInitialState} from './toolbox';
@@ -36,6 +37,7 @@ const guiInitialState = {
     modals: modalsInitialState,
     monitors: monitorsInitialState,
     monitorLayout: monitorLayoutInitialState,
+    restoreDeletion: restoreDeletionInitialState,
     targets: targetsInitialState,
     toolbox: toolboxInitialState,
     vm: vmInitialState,
@@ -79,6 +81,7 @@ const guiReducer = combineReducers({
     modals: modalReducer,
     monitors: monitorReducer,
     monitorLayout: monitorLayoutReducer,
+    restoreDeletion: restoreDeletionReducer,
     targets: targetReducer,
     toolbox: toolboxReducer,
     vm: vmReducer,

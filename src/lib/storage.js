@@ -15,29 +15,36 @@ const ASSET_SERVER = '//cdn.imayuan.com/';
 class Storage extends ScratchStorage {
     constructor () {
         super();
-        this.addWebSource(
-            [this.AssetType.Project],
-            projectAsset => {
-                const [projectId, revision] = projectAsset.assetId.split('.');
-                return revision ?
-                    `${PROJECT_SERVER}${projectId}.json` :
-                    `${PROJECT_SERVER}${projectId}.json`;
-            }
-        );
-        this.addWebSource(
-            [this.AssetType.ImageVector, this.AssetType.ImageBitmap, this.AssetType.Sound],
-            asset => `${ASSET_SERVER}${asset.assetId}.${asset.dataFormat}`
-        );
-        this.addWebSource(
-            [this.AssetType.Sound],
-            asset => `static/extension-assets/scratch3_music/${asset.assetId}.${asset.dataFormat}`
-        );
         defaultProjectAssets.forEach(asset => this.cache(
             this.AssetType[asset.assetType],
             this.DataFormat[asset.dataFormat],
             asset.data,
             asset.id
         ));
+        this.addWebSource(
+            [this.AssetType.Project],
+            this.getProjectURL.bind(this)
+        );
+        this.addWebSource(
+            [this.AssetType.ImageVector, this.AssetType.ImageBitmap, this.AssetType.Sound],
+            this.getAssetURL.bind(this)
+        );
+        this.addWebSource(
+            [this.AssetType.Sound],
+            asset => `static/extension-assets/scratch3_music/${asset.assetId}.${asset.dataFormat}`
+        );
+    }
+    setProjectHost (projectHost) {
+        this.projectHost = projectHost;
+    }
+    getProjectURL (projectAsset) {
+        return `${PROJECT_SERVER}${projectId}.json`;
+    }
+    setAssetHost (assetHost) {
+        this.assetHost = assetHost;
+    }
+    getAssetURL (asset) {
+        return `${ASSET_SERVER}${asset.assetId}.${asset.dataFormat}`;
     }
 }
 

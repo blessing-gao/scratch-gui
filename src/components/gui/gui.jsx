@@ -57,9 +57,11 @@ const GUIComponent = props => {
         costumeLibraryVisible,
         costumesTabVisible,
         enableCommunity,
+        hideIntro,
         importInfoVisible,
         intl,
         isPlayerOnly,
+        isRtl,
         loading,
         onExtensionButtonClick,
         onActivateCostumesTab,
@@ -114,6 +116,7 @@ const GUIComponent = props => {
         ) : (
             <Box
                 className={styles.pageWrapper}
+                dir={isRtl ? 'rtl' : 'ltr'}
                 {...componentProps}
             >
                 {confirmVisibe && <ConfirmMsg
@@ -123,7 +126,9 @@ const GUIComponent = props => {
                     handleSure={confirmHandleSure}
                     timeout={confirmTimeout}/>
                 }
-                {previewInfoVisible ? null : null}
+                {previewInfoVisible ? (
+                    <PreviewModal hideIntro={hideIntro} />
+                ) : null}
                 {saveModalVisible ? (
                     <SaveModal />
                 ) : null}
@@ -137,7 +142,7 @@ const GUIComponent = props => {
                     <ImportModal />
                 ) : null}
                 {isRendererSupported ? null : (
-                    <WebGlModal />
+                    <WebGlModal isRtl={isRtl} />
                 )}
                 {tipsLibraryVisible ? (
                     <TipsLibrary />
@@ -235,9 +240,9 @@ const GUIComponent = props => {
                                     {soundsTabVisible ? <SoundTab vm={vm} /> : null}
                                 </TabPanel>
                             </Tabs>
-                            {/*{backpackOptions.visible ? (*/}
-                                {/*<Backpack host={backpackOptions.host} />*/}
-                            {/*) : null}*/}
+                            {backpackOptions.visible ? (
+                                <Backpack host={backpackOptions.host} />
+                            ) : null}
                         </Box>
 
                         <Box className={classNames(styles.stageAndTargetWrapper, styles[stageSize])}>
@@ -275,9 +280,11 @@ GUIComponent.propTypes = {
     costumeLibraryVisible: PropTypes.bool,
     costumesTabVisible: PropTypes.bool,
     enableCommunity: PropTypes.bool,
+    hideIntro: PropTypes.bool,
     importInfoVisible: PropTypes.bool,
     intl: intlShape.isRequired,
     isPlayerOnly: PropTypes.bool,
+    isRtl: PropTypes.bool,
     loading: PropTypes.bool,
     onActivateCostumesTab: PropTypes.func,
     onActivateSoundsTab: PropTypes.func,
