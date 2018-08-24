@@ -51,42 +51,11 @@ const PreviewModal = ({intl, ...props}) => (
 
                 <Box className={styles.buttonRow}>
                     <button
-                        className={styles.noButton}
-                        title={intl.formatMessage({
-                            defaultMessage: 'Not Now',
-                            description: 'Tooltip for Not Now button',
-                            id: 'gui.previewModal.notnowtooltip'
-                        })}
-                        onClick={props.onCancel}
-                    >
-                        <FormattedMessage
-                            defaultMessage="Not Now"
-                            description="Label for button to back out of trying Scratch 3.0 Beta"
-                            id="gui.previewInfo.notnow"
-                        />
-                    </button>
-                    <button
                         className={styles.okButton}
-                        title={intl.formatMessage({
-                            defaultMessage: 'Try It',
-                            description: 'Tooltip for Try It button',
-                            id: 'gui.previewModal.tryittooltip'
-                        })}
+                        title={'开始'}
                         onClick={props.onTryIt}
                     >
-                        <FormattedMessage
-                            defaultMessage="Try It! {caticon}"
-                            description="Label for button to try Scratch 3.0 Beta"
-                            id="gui.previewModal.tryit"
-                            values={{
-                                caticon: (
-                                    <img
-                                        className={styles.catIcon}
-                                        src={catIcon}
-                                    />
-                                )
-                            }}
-                        />
+                        开始
                     </button>
                     <button
                         className={styles.viewProjectButton}

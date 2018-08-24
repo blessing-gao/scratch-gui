@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import omit from 'lodash.omit';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 import {connect} from 'react-redux';
 import MediaQuery from 'react-responsive';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
@@ -59,7 +58,6 @@ const GUIComponent = props => {
         enableCommunity,
         hideIntro,
         importInfoVisible,
-        intl,
         isPlayerOnly,
         isRtl,
         loading,
@@ -126,9 +124,9 @@ const GUIComponent = props => {
                     handleSure={confirmHandleSure}
                     timeout={confirmTimeout}/>
                 }
-                {previewInfoVisible ? (
-                    <PreviewModal hideIntro={hideIntro} />
-                ) : null}
+                {/*{previewInfoVisible ? (*/}
+                    {/*<PreviewModal hideIntro={hideIntro} />*/}
+                {/*) : null}*/}
                 {saveModalVisible ? (
                     <SaveModal />
                 ) : null}
@@ -282,7 +280,6 @@ GUIComponent.propTypes = {
     enableCommunity: PropTypes.bool,
     hideIntro: PropTypes.bool,
     importInfoVisible: PropTypes.bool,
-    intl: intlShape.isRequired,
     isPlayerOnly: PropTypes.bool,
     isRtl: PropTypes.bool,
     loading: PropTypes.bool,
@@ -323,6 +320,6 @@ const mapStateToProps = state => ({
     stageSizeMode: state.scratchGui.stageSize.stageSize
 });
 
-export default injectIntl(connect(
+export default  connect(
     mapStateToProps
-)(GUIComponent));
+)(GUIComponent);

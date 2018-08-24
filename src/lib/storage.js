@@ -38,13 +38,13 @@ class Storage extends ScratchStorage {
         this.projectHost = projectHost;
     }
     getProjectURL (projectAsset) {
-        return `${PROJECT_SERVER}${projectId}.json`;
+        return `${this.projectHost}${projectAsset.assetId}.json`;
     }
     setAssetHost (assetHost) {
         this.assetHost = assetHost;
     }
     getAssetURL (asset) {
-        return `${ASSET_SERVER}${asset.assetId}.${asset.dataFormat}`;
+        return `${this.assetHost}${asset.assetId}.${asset.dataFormat}`;
     }
 }
 

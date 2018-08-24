@@ -335,20 +335,20 @@ class MenuBar extends React.Component {
                     {/*</a>*/}
                 {/*</div>*/}
                 <div className={styles.accountInfoWrapper}>
-                    <MenuBarItemTooltip id="mystuff">
-                        <div
-                            className={classNames(
-                                styles.menuBarItem,
-                                styles.hoverable,
-                                styles.mystuffButton
-                            )}
-                        >
-                            <img
-                                className={styles.mystuffIcon}
-                                src={mystuffIcon}
-                            />
-                        </div>
-                    </MenuBarItemTooltip>
+                    {/*<MenuBarItemTooltip id="mystuff">*/}
+                        {/*<div*/}
+                            {/*className={classNames(*/}
+                                {/*styles.menuBarItem,*/}
+                                {/*styles.hoverable,*/}
+                                {/*styles.mystuffButton*/}
+                            {/*)}*/}
+                        {/*>*/}
+                            {/*<img*/}
+                                {/*className={styles.mystuffIcon}*/}
+                                {/*src={mystuffIcon}*/}
+                            {/*/>*/}
+                        {/*</div>*/}
+                    {/*</MenuBarItemTooltip>*/}
                     <MenuBarItemTooltip
                         id="account-nav"
                         place={this.props.isRtl ? 'right' : 'left'}
