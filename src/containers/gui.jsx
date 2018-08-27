@@ -2,6 +2,7 @@ import AudioEngine from 'scratch-audio';
 import PropTypes from 'prop-types';
 import React from 'react';
 import VM from 'scratch-vm';
+import Cookies from 'universal-cookie';
 import {connect} from 'react-redux';
 import ReactModal from 'react-modal';
 import request ,{getTargetId,getQueryString} from '../lib/request';
@@ -26,6 +27,8 @@ import vmListenerHOC from '../lib/vm-listener-hoc.jsx';
 import GUIComponent from '../components/gui/gui.jsx';
 import {setWork} from "../reducers/scratch";
 
+const cookies = new Cookies();
+
 class GUI extends React.Component {
     constructor (props) {
         super(props);
@@ -41,9 +44,11 @@ class GUI extends React.Component {
     componentDidMount () {
         // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
         const id = getQueryString("id");
-        const userToken= getQueryString("userToken") || 'auth_ce0eda076c3247339153b4a63c82e82c';
-        const platFormId= getQueryString("platFormId") || '1';
+        // const userToken= getQueryString("userToken");
+        const userToken = cookies.get("token");
+        const platFormId= getQueryString("platFormId");
         const deviceIdentify = '1';
+        console.log(userToken);
         if (id !== null){
             request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&platFormId=${platFormId}&userToken=${userToken}&deviceIdentify=${deviceIdentify}`, result => {
                 let workData = {

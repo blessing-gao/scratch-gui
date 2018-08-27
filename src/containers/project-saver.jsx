@@ -2,6 +2,7 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
+import {getWork,setWork} from '../reducers/scratch';
 
 /**
  * Project saver component passes a saveProject function to its child.
@@ -33,7 +34,8 @@ class ProjectSaver extends React.Component {
             // File name: project-DATE-TIME
             const date = new Date();
             const timestamp = `${date.toLocaleDateString()}-${date.toLocaleTimeString()}`;
-            const filename = `未命名作品-${timestamp}.my`;
+            let work = this.props.work;
+            const filename = work.name ? `${work.name}.my` : `未命名-${timestamp}.my`;
 
             // Use special ms version if available to get it working on Edge.
             if (navigator.msSaveOrOpenBlob) {
@@ -63,13 +65,15 @@ class ProjectSaver extends React.Component {
 
 ProjectSaver.propTypes = {
     children: PropTypes.func,
+    work: PropTypes.object,
     vm: PropTypes.shape({
         saveProjectSb3: PropTypes.func
     })
 };
 
 const mapStateToProps = state => ({
-    vm: state.scratchGui.vm
+    vm: state.scratchGui.vm,
+    work: state.scratchGui.scratch.work
 });
 
 export default connect(
