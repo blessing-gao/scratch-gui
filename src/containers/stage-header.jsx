@@ -49,10 +49,10 @@ class StageHeader extends React.Component {
         //     img.src = c.toDataURL('image/jpg',0.7);
         //     console.log("22\n"+img.src)
         // }
-        // var img = new Image();
-        // img.src = this.props.vm.runtime.renderer._gl.canvas.toDataURL('image/png',0.7);
-        console.log(this.props.vm.runtime.renderer._gl.canvas.toDataURL('image/png',0.7));
-        // window.sessionStorage.setItem("coverImg",img.src);
+        var img = new Image();
+        img.src = this.props.vm.runtime.renderer._gl.canvas.toDataURL('image/png',0.7);
+        console.log(img.src);
+        window.sessionStorage.setItem("coverImg",img.src);
         // this.props.vm.render
         const shotBtn = document.getElementById('shotBtn');
         fireKeyEvent(shotBtn, 'keydown', 16);

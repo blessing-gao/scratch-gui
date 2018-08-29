@@ -44,16 +44,20 @@ class GUI extends React.Component {
     componentDidMount () {
         // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
         const id = getQueryString("id");
-        // const userToken= getQueryString("userToken");
-        const userToken = cookies.get("token");
-        const platFormId= getQueryString("platFormId");
+        const userToken= "02216a6594819693b9d2a7d4716708c2dbf6255ce062ff046749ce1fe4c1cee6";
+        const userId = "5a54badb45f647a29a4ef6c801abc8d6";
+        const nickname = "mayuan";
+        // const userToken = cookies.get("token");
+        const platFormId= getQueryString("platFormId") || 1;
         const deviceIdentify = '1';
         console.log(userToken);
         if (id !== null){
             request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&platFormId=${platFormId}&userToken=${userToken}&deviceIdentify=${deviceIdentify}`, result => {
                 let workData = {
                     userToken: userToken,
-                    platFormId: platFormId
+                    platFormId: platFormId,
+                    userId: userId,
+                    nickname: nickname
                 };
                 if (result.code !== request.NotFindError && result.result){
                     let res = result.result;
@@ -66,7 +70,9 @@ class GUI extends React.Component {
         }else{
             let workData = {
                 userToken: userToken,
-                platFormId: platFormId
+                platFormId: platFormId,
+                userId: userId,
+                nickname: nickname
             };
             this.props.setWork(workData);
         }
