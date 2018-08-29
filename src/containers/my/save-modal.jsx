@@ -89,19 +89,21 @@ class SaveModal extends React.Component {
             }
             let saveData = {
                 'file':content,
-                'platFormId1':work.platFormId,
-                'userToken':work.userToken
+                'nickname':work.nickname,
+                "userId":work.userId,
+                "id":work.id
             };
-            for(let x in work){
-                saveData[x] = work[x];
-            }
+            // for(let x in work){
+            //     saveData[x] = work[x];
+            // }
             saveData.name = this.state.workName;
             saveData.remarks = this.state.describe;
             saveData.type = this.state.selectedTag;
             saveData.cover = sessionStorage.getItem('coverImg');
             saveData.isRelease = 1;
             saveData.isAnon = this.state.iAnon - 0;
-            request.file_request(request.POST, saveData, '/api/scratch/save', result => {
+            console.log(saveData);
+            request.file_request(request.POST, saveData, '/api/scratch/saveWork', result => {
                 if (result.code == 0 && result.result){
                     // 上传成功
                     let workData = JSON.parse(JSON.stringify(this.props.work));

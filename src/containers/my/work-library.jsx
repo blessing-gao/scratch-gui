@@ -45,14 +45,12 @@ class WorkLibrary extends React.Component {
             },
             "sort": {
                 "predicate" : "create_time"
-            },
-            "platFormId": work.platFormId,
-            "userToken": work.userToken
+            }
         };
         if(this.state.searchType === 0){
             data.search.type = 0;
         }
-        request.default_request(request.POST, JSON.stringify(data), `/api/scratch/worksList`, result => {
+        request.default_request(request.POST, JSON.stringify(data), `/api/scratch/workslist/${work.userId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 this.setState({
                     works: result.result.records,

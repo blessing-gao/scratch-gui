@@ -69,8 +69,8 @@ class ProjectSave extends React.Component {
             let saveData = {
                 'file':content,
                 'name':name,
-                'platFormId1':work.platFormId,
-                'userToken':work.userToken,
+                'nickname':work.nickname,
+                "userId":work.userId,
                 'cover' :sessionStorage.getItem('coverImg')
             };
             if(work.id && notNewProject){
@@ -92,7 +92,7 @@ class ProjectSave extends React.Component {
             //         clearInterval(this.timer);
             //     }
             // },1000);
-            request.file_request(request.POST, saveData, '/api/scratch/save', result => {
+            request.file_request(request.POST, saveData, '/api/scratch/saveWork', result => {
                 this.setState({iDisable:false});
                 if (result.code == 0 && result.result){
                     // 上传成功

@@ -82,7 +82,7 @@ const ProjectLoaderHOC = function (WrappedComponent) {
     };
     ProjectLoaderComponent.defaultProps = {
         assetHost: '//cdn.imayuan.com/project/',
-        projectHost: '//cdn.imayuan.com/',
+        projectHost: '//cdn.imayuan.com/project/',
         projectId: 0
     };
 
