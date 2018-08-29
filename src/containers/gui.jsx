@@ -147,6 +147,7 @@ class GUI extends React.Component {
 }
 
 GUI.propTypes = {
+    assetHost: PropTypes.string,
     children: PropTypes.node,
     fetchingProject: PropTypes.bool,
     importInfoVisible: PropTypes.bool,
@@ -156,6 +157,7 @@ GUI.propTypes = {
     projectData: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     saveModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM),
+    projectHost: PropTypes.string,
     setWork: PropTypes.func
 };
 

@@ -23,6 +23,8 @@ import {
     SOUNDS_TAB_INDEX
 } from '../reducers/editor-tab';
 
+import {setRestore} from '../reducers/restore-deletion';
+
 import addLibraryBackdropIcon from '../components/asset-panel/icon--add-backdrop-lib.svg';
 import addLibraryCostumeIcon from '../components/asset-panel/icon--add-costume-lib.svg';
 import fileUploadIcon from '../components/action-menu/icon--file-upload.svg';
@@ -106,7 +108,11 @@ class CostumeTab extends React.Component {
         this.setState({selectedCostumeIndex: costumeIndex});
     }
     handleDeleteCostume (costumeIndex) {
-        this.props.vm.deleteCostume(costumeIndex);
+        const restoreCostumeFun = this.props.vm.deleteCostume(costumeIndex);
+        this.props.dispatchUpdateRestore({
+            restoreFun: restoreCostumeFun,
+            deletedItem: 'Costume'
+        });
     }
     handleDuplicateCostume (costumeIndex) {
         this.props.vm.duplicateCostume(costumeIndex);
@@ -203,6 +209,7 @@ class CostumeTab extends React.Component {
     }
     render () {
         const {
+            dispatchUpdateRestore, // eslint-disable-line no-unused-vars
             onNewCostumeFromCameraClick,
             onNewLibraryBackdropClick,
             onNewLibraryCostumeClick,
@@ -295,6 +302,7 @@ class CostumeTab extends React.Component {
 
 CostumeTab.propTypes = {
     cameraModalVisible: PropTypes.bool,
+    dispatchUpdateRestore: PropTypes.func,
     editingTarget: PropTypes.string,
     onActivateSoundsTab: PropTypes.func.isRequired,
     onNewCostumeFromCameraClick: PropTypes.func.isRequired,
@@ -341,6 +349,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onRequestCloseCameraModal: () => {
         dispatch(closeCameraCapture());
+    },
+    dispatchUpdateRestore: restoreState => {
+        dispatch(setRestore(restoreState));
     }
 });
 
