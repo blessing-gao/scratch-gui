@@ -81,7 +81,7 @@ const ProjectLoaderHOC = function (WrappedComponent) {
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     };
     ProjectLoaderComponent.defaultProps = {
-        assetHost: '//cdn.imayuan.com/project/',
+        assetHost: '//cdn.imayuan.com/',
         projectHost: '//cdn.imayuan.com/project/',
         projectId: 0
     };
