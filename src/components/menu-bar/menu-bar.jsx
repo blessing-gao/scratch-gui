@@ -368,10 +368,7 @@ class MenuBar extends React.Component {
                             {/*/>*/}
                         {/*</div>*/}
                     {/*</MenuBarItemTooltip>*/}
-                    <MenuBarItemTooltip
-                        id="account-nav"
-                        place={this.props.isRtl ? 'right' : 'left'}
-                    >
+                    
                         <div
                             className={classNames(
                                 styles.menuBarItem,
@@ -381,17 +378,17 @@ class MenuBar extends React.Component {
                         >
                             <img
                                 className={styles.profileIcon}
-                                src={profileIcon}
+                                src={this.props.work.picUrl || profileIcon}
                             />
                             <span>
-                                {'scratch-cat' /* @todo username */}
+                                {this.props.work.nickname}
                             </span>
                             <img
                                 className={styles.dropdownCaretIcon}
                                 src={dropdownCaret}
                             />
                         </div>
-                    </MenuBarItemTooltip>
+                    
                 </div>
             </Box>
         );
