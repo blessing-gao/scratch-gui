@@ -45,7 +45,7 @@ class WorkLibraryItem extends React.PureComponent {
         };
     }
     handleEditClick () {
-        window.location.href = `${host}/?id=${this.props.id}&userToken=${this.props.work.userToken}&platFormId=${this.props.work.platFormId}`;
+        window.location.href = `${host}/?id=${this.props.id}`;
         // window.location.href = `${host}/scratch/ide.html?projectId=${this.props.id}`;
         // console.log(`http://localhost:8080/scratch/ide.html?projectId=${this.props.id}`)
         // window.location.href = `http://localhost:8080/scratch/ide.html?projectId=${this.props.id}`;
