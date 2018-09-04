@@ -51,7 +51,7 @@ class GUI extends React.Component {
         const userId = cookies.get("userId");
         const nickname = cookies.get("nickname");
         const picUrl = cookies.get("picUrl");
-        const platFormId= getQueryString("platFormId") || 1;
+        const platFormId= getQueryString("platFormId") || "mayuan";
         const deviceIdentify = '1';
         if (id !== null){
             request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&platFormId=${platFormId}&userToken=${userToken}&deviceIdentify=${deviceIdentify}`, result => {
