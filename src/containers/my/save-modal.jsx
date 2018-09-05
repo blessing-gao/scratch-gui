@@ -90,12 +90,14 @@ class SaveModal extends React.Component {
             let saveData = {
                 'file':content,
                 'nickname':work.nickname,
-                "userId":work.userId,
-                "id":work.id
+                "userId":work.userId
             };
             // for(let x in work){
             //     saveData[x] = work[x];
             // }
+            if(work.id){
+                saveData.id = work.id;
+            }
             saveData.name = this.state.workName;
             saveData.remarks = this.state.describe;
             saveData.type = this.state.selectedTag;
