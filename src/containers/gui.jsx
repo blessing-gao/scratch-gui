@@ -54,7 +54,7 @@ class GUI extends React.Component {
         const platFormId= getQueryString("platFormId") || "mayuan";
         const deviceIdentify = '1';
         if (id !== null){
-            request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&platFormId=${platFormId}&userToken=${userToken}&deviceIdentify=${deviceIdentify}`, result => {
+            request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&deviceIdentify=${deviceIdentify}`, result => {
                 let workData = {
                     userToken: userToken,
                     platFormId: platFormId,
