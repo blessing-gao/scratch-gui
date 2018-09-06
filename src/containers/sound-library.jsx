@@ -53,19 +53,12 @@ class SoundLibrary extends React.PureComponent {
         },'//cdn.imayuan.com');
     }
 
-    handleChange (type){
-        // 课程素材{type=1},默认素材{type=2}切换
-        if(type == 1){
-            this.getResource(1,4);
-        }else {
-            this.getDefault();
-        }
-    }
-
     getResource (type, typeId){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&typeId=${typeId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
+                localStorage.setItem('scripts4', JSON.stringify(result.result));
+                localStorage.setItem('scriptsMd4', result.msg);
                 this.setState({sound: result.result});
             }
         });
@@ -73,7 +66,7 @@ class SoundLibrary extends React.PureComponent {
 
     getType (type){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
@@ -84,9 +77,39 @@ class SoundLibrary extends React.PureComponent {
         });
     }
 
+    checkResource (){
+        // 校验md5是否失效
+        // 若失效,则请求获取资源且存入localstorage
+        // 若未失效,则直接从localstorage中获取资源
+        const scriptsMd4 = localStorage.getItem('scriptsMd4');
+        if (scriptsMd4 !== null && scriptsMd4 !== ''){
+            request.default_request(request.GET, null,
+                `/api/scratch/checkResource?type=4&value=${scriptsMd4}`, result => {
+                    if (result){
+                        this.setState({sprites: JSON.parse(localStorage.getItem('scripts4'))});
+                    } else {
+                        this.getResource(1,4);
+                    }
+                });
+        }else{
+            this.getResource(1,4);
+        }
+    }
+
+    handleChange (type){
+        // 课程素材{type=1},默认素材{type=2}切换
+        if(type == 1){
+            // this.getResource(1,4);
+            this.checkResource();
+        }else {
+            this.getDefault();
+        }
+    }
+
     componentDidMount () {
         this.getType(4);    // 获取类别 type, platFormId, userToken
-        this.getResource(1,4);    // 获取素材 type, platFormId, userToken, typeId
+        this.checkResource();
+        // this.getResource(1,4);    // 获取素材 type, platFormId, userToken, typeId
         this.audioEngine = new AudioEngine();
         this.playingSoundPromise = null;
     }

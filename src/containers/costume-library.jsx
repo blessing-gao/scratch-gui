@@ -54,8 +54,10 @@ class CostumeLibrary extends React.PureComponent {
 
     getResource (type, typeId){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&typeId=${typeId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
+                localStorage.setItem('scripts3', JSON.stringify(result.result));
+                localStorage.setItem('scriptsMd3', result.msg);
                 this.setState({costumes: result.result});
             }
         });
@@ -63,7 +65,7 @@ class CostumeLibrary extends React.PureComponent {
 
     getType (type){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
@@ -74,15 +76,36 @@ class CostumeLibrary extends React.PureComponent {
         });
     }
 
+    checkResource (){
+        // 校验md5是否失效
+        // 若失效,则请求获取资源且存入localstorage
+        // 若未失效,则直接从localstorage中获取资源
+        const scriptsMd3 = localStorage.getItem('scriptsMd3');
+        if (scriptsMd3 !== null && scriptsMd3 !== ''){
+            request.default_request(request.GET, null,
+                `/api/scratch/checkResource?type=3&value=${scriptsMd3}`, result => {
+                    if (result){
+                        this.setState({sprites: JSON.parse(localStorage.getItem('scripts3'))});
+                    } else {
+                        this.getResource(1,3);
+                    }
+                });
+        }else{
+            this.getResource(1,3);
+        }
+    }
+
     componentDidMount () {
         this.getType(3);    // 获取类别 type, platFormId, userToken
-        this.getResource(1,3);    // 获取素材 type, platFormId, userToken, typeId
+        this.checkResource();
+        // this.getResource(1,3);    // 获取素材 type, platFormId, userToken, typeId
     }
 
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
         if(type == 1){
-            this.getResource(1,3);
+            // this.getResource(1,3);
+            this.checkResource();
         }else {
             this.getDefault();
         }

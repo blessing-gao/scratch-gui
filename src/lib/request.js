@@ -10,7 +10,7 @@ export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
     return '//scratch.imayuan.com';
     // return `${window.location.protocol}//${window.location.host}`;
-    // return 'http://192.168.1.101:8080';
+    // return 'http://192.168.1.100:8080';
 }
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);

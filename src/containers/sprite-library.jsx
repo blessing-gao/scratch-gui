@@ -37,8 +37,10 @@ class SpriteLibrary extends React.PureComponent {
 
     getResource (type, typeId){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&typeId=${typeId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
+                localStorage.setItem('scripts2', JSON.stringify(result.result));
+                localStorage.setItem('scriptsMd2', result.msg);
                 this.setState({sprites: result.result});
             }
         });
@@ -54,7 +56,7 @@ class SpriteLibrary extends React.PureComponent {
 
     getType (type){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
@@ -65,9 +67,29 @@ class SpriteLibrary extends React.PureComponent {
         });
     }
 
+    checkResource (){
+        // 校验md5是否失效
+        // 若失效,则请求获取资源且存入localstorage
+        // 若未失效,则直接从localstorage中获取资源
+        const scriptsMd2 = localStorage.getItem('scriptsMd2');
+        if (scriptsMd2 !== null && scriptsMd2 !== ''){
+            request.default_request(request.GET, null,
+                `/api/scratch/checkResource?type=2&value=${scriptsMd2}`, result => {
+                    if (result){
+                        this.setState({sprites: JSON.parse(localStorage.getItem('scripts2'))});
+                    } else {
+                        this.getResource(1,2);
+                    }
+                });
+        }else{
+            this.getResource(1,2);
+        }
+    }
+
     componentDidMount () {
         this.getType(2);    // 获取类别 type
-        this.getResource(1,2);    // 获取素材 type, typeId
+        // this.getResource(1,2);    // 获取素材 type, typeId
+        this.checkResource();
     }
 
     componentWillUnmount () {
@@ -91,7 +113,7 @@ class SpriteLibrary extends React.PureComponent {
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
         if(type == 1){
-            this.getResource(1,2);
+            this.checkResource();
         }else {
             this.getDefault();
         }
