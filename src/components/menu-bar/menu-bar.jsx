@@ -52,7 +52,7 @@ const host = getHost();
 const newWork = function (){
     const r = confirm('离开前请确定作品已经保存');
     if (r === true) {
-        window.location.href = `${host}/?userToken=${this.props.work.userToken}&platFormId=${this.props.work.platFormId}`;
+        window.location.reload();
     } else {
         return;
     }

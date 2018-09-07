@@ -66,14 +66,11 @@ class WorkLibraryItem extends React.PureComponent {
         if(conf === true){
             let work = this.props.work;
             const data = {
-                scratchId: this.props.id,
-                userToken: work.userToken,
-                platFormId: work.platFormId
+                scratchId: this.props.id
             };
             request.default_request(request.POST, data, '/api/scratch/delete', result => {
                 // 更新列表
                 if (result){
-                    console.log(result);
                     this.props.onDelete();
                 }
             });

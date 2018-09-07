@@ -47,7 +47,7 @@ class SaveModal extends React.Component {
 
     getType (type){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
@@ -71,8 +71,7 @@ class SaveModal extends React.Component {
     }
 
     componentDidMount (){
-        // todo: 更换分类,获取作品分类type为5
-        this.getType(1);    // 获取作品分类
+        this.getType(5);    // 获取作品分类
         this.setState({workName: this.props.work.name || ''});
         const shotBtn = document.getElementById('shotBtn');
         fireKeyEvent(shotBtn, 'keydown', 16);

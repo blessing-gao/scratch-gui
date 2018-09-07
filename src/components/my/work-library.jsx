@@ -14,9 +14,7 @@ import Filter from '../filter/filter.jsx';
 
 const ALL_TAG_TITLE = '所有';
 const tagListPrefix = [
-    {id: 0, title: ALL_TAG_TITLE},
-    {id: 1, title: '已发布'},
-    {id: 2, title: '未发布'}
+    {id: 0, title: ALL_TAG_TITLE}
 ];
 
 const messages = {

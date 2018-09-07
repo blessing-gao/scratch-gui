@@ -40,17 +40,16 @@ class WorkLibrary extends React.Component {
                 "start": (nowPage - 1) * this.state.numbers
             },
             "search": {
-                "name": this.state.searchContent || null,
-                "type": this.state.searchType || null
+                "name": this.state.searchContent || null
             },
             "sort": {
                 "predicate" : "create_time"
             }
         };
-        if(this.state.searchType === 0){
-            data.search.type = 0;
+        if(this.state.searchType && this.state.searchType != '0'){
+            data.search.type = this.state.searchType;
         }
-        request.default_request(request.POST, JSON.stringify(data), `/api/scratch/workslist/${work.userId}`, result => {
+        request.default_request(request.POST, JSON.stringify(data), `/api/scratch/workslist`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 this.setState({
                     works: result.result.records,
@@ -63,11 +62,11 @@ class WorkLibrary extends React.Component {
 
     getType (type){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}&userToken=${work.userToken}`, result => {
+        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
-                    tags.push({id:tag.id,title:tag.name});
+                    tags.push({id:tag.typeId,title:tag.name});
                 });
                 this.setState({tags:tags});
             }
@@ -75,14 +74,22 @@ class WorkLibrary extends React.Component {
     }
 
     handleTagClick (tag){
-        if(tag == '已发布'){
-            tag = '1';
-        }else if(tag == '未发布'){
-            tag = '0';
-        }else if(tag == '所有'){
-            tag = '';
+        console.log(tag);
+        let tags = this.state.tags;
+        let type = 0;
+        for(let i in tags){
+            if(tags[i].title == tag){
+                type = tags[i].id;
+            }
         }
-        this.setState({searchType: tag}, () => {
+        // if(tag == '已发布'){
+        //     tag = '1';
+        // }else if(tag == '未发布'){
+        //     tag = '0';
+        // }else if(tag == '所有'){
+        //     tag = '';
+        // }
+        this.setState({searchType: type}, () => {
             this.getResource(1);
         });
     }

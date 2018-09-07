@@ -55,7 +55,7 @@ class BackdropLibrary extends React.Component {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
-                    tags.push({id:tag.id,title:tag.name});
+                    tags.push({id:tag.typeId,title:tag.name});
                 });
                 this.setState({tags:tags});
             }

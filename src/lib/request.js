@@ -1,9 +1,11 @@
 /* eslint-disable func-style,require-jsdoc */
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+import Cookies from 'universal-cookie';
 /**
  * Created by 26928 on 2017-10-17.
  */
+const cookies = new Cookies();
 export const ASSET_SERVER = '//owkomi1zd.bkt.clouddn.com/';
 export const COVER_SERVER = '//cdn.imayuan.com/cover/';
 export function getHost () {
@@ -47,6 +49,8 @@ export default {
             }
             const obj = new XMLHttpRequest();
             obj.open(func, HOST + path, asyn);
+            obj.setRequestHeader('token', cookies.get('token'));
+            obj.setRequestHeader('platForm', cookies.get('platFormId') || "mayuan");
             obj.setRequestHeader('Content-type', header ? header : 'application/x-www-form-urlencoded;'); // 添加http头，发送信息至服务器时内容编码类型
             obj.send(data);
             obj.onreadystatechange = function () {
@@ -127,6 +131,8 @@ export default {
             }
             const obj = new XMLHttpRequest();
             obj.open(func, HOST + path, asyn);
+            obj.setRequestHeader('token', cookies.get('token'));
+            obj.setRequestHeader('platForm', cookies.get('platFormId') || "mayuan");
             obj.send(formData);
             obj.onreadystatechange = function () {
                 if (obj.readyState == XMLHttpRequest.DONE){
