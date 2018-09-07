@@ -90,7 +90,12 @@ class SaveModalComponent extends React.Component {
                         </button>
                         <button
                             className={styles.okButton}
+                            className={
+                                classNames(styles.okButton,
+                                (this.props.iDisable && styles.okButtonDisable)
+                            )}
                             onClick={this.props.handleOnSave}
+                            disabled={this.props.iDisable}
                         >
                             发布
                         </button>

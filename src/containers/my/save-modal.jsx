@@ -86,11 +86,13 @@ class SaveModal extends React.Component {
     }
 
     handleOnSave (){
+        this.setState({iDisable: true});
         let work = JSON.parse(JSON.stringify(this.props.work));
         this.props.vm.saveProjectSb3().then(content => {
             // Use special ms version if available to get it working on Edge.
             if (navigator.msSaveOrOpenBlob) {
                 navigator.msSaveOrOpenBlob(content, this.state.name);
+                this.setState({iDisable: false});
                 return;
             }
             let saveData = {
@@ -112,6 +114,7 @@ class SaveModal extends React.Component {
             saveData.isAnon = this.state.iAnon - 0;
             console.log(saveData);
             request.file_request(request.POST, saveData, '/api/scratch/saveWork', result => {
+                this.setState({iDisable: true});
                 if (result.code == 0 && result.result){
                     // 上传成功
                     let workData = JSON.parse(JSON.stringify(this.props.work));
@@ -146,6 +149,7 @@ class SaveModal extends React.Component {
     }
     onHandleCancel () {
         this.props.closeSaveModal();
+        this.setState({iDisable: false});
     }
     render () {
         /* eslint-disable no-unused-vars */
@@ -165,6 +169,7 @@ class SaveModal extends React.Component {
                 onChangeDesc={this.handleChangeDesc}
                 handleOnSave={this.handleOnSave}
                 handleAnon={this.handleAnon}
+                iDisable={this.state.iDisable}
             />);
     }
 }

@@ -138,3 +138,6 @@
     font-size: 14px;
     line-height: 40px;
 }
+.ok-button-disable{
+    cursor: wait;
+}
