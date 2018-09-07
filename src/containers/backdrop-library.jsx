@@ -71,7 +71,7 @@ class BackdropLibrary extends React.Component {
             request.default_request(request.GET, null,
                 `/api/scratch/checkResource?type=1&value=${scriptsMd1}`, result => {
                     if (result){
-                        this.setState({sprites: JSON.parse(localStorage.getItem('scripts1'))});
+                        this.setState({backdrop: JSON.parse(localStorage.getItem('scripts1'))});
                     } else {
                         this.getResource(1,1);
                     }

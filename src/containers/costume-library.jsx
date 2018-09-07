@@ -85,7 +85,7 @@ class CostumeLibrary extends React.PureComponent {
             request.default_request(request.GET, null,
                 `/api/scratch/checkResource?type=3&value=${scriptsMd3}`, result => {
                     if (result){
-                        this.setState({sprites: JSON.parse(localStorage.getItem('scripts3'))});
+                        this.setState({costumes: JSON.parse(localStorage.getItem('scripts3'))});
                     } else {
                         this.getResource(1,3);
                     }

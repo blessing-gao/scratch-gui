@@ -86,7 +86,7 @@ class SoundLibrary extends React.PureComponent {
             request.default_request(request.GET, null,
                 `/api/scratch/checkResource?type=4&value=${scriptsMd4}`, result => {
                     if (result){
-                        this.setState({sprites: JSON.parse(localStorage.getItem('scripts4'))});
+                        this.setState({sound: JSON.parse(localStorage.getItem('scripts4'))});
                     } else {
                         this.getResource(1,4);
                     }
