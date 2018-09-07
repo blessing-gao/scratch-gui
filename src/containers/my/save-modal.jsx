@@ -51,7 +51,7 @@ class SaveModal extends React.Component {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
-                    tags.push({id:tag.id,title:tag.name});
+                    tags.push({id:tag.typeId,title:tag.name});
                 });
                 this.setState({tags:tags});
             }
@@ -67,7 +67,14 @@ class SaveModal extends React.Component {
     }
 
     handleTagClick(tag){
-        this.setState({selectedTag: tag});
+        let tags = this.state.tags;
+        let type;
+        for(let i in tags){
+            if(tags[i].title == tag){
+                type = tags[i].id;
+            }
+        }
+        this.setState({selectedTag: type});
     }
 
     componentDidMount (){
