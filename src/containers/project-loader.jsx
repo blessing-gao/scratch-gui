@@ -67,7 +67,10 @@ class ProjectLoader extends React.Component {
                 const work = this.props.work;
                 const newWork = {
                     userToken: work.userToken,
-                    platFormId: work.platFormId
+                    platFormId: work.platFormId,
+                    userId: work.userId,
+                    nickname: work.nickname,
+                    picUrl: work.picUrl
                 };
                 this.props.setWork(newWork);
             })
