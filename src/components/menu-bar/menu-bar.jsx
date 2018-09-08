@@ -368,7 +368,7 @@ class MenuBar extends React.Component {
                             {/*/>*/}
                         {/*</div>*/}
                     {/*</MenuBarItemTooltip>*/}
-                    
+
                         <div
                             className={classNames(
                                 styles.menuBarItem,
@@ -378,17 +378,21 @@ class MenuBar extends React.Component {
                         >
                             <img
                                 className={styles.profileIcon}
-                                src={this.props.work.picUrl || profileIcon}
+                                src={this.props.work.picUrl || scratchLogo}
                             />
-                            <span>
-                                {this.props.work.nickname}
-                            </span>
+                            {this.props.work.userToken ? (
+                                <span>
+                                    {this.props.work.nickname || 'mayuan'}
+                                </span>
+                            ) : (
+                                <a href="http://www.imayuan.com/login" className={styles.loginName}>未登录</a>
+                            )}
                             <img
                                 className={styles.dropdownCaretIcon}
                                 src={dropdownCaret}
                             />
                         </div>
-                    
+
                 </div>
             </Box>
         );

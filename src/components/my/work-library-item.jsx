@@ -53,7 +53,7 @@ class WorkLibraryItem extends React.PureComponent {
         // window.location.href = 'http://www.baidu.com';
     }
     handleShareClick () {
-        const ercode = `http://imayuan.com/mobile/scratch/game.html?projectId=${this.props.id}`;
+        const ercode = `http://imayuan.com/player/mobile/game.html?projectId=${this.props.id}`;
         this.setState({isModal: true,codeSrc: ercode});
     }
 
