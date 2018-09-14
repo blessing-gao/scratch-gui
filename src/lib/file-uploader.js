@@ -29,7 +29,6 @@ const handleFileUpload = function (fileInput, onload) {
         fileInput.value = null;
         const fileType = thisFile.type;
         const fileName = extractFileName(thisFile.name);
-
         onload(reader.result, fileType, fileName);
     };
     if (fileInput.files) {
@@ -68,7 +67,6 @@ const cacheAsset = function (storage, fileName, assetType, dataFormat, data) {
         dataFormat,
         data
     );
-
     return {
         name: fileName,
         dataFormat: dataFormat,
@@ -121,9 +119,9 @@ const costumeUpload = function (fileData, fileType, costumeName, storage, handle
             costumeFormat,
             dataBuffer
         );
+        // todo 上传切面，此处已经完成对新造型命名，接下来出入文件上传操作，新文件名从vmCostume.md5中读取，文件流是filedata
         handleCostume(vmCostume);
     };
-
     if (costumeFormat === storage.DataFormat.SVG) {
         // Must pass in file data as a Uint8Array,
         // passing in an array buffer causes the sprite/costume
@@ -176,7 +174,7 @@ const soundUpload = function (fileData, fileType, soundName, storage, handleSoun
         storage.AssetType.Sound,
         soundFormat,
         new Uint8Array(fileData));
-
+    // todo 上传切面，此处已经完成对新音乐命名，接下来出入文件上传操作，vmSound.md5中读取，文件流是filedata
     handleSound(vmSound);
 };
 
@@ -209,6 +207,7 @@ const spriteUpload = function (fileData, fileType, spriteName, storage, handleSp
                 sounds: [] // TODO are all of these necessary?
             };
             // TODO probably just want sprite upload to handle this object directly
+
             handleSprite(JSON.stringify(newSprite));
         }));
         return;
