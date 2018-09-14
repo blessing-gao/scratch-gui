@@ -65,33 +65,40 @@ class CostumeLibrary extends React.PureComponent {
 
     getType (type){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
-            if (result.code !== request.NotFindError && result.result) {
-                let tags = [];
-                result.result.map(tag => {
-                    tags.push({id:tag.typeId,title:tag.name});
-                });
-                this.setState({tags:tags});
-            }
-        });
+        if(work.userToken) {
+            request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
+                if (result.code !== request.NotFindError && result.result) {
+                    let tags = [];
+                    result.result.map(tag => {
+                        tags.push({id: tag.typeId, title: tag.name});
+                    });
+                    this.setState({tags: tags});
+                }
+            });
+        }
     }
 
     checkResource (){
-        // 校验md5是否失效
-        // 若失效,则请求获取资源且存入localstorage
-        // 若未失效,则直接从localstorage中获取资源
-        const scriptsMd3 = localStorage.getItem('scriptsMd3');
-        if (scriptsMd3 !== null && scriptsMd3 !== ''){
-            request.default_request(request.GET, null,
-                `/api/scratch/checkResource?type=3&value=${scriptsMd3}`, result => {
-                    if (result){
-                        this.setState({costumes: JSON.parse(localStorage.getItem('scripts3'))});
-                    } else {
-                        this.getResource(1,3);
-                    }
-                });
-        }else{
-            this.getResource(1,3);
+        let work = this.props.work;
+        if(work.userToken){
+            // 校验md5是否失效
+            // 若失效,则请求获取资源且存入localstorage
+            // 若未失效,则直接从localstorage中获取资源
+            const scriptsMd3 = localStorage.getItem('scriptsMd3');
+            if (scriptsMd3 !== null && scriptsMd3 !== ''){
+                request.default_request(request.GET, null,
+                    `/api/scratch/checkResource?type=3&value=${scriptsMd3}`, result => {
+                        if (result){
+                            this.setState({costumes: JSON.parse(localStorage.getItem('scripts3'))});
+                        } else {
+                            this.getResource(1,3);
+                        }
+                    });
+            }else{
+                this.getResource(1,3);
+            }
+        }else {
+            this.getDefault();
         }
     }
 
@@ -118,8 +125,10 @@ class CostumeLibrary extends React.PureComponent {
                 id="costumeLibrary"
                 tags={this.state.tags}
                 title="选择造型"
+                iLogin={this.props.work.userToken ? true : false}
                 onItemSelected={this.handleItemSelected}
                 onRequestClose={this.props.onRequestClose}
+                onTabChange={this.handleChange}
             />
         );
     }

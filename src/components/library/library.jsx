@@ -166,7 +166,8 @@ class LibraryComponent extends React.Component {
                                 active={this.state.selectedType === '1'}
                                 className={classNames(
                                             styles.filterBarItem,
-                                            styles.tagButton
+                                            styles.tagButton,
+                                            (!this.props.iLogin ? styles.btnHidden : '')
                                         )}
                                 onClick={() => {
                                     this.handleTypeClick('1');

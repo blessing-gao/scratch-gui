@@ -49,7 +49,8 @@ class GUI extends React.Component {
         // const nickname = "mayuan";
         const userToken= cookies.get("token");
         const userId = cookies.get("userId");
-        const nickname = decodeURI(cookies.get("nickname"),"utf-8");
+        
+        const nickname = cookies.get("nickname") ? decodeURI(cookies.get("nickname"),"utf-8") : "mayuan";
         const picUrl = cookies.get("picUrl");
         const platFormId= getQueryString("platFormId") || "mayuan";
         const deviceIdentify = '1';

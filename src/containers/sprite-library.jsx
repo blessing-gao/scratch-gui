@@ -56,33 +56,40 @@ class SpriteLibrary extends React.PureComponent {
 
     getType (type){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
-            if (result.code !== request.NotFindError && result.result) {
-                let tags = [];
-                result.result.map(tag => {
-                    tags.push({id:tag.typeId,title:tag.name});
-                });
-                this.setState({tags:tags});
-            }
-        });
+        if(work.userToken){
+            request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
+                if (result.code !== request.NotFindError && result.result) {
+                    let tags = [];
+                    result.result.map(tag => {
+                        tags.push({id:tag.typeId,title:tag.name});
+                    });
+                    this.setState({tags:tags});
+                }
+            });
+        }
     }
 
     checkResource (){
-        // 校验md5是否失效
-        // 若失效,则请求获取资源且存入localstorage
-        // 若未失效,则直接从localstorage中获取资源
-        const scriptsMd2 = localStorage.getItem('scriptsMd2');
-        if (scriptsMd2 !== null && scriptsMd2 !== ''){
-            request.default_request(request.GET, null,
-                `/api/scratch/checkResource?type=2&value=${scriptsMd2}`, result => {
-                    if (result){
-                        this.setState({sprites: JSON.parse(localStorage.getItem('scripts2'))});
-                    } else {
-                        this.getResource(1,2);
-                    }
-                });
-        }else{
-            this.getResource(1,2);
+        let work = this.props.work;
+        if(work.userToken) {
+            // 校验md5是否失效
+            // 若失效,则请求获取资源且存入localstorage
+            // 若未失效,则直接从localstorage中获取资源
+            const scriptsMd2 = localStorage.getItem('scriptsMd2');
+            if (scriptsMd2 !== null && scriptsMd2 !== '') {
+                request.default_request(request.GET, null,
+                    `/api/scratch/checkResource?type=2&value=${scriptsMd2}`, result => {
+                        if (result) {
+                            this.setState({sprites: JSON.parse(localStorage.getItem('scripts2'))});
+                        } else {
+                            this.getResource(1, 2);
+                        }
+                    });
+            } else {
+                this.getResource(1, 2);
+            }
+        }else {
+            this.getDefault();
         }
     }
 
@@ -149,6 +156,7 @@ class SpriteLibrary extends React.PureComponent {
                 id="spriteLibrary"
                 tags={this.state.tags}
                 title="选择角色"
+                iLogin={this.props.work.userToken ? true : false}
                 onItemMouseEnter={this.handleMouseEnter}
                 onItemMouseLeave={this.handleMouseLeave}
                 onItemSelected={this.handleItemSelect}

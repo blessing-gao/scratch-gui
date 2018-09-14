@@ -51,33 +51,40 @@ class BackdropLibrary extends React.Component {
 
     getType (type){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
-            if (result.code !== request.NotFindError && result.result) {
-                let tags = [];
-                result.result.map(tag => {
-                    tags.push({id:tag.typeId,title:tag.name});
-                });
-                this.setState({tags:tags});
-            }
-        });
+        if(work.userToken) {
+            request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
+                if (result.code !== request.NotFindError && result.result) {
+                    let tags = [];
+                    result.result.map(tag => {
+                        tags.push({id: tag.typeId, title: tag.name});
+                    });
+                    this.setState({tags: tags});
+                }
+            });
+        }
     }
 
     checkResource (){
-        // 校验md5是否失效
-        // 若失效,则请求获取资源且存入localstorage
-        // 若未失效,则直接从localstorage中获取资源
-        const scriptsMd1 = localStorage.getItem('scriptsMd1');
-        if (scriptsMd1 !== null && scriptsMd1 !== ''){
-            request.default_request(request.GET, null,
-                `/api/scratch/checkResource?type=1&value=${scriptsMd1}`, result => {
-                    if (result){
-                        this.setState({backdrop: JSON.parse(localStorage.getItem('scripts1'))});
-                    } else {
-                        this.getResource(1,1);
-                    }
-                });
-        }else{
-            this.getResource(1,1);
+        let work = this.props.work;
+        if(work.userToken) {
+            // 校验md5是否失效
+            // 若失效,则请求获取资源且存入localstorage
+            // 若未失效,则直接从localstorage中获取资源
+            const scriptsMd1 = localStorage.getItem('scriptsMd1');
+            if (scriptsMd1 !== null && scriptsMd1 !== '') {
+                request.default_request(request.GET, null,
+                    `/api/scratch/checkResource?type=1&value=${scriptsMd1}`, result => {
+                        if (result) {
+                            this.setState({backdrop: JSON.parse(localStorage.getItem('scripts1'))});
+                        } else {
+                            this.getResource(1, 1);
+                        }
+                    });
+            } else {
+                this.getResource(1, 1);
+            }
+        }else {
+            this.getDefault();
         }
     }
 
@@ -122,6 +129,7 @@ class BackdropLibrary extends React.Component {
                 id="backdropLibrary"
                 tags={this.state.tags}
                 title="选择背景"
+                iLogin={this.props.work.userToken ? true : false}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
                 onTabChange={this.handleChange}
