@@ -117,7 +117,7 @@ class CostumeLibrary extends React.PureComponent {
             this.getDefault();
         }
     }
-
+ 
     render () {
         return (
             <LibraryComponent

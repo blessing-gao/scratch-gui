@@ -1,6 +1,6 @@
 import {BitmapAdapter} from 'scratch-svg-renderer';
 import log from './log.js';
-
+import request ,{getQueryString, getTargetId} from './request';
 /**
  * Extract the file name given a string of the form fileName + ext
  * @param {string} nameExt File name + extension (e.g. 'my_image.png')
@@ -120,6 +120,13 @@ const costumeUpload = function (fileData, fileType, costumeName, storage, handle
             dataBuffer
         );
         // todo 上传切面，此处已经完成对新造型命名，接下来出入文件上传操作，新文件名从vmCostume.md5中读取，文件流是filedata
+        const reqData = {
+            filename: vmCostume.md5,
+            file: new Blob([fileData])
+        };
+        request.file_request(request.POST, reqData, '/api/aliyun/fileUpload', result => {
+            // console.log(result);
+        });
         handleCostume(vmCostume);
     };
     if (costumeFormat === storage.DataFormat.SVG) {
@@ -175,6 +182,13 @@ const soundUpload = function (fileData, fileType, soundName, storage, handleSoun
         soundFormat,
         new Uint8Array(fileData));
     // todo 上传切面，此处已经完成对新音乐命名，接下来出入文件上传操作，vmSound.md5中读取，文件流是filedata
+    const reqData = {
+        filename: vmSound.md5,
+        file: new Blob([fileData])
+    };
+    request.file_request(request.POST, reqData, '/api/aliyun/fileUpload', result => {
+        // console.log(result);
+    });
     handleSound(vmSound);
 };
 
