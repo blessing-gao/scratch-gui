@@ -88,15 +88,16 @@ class SaveModal extends React.Component {
     handleOnSave (){
         this.setState({iDisable: true});
         let work = JSON.parse(JSON.stringify(this.props.work));
-        this.props.vm.saveProjectSb3().then(content => {
-            // Use special ms version if available to get it working on Edge.
-            if (navigator.msSaveOrOpenBlob) {
-                navigator.msSaveOrOpenBlob(content, this.state.name);
-                this.setState({iDisable: false});
-                return;
-            }
+        // this.props.vm.saveProjectSb3().then(content => {
+        //     // Use special ms version if available to get it working on Edge.
+        //     if (navigator.msSaveOrOpenBlob) {
+        //         navigator.msSaveOrOpenBlob(content, this.state.name);
+        //         this.setState({iDisable: false});
+        //         return;
+        //     }
+        let fileData = new Blob([this.props.vm.toJSON()]);
             let saveData = {
-                'file':content,
+                'file':fileData,
                 'nickname':work.nickname,
                 "userId":work.userId
             };
@@ -113,7 +114,7 @@ class SaveModal extends React.Component {
             saveData.isRelease = 1;
             saveData.isAnon = this.state.iAnon - 0;
             console.log(saveData);
-            request.file_request(request.POST, saveData, '/api/scratch/saveWork', result => {
+            request.file_request(request.POST, saveData, '/api/scratch/saveWork1', result => {
                 this.setState({iDisable: true});
                 if (result.code == 0 && result.result){
                     // 上传成功
@@ -142,7 +143,7 @@ class SaveModal extends React.Component {
                 }
                 this.onHandleCancel();
             });
-        });
+        // });
     }
     handleChange (event) {
         this.setState({workName: event.target.value});
