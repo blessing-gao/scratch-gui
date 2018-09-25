@@ -67,6 +67,7 @@ const cacheAsset = function (storage, fileName, assetType, dataFormat, data) {
         dataFormat,
         data
     );
+
     return {
         name: fileName,
         dataFormat: dataFormat,

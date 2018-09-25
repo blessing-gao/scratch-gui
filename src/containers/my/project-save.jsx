@@ -59,20 +59,15 @@ class ProjectSave extends React.Component {
         }else{
             name = work.name;
         }
-
         this.setState({iDisable: true});
-        // 通过该方法获取作品json
-        // console.log(this.props.vm.toJSON());
-        //todo 提交作品到服务器
-        // this.props.vm.saveProjectSb3().then(content => {
-        //     // Use special ms version if available to get it working on Edge.
-        //     if (navigator.msSaveOrOpenBlob) {
-        //         navigator.msSaveOrOpenBlob(content, name);
-        //         return;
-        //     }
-            let fileData = new Blob([this.props.vm.toJSON()]);
+        this.props.vm.saveProjectSb3().then(content => {
+            // Use special ms version if available to get it working on Edge.
+            if (navigator.msSaveOrOpenBlob) {
+                navigator.msSaveOrOpenBlob(content, name);
+                return;
+            }
             let saveData = {
-                'file':fileData,
+                'file':content,
                 'name':name,
                 'nickname':work.nickname,
                 "userId":work.userId,
@@ -82,7 +77,22 @@ class ProjectSave extends React.Component {
                 // saveData.scratchFile = JSON.stringify(work);
                 saveData.id = work.id;
             }
-            request.file_request(request.POST, saveData, '/api/scratch/saveWork1', result => {
+            // let msg = {
+            //     type: 2,
+            //     message: '保存成功',
+            //     show: true,
+            //     selected: ''
+            // };
+            // this.props.setConfirm(msg);
+            // this.timer = setInterval(()=>{
+            //     let selected = this.props.confirm.selected;
+            //     if(selected == 'yes'){
+            //         clearInterval(this.timer);
+            //     }else if(selected == 'no'){
+            //         clearInterval(this.timer);
+            //     }
+            // },1000);
+            request.file_request(request.POST, saveData, '/api/scratch/saveWork', result => {
                 this.setState({iDisable:false});
                 if (result.code == 0 && result.result){
                     // 上传成功
@@ -108,9 +118,8 @@ class ProjectSave extends React.Component {
                     this.props.setConfirm(msg);
                 }
             });
-        // });
+        });
     }
-
 
     saveCover(){
         const shotBtn = document.getElementById('shotBtn');

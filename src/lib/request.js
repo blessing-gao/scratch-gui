@@ -121,6 +121,7 @@ export default {
     file_request: function (func, data, path, callback, asyn = true) {
         try {
             const HOST = getHost();
+            // const HOST = "http://192.168.1.100:8081";
             if (func == this.POST){
                 var formData = new FormData();
                 if (typeof data === 'object'){
