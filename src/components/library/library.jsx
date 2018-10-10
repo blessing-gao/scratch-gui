@@ -35,7 +35,8 @@ class LibraryComponent extends React.Component {
             'handleSelect',
             'handleTagClick',
             'handleTypeClick',
-            'setFilteredDataRef'
+            'setFilteredDataRef',
+            'handleMenu'
         ]);
         this.state = {
             selectedItem: null,
@@ -117,6 +118,10 @@ class LibraryComponent extends React.Component {
     setFilteredDataRef (ref) {
         this.filteredDataRef = ref;
     }
+
+    handleMenu (e) {
+        e.preventDefault();
+    }
     render () {
         return (
             <Modal
@@ -125,6 +130,7 @@ class LibraryComponent extends React.Component {
                 id={this.props.id}
                 onRequestClose={this.handleClose}
             >
+                <div onContextMenu={this.handleMenu}>
                 {(this.props.filterable || this.props.tags) && (
                     <div className={styles.filterBar}>
                         {this.props.filterable && (
@@ -216,6 +222,7 @@ class LibraryComponent extends React.Component {
                         );
                     })}
                 </div>
+                    </div>
             </Modal>
         );
     }
