@@ -167,6 +167,7 @@ GUI.propTypes = {
     previewInfoVisible: PropTypes.bool,
     projectData: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     saveModalVisible: PropTypes.bool,
+    loginModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM),
     projectHost: PropTypes.string,
     setWork: PropTypes.func
@@ -185,6 +186,7 @@ const mapStateToProps = state => ({
     loadingStateVisible: state.scratchGui.modals.loadingProject,
     previewInfoVisible: state.scratchGui.modals.previewInfo,
     saveModalVisible: state.scratchGui.modals.saveModal,
+    loginModalVisible: state.scratchGui.modals.loginModal,
     workLibraryVisible: state.scratchGui.modals.workLibrary,
     targetIsStage: (
         state.scratchGui.targets.stage &&

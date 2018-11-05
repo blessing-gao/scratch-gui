@@ -37,6 +37,7 @@ import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
 import SaveModal from '../../containers/my/save-modal.jsx';
+import LoginModal from '../../containers/my/login-modal.jsx';
 import WorkLibrary from '../../containers/my/work-library.jsx';
 const messages = {addExtension: '添加拓展'};
 
@@ -71,6 +72,7 @@ const GUIComponent = props => {
         previewInfoVisible,
         targetIsStage,
         saveModalVisible,
+        loginModalVisible,
         soundsTabVisible,
         stageSizeMode,
         tipsLibraryVisible,
@@ -128,6 +130,9 @@ const GUIComponent = props => {
                 {/*) : null}*/}
                 {saveModalVisible ? (
                     <SaveModal />
+                ) : null}
+                {loginModalVisible ? (
+                    <LoginModal />
                 ) : null}
                 {workLibraryVisible ? (
                     <WorkLibrary />
@@ -292,6 +297,7 @@ GUIComponent.propTypes = {
     onTabSelect: PropTypes.func,
     previewInfoVisible: PropTypes.bool,
     saveModalVisible: PropTypes.bool,
+    loginModalVisible: PropTypes.bool,
     soundsTabVisible: PropTypes.bool,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
     targetIsStage: PropTypes.bool,

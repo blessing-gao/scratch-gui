@@ -11,13 +11,6 @@ import {setWork} from '../../reducers/scratch';
 import Modal from 'react-modal';
 import QRCode from 'qrcode.react';
 
-import delIcon from '../../lib/assets/delete-icon.png';
-import editIcon from '../../lib/assets/edit-icon.png';
-import moreIcon from '../../lib/assets/more-icon.png';
-import moreIconAct from '../../lib/assets/more-icon-active.png';
-import shareIcon from '../../lib/assets/share-icon.png';
-import shareIconAct from '../../lib/assets/share-icon-active.png';
-
 const host = getHost();
 
 const customStyles = {
@@ -53,6 +46,11 @@ class WorkLibraryItem extends React.PureComponent {
     }
     handleEditClick () {
         window.location.href = `${host}/?id=${this.props.id}&platFormId=${this.props.work.platFormId}`;
+        // window.location.href = `${host}/scratch/ide.html?projectId=${this.props.id}`;
+        // console.log(`http://localhost:8080/scratch/ide.html?projectId=${this.props.id}`)
+        // window.location.href = `http://localhost:8080/scratch/ide.html?projectId=${this.props.id}`;
+        // window.location.reload();
+        // window.location.href = 'http://www.baidu.com';
     }
     handleShareClick () {
         const ercode = `http://imayuan.com/player/mobile/game.html?projectId=${this.props.id}`;
@@ -96,31 +94,37 @@ class WorkLibraryItem extends React.PureComponent {
         return (
             <Box>
                 <Box
-                    className={styles.libraryItem}
+                    className={this.state.status ?
+                        styles.libraryItemhover : styles.libraryItem}
                     onMouseEnter={this.handleMouseEnter}
                     onMouseLeave={this.handleMouseLeave}
                 >
                     {/* Layers of wrapping is to prevent layout thrashing on animation */}
                     <Box className={styles.libraryItemImageContainerWrapper}>
-                        <img
-                            className={styles.libraryItemImage}
-                            src={this.props.iconURL}
-                        />
-                    </Box>
-                    <Box className={styles.libraryItemContainer}>
-                        <Box className={styles.libraryItemContent}>
-                            <span className={styles.libraryItemName}>{this.props.name}</span>
-                            <img className={styles.iconButton} src={shareIcon}/>
-                        </Box>
-                        <Box className={styles.libraryItemContent}>
-                            <span className={styles.libraryItemTime}>{this.props.datetime}</span>
-                            <img className={styles.iconButton} src={moreIcon}/>
-                            <div className={styles.iconShowBox}>
-                                <div className={classNames(styles.iconItem, styles.iconItemEdit)}>编辑</div>
-                                <div className={classNames(styles.iconItem, styles.iconItemDel)}>删除</div>
-                            </div>
+                        <Box className={styles.libraryItemImageContainer}>
+                            <img
+                                className={styles.libraryItemImage}
+                                src={this.props.iconURL}
+                            />
                         </Box>
                     </Box>
+                    <Box className={styles.btnBox}>
+                        <button
+                            className={classNames(styles.menuEdit, styles.menuBtn)}
+                            onClick={this.handleEditClick}
+                        >
+                            编辑
+                        </button>
+                        <button
+                            className={classNames(styles.menuShare, styles.menuBtn)}
+                            onClick={this.handleShareClick}
+                        >分享</button>
+                        <button
+                            className={classNames(styles.menuDelete, styles.menuBtn)}
+                            onClick={this.handleDeleteClick}
+                        >删除</button>
+                    </Box>
+                    <span className={styles.libraryItemName}>{this.props.name}</span>
                     {/* <br />*/}
                     {/* <span className={styles.libraryItemName}>{this.props.name}</span>*/}
                 </Box>

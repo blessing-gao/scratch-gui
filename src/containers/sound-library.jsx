@@ -101,8 +101,10 @@ class SoundLibrary extends React.PureComponent {
         if(type == 1){
             // this.getResource(1,4);
             this.checkResource();
-        }else {
+        }else if(type == 2) {
             this.getDefault();
+        }else {
+            // 获取个人素材
         }
     }
 

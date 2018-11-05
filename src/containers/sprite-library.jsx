@@ -121,8 +121,10 @@ class SpriteLibrary extends React.PureComponent {
         // 课程素材{type=1},默认素材{type=2}切换
         if(type == 1){
             this.checkResource();
-        }else {
+        }else if(type == 2) {
             this.getDefault();
+        }else {
+            // 获取个人素材
         }
     }
     startRotatingCostumes () {

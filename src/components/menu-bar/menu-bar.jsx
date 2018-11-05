@@ -16,7 +16,7 @@ import {MenuItem, MenuSection} from '../menu/menu.jsx';
 import ProjectSaver from '../../containers/project-saver.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import ProjectSave from '../../containers/my/project-save.jsx';
-import {openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal} from '../../reducers/modals';
+import {openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal, openLoginModal} from '../../reducers/modals';
 import TurboMode from '../../containers/turbo-mode.jsx';
 
 import {setPlayer} from '../../reducers/mode';
@@ -385,7 +385,7 @@ class MenuBar extends React.Component {
                                     {this.props.work.nickname || 'mayuan'}
                                 </span>
                             ) : (
-                                <a href="http://www.imayuan.com/login" className={styles.loginName}>未登录</a>
+                                <a onClick={this.props.onOpenLoginModal} className={styles.loginName}>登录</a>
                             )}
                             <img
                                 className={styles.dropdownCaretIcon}
@@ -440,6 +440,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onOpenSaveModal: () => {
         dispatch(openSaveModal());
+    },
+    onOpenLoginModal: () => {
+        dispatch(openLoginModal());
     }
 });
 

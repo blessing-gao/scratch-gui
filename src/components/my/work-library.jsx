@@ -48,56 +48,56 @@ class WorkLibraryComponent extends React.Component {
                 filterQuery={''}
                 onRequestClose={this.props.onRequestClose}
             >
-                {(this.props.filterable || this.props.tags) && (
-                    <div className={styles.filterBar}>
-                        {this.props.filterable && (
-                            <Filter
-                                className={classNames(
+                <div className={styles.main}>
+                    {(this.props.filterable || this.props.tags) && (
+                        <div className={styles.filterBar}>
+                            {this.props.filterable && (
+                                <Filter
+                                    className={classNames(
                                     styles.filterBarItem,
                                     styles.filter
                                 )}
-                                filterQuery={this.props.filterQuery}
-                                inputClassName={styles.filterInput}
-                                placeholderText={messages.filterPlaceholder}
-                                onChange={this.props.handleFilterChange}
-                                onClear={this.props.handleFilterClear}
-                                onKeyDown={this.props.handleFilterKeyDown}
-                            />
-                        )}
-                        {this.props.filterable && this.props.tags && (
-                            <Divider className={classNames(styles.filterBarItem, styles.divider)} />
-                        )}
-                        {this.props.tags &&
-                        <div className={styles.tagWrapper}>
-                            {tagListPrefix.concat(this.props.tags).map((tagProps, id) => (
-                                <TagButton
-                                    active={this.state.selectedTag === tagProps.title}
-                                    className={classNames(
-                                            styles.filterBarItem,
+                                    filterQuery={this.props.filterQuery}
+                                    inputClassName={styles.filterInput}
+                                    placeholderText={messages.filterPlaceholder}
+                                    onChange={this.props.handleFilterChange}
+                                    onClear={this.props.handleFilterClear}
+                                    onKeyDown={this.props.handleFilterKeyDown}
+                                />
+                            )}
+                            {this.props.tags &&
+                            <div className={styles.tagWrapper}>
+                                {tagListPrefix.concat(this.props.tags).map((tagProps, id) => (
+                                    <TagButton
+                                        active={this.state.selectedTag === tagProps.title}
+                                        className={classNames(
                                             styles.tagButton,
                                             tagProps.className
                                         )}
-                                    key={`tag-button-${id}`}
-                                    onClick={this.handleTagClick}
-                                    {...tagProps}
-                                />
-                            ))}
+                                        activeClass={classNames(
+                                            styles.tagButtonActive
+                                        )}
+                                        key={`tag-button-${id}`}
+                                        onClick={this.handleTagClick}
+                                        {...tagProps}
+                                    />
+                                ))}
+                            </div>
+                            }
                         </div>
-                        }
-                    </div>
-                )}
-                <div
-                    className={classNames(styles.libraryScrollGrid, {
+                    )}
+                    <div
+                        className={classNames(styles.libraryScrollGrid, {
                         [styles.withFilterBar]: this.props.filterable || this.props.tags
                     })}
-                    ref={this.setFilteredDataRef}
-                >
+                        ref={this.setFilteredDataRef}
+                    >
                         {this.props.data.map((dataItem, index) => {
                             const scratchURL = dataItem.cover ?
                                 `${dataItem.cover}` : `//cdn.imayuan.com/b579aeeb143e79c47e2e65cbd3c0fe36.svg`;
                             return (
                                 <WorkLibraryItem
-                                    datetime={dataItem.createDate}
+                                    datetime={dataItem.createTime ? dataItem.createTime.substring(0,10) : ""}
                                     iconURL={scratchURL}
                                     id={dataItem.id}
                                     key={index}
@@ -106,13 +106,14 @@ class WorkLibraryComponent extends React.Component {
                                 />);
                         })
                         }
-                    <div className={styles.pagesBox}>
-                        <Pagination
-                            getLast={this.props.getLast}
-                            getNext={this.props.getNext}
-                            nowPage={this.props.nowPage}
-                            totalPage={this.props.totalPage}
-                        />
+                        {/*<div className={styles.pagesBox}>*/}
+                        {/*<Pagination*/}
+                         {/*getLast={this.props.getLast}*/}
+                         {/*getNext={this.props.getNext}*/}
+                         {/*nowPage={this.props.nowPage}*/}
+                         {/*totalPage={this.props.totalPage}*/}
+                         {/*/>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
                 {/*<div className={styles.filterBar}>*/}

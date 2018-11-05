@@ -68,7 +68,6 @@ class LibraryItem extends React.PureComponent {
                     <img
                         className={styles.featuredImage}
                         src={this.props.iconURL}
-                        crossOrigin="anonymous"
                     />
                 </div>
                 <div
@@ -97,7 +96,6 @@ class LibraryItem extends React.PureComponent {
                         <img
                             className={styles.libraryItemImage}
                             src={this.props.iconURL}
-                            crossOrigin="anonymous"
                         />
                     </Box>
                 </Box>

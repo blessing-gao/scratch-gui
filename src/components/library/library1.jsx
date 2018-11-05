@@ -13,27 +13,13 @@ import analytics from '../../lib/analytics';
 
 import styles from './library.css';
 
-import courseRes from '../../lib/assets/course-res.png';
-import courseResAct from '../../lib/assets/course-res-active.png';
-import defRes from '../../lib/assets/def-res.png';
-import defResAct from '../../lib/assets/def-res-active.png';
-import userRes from '../../lib/assets/user-res.png';
-import userResAct from '../../lib/assets/user-res-active.png';
-
-
 // const ALL_TAG_TITLE = 'All';
-const ALL_TAG_TITLE = '全部素材';
+const ALL_TAG_TITLE = '所有';
 const tagListPrefix = [{id: 0, title: ALL_TAG_TITLE}];
 
 const messages = {
     filterPlaceholder: '搜索'
 };
-
-const rescourseType = [
-    { value: "0", label: "个人素材", def: userRes, active: userResAct},
-    { value: "1", label: "课堂素材", def: courseRes, active: courseResAct},
-    { value: "2", label: "默认素材", def: defRes, active: defResAct}
-];
 
 class LibraryComponent extends React.Component {
     constructor (props) {
@@ -108,7 +94,7 @@ class LibraryComponent extends React.Component {
         this.setState({filterQuery: ''});
     }
     getFilteredData () {
-        if (this.state.selectedTag === '全部素材') {
+        if (this.state.selectedTag === '所有') {
             if (!this.state.filterQuery) return this.props.data;
             return this.props.data.filter(dataItem => (
                 (dataItem.tags || [])
@@ -144,7 +130,7 @@ class LibraryComponent extends React.Component {
                 id={this.props.id}
                 onRequestClose={this.handleClose}
             >
-                <div className={styles.main} onContextMenu={this.handleMenu}>
+                <div onContextMenu={this.handleMenu}>
                 {(this.props.filterable || this.props.tags) && (
                     <div className={styles.filterBar}>
                         {this.props.filterable && (
@@ -160,17 +146,18 @@ class LibraryComponent extends React.Component {
                                 onClear={this.handleFilterClear}
                             />
                         )}
+                        {this.props.filterable && this.props.tags && (
+                            <Divider className={classNames(styles.filterBarItem, styles.divider)} />
+                        )}
                         {this.props.tags &&
                             <div className={styles.tagWrapper}>
                                 {tagListPrefix.concat(this.props.tags).map((tagProps, id) => (
                                     <TagButton
                                         active={this.state.selectedTag === tagProps.title.toLowerCase()}
                                         className={classNames(
+                                            styles.filterBarItem,
                                             styles.tagButton,
                                             tagProps.className
-                                        )}
-                                        activeClass={classNames(
-                                            styles.tagButtonActive
                                         )}
                                         key={`tag-button-${id}`}
                                         onClick={this.handleTagClick}
@@ -179,55 +166,62 @@ class LibraryComponent extends React.Component {
                                 ))}
                             </div>
                         }
+                        <Divider className={classNames(styles.filterBarItem, styles.divider)} />
+                        <div className={classNames(styles.flex, styles.checkTheme)}>
+                            <TagButton
+                                active={this.state.selectedType === '1'}
+                                className={classNames(
+                                            styles.filterBarItem,
+                                            styles.tagButton,
+                                            (!this.props.iLogin ? styles.btnHidden : '')
+                                        )}
+                                onClick={() => {
+                                    this.handleTypeClick('1');
+                                }}
+                                title="课程素材"
+                            />
+                            <TagButton
+                                active={this.state.selectedType === '2'}
+                                className={classNames(
+                                            styles.filterBarItem,
+                                            styles.tagButton
+                                        )}
+                                onClick={() => {
+                                    this.handleTypeClick('2');
+                                }}
+                                title="默认素材"
+                            />
+                        </div>
                     </div>
                 )}
-                    <div className={styles.libraryRightContainer}>
-                        <div className={styles.libraryRightHeader}>
-                            { rescourseType.map(item => {
-                                return (
-                                    <div
-                                        key={item.value}
-                                        onClick={()=>this.handleTypeClick(item.value)}
-                                        className={classNames(
-                                        styles.headerTag, 
-                                        {[styles.headerTagActive]: this.state.selectedType == item.value})
-                                    }
-                                    >
-                                        <img src={this.state.selectedType == item.value ? item.active : item.def}/>
-                                        {item.label}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        <div
-                            className={classNames(styles.libraryScrollGrid, {
+                <div
+                    className={classNames(styles.libraryScrollGrid, {
                         [styles.withFilterBar]: this.props.filterable || this.props.tags
                     })}
-                            ref={this.setFilteredDataRef}
-                        >
-                            {this.getFilteredData().map((dataItem, index) => {
-                                const scratchURL = dataItem.md5 ?
-                                    `//cdn.imayuan.com/${dataItem.md5}` :
-                                    dataItem.rawURL;
-                                return (
-                                    <LibraryItem
-                                        description={dataItem.description}
-                                        disabled={dataItem.disabled}
-                                        featured={dataItem.featured}
-                                        iconURL={scratchURL}
-                                        id={index}
-                                        key={`item_${index}`}
-                                        name={dataItem.name}
-                                        onBlur={this.handleBlur}
-                                        onFocus={this.handleFocus}
-                                        onMouseEnter={this.handleMouseEnter}
-                                        onMouseLeave={this.handleMouseLeave}
-                                        onSelect={this.handleSelect}
-                                    />
-                                );
-                            })}
-                        </div>
-                    </div>
+                    ref={this.setFilteredDataRef}
+                >
+                    {this.getFilteredData().map((dataItem, index) => {
+                        const scratchURL = dataItem.md5 ?
+                            `//cdn.imayuan.com/${dataItem.md5}` :
+                            dataItem.rawURL;
+                        return (
+                            <LibraryItem
+                                description={dataItem.description}
+                                disabled={dataItem.disabled}
+                                featured={dataItem.featured}
+                                iconURL={scratchURL}
+                                id={index}
+                                key={`item_${index}`}
+                                name={dataItem.name}
+                                onBlur={this.handleBlur}
+                                onFocus={this.handleFocus}
+                                onMouseEnter={this.handleMouseEnter}
+                                onMouseLeave={this.handleMouseLeave}
+                                onSelect={this.handleSelect}
+                            />
+                        );
+                    })}
+                </div>
                     </div>
             </Modal>
         );

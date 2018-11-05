@@ -16,6 +16,7 @@ const MODAL_SOUND_RECORDER = 'soundRecorder';
 const MODAL_SAVE_MODAL = 'saveModal';
 const MODAL_TIPS_LIBRARY = 'tipsLibrary';
 const MODAL_WORK_LIBRARY = 'workLibrary';
+const MODAL_LOGIN_MODAL = 'loginModal';
 
 
 const initialState = {
@@ -31,7 +32,8 @@ const initialState = {
     [MODAL_SOUND_RECORDER]: false,
     [MODAL_TIPS_LIBRARY]: false,
     [MODAL_SAVE_MODAL]: false,
-    [MODAL_WORK_LIBRARY]: false
+    [MODAL_WORK_LIBRARY]: false,
+    [MODAL_LOGIN_MODAL]: false
 };
 
 const reducer = function (state, action) {
@@ -113,6 +115,10 @@ const openWorkLibrary = function () {
     // analytics.pageview('/modals/work');
     return openModal(MODAL_WORK_LIBRARY);
 };
+const openLoginModal = function () {
+    // analytics.pageview('/modals/save');
+    return openModal(MODAL_LOGIN_MODAL);
+};
 const closeBackdropLibrary = function () {
     return closeModal(MODAL_BACKDROP_LIBRARY);
 };
@@ -152,6 +158,9 @@ const closeSaveModal = function () {
 const closeWorkLibrary = function () {
     return closeModal(MODAL_WORK_LIBRARY);
 };
+const closeLoginModal = function () {
+    return closeModal(MODAL_LOGIN_MODAL);
+};
 export {
     reducer as default,
     initialState as modalsInitialState,
@@ -168,6 +177,7 @@ export {
     openTipsLibrary,
     openSaveModal,
     openWorkLibrary,
+    openLoginModal,
     closeBackdropLibrary,
     closeCameraCapture,
     closeCostumeLibrary,
@@ -180,5 +190,6 @@ export {
     closeSoundRecorder,
     closeTipsLibrary,
     closeSaveModal,
-    closeWorkLibrary
+    closeWorkLibrary,
+    closeLoginModal
 };

@@ -10,6 +10,7 @@ const TagButtonComponent = ({
     active,
     iconClassName,
     className,
+    activeClass,
     title,
     ...props
 }) => (
@@ -17,7 +18,7 @@ const TagButtonComponent = ({
         className={classNames(
             styles.tagButton,
             className, {
-                [styles.active]: active
+                [activeClass || styles.active]: active
             }
         )}
         iconClassName={classNames(
