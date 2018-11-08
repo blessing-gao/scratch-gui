@@ -74,7 +74,7 @@ class WorkLibrary extends React.Component {
     }
 
     handleTagClick (tag){
-        console.log(tag);
+        // console.log(tag);
         let tags = this.state.tags;
         let type = 0;
         for(let i in tags){

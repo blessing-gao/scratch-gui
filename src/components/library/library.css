@@ -5,13 +5,13 @@
     display: flex;
     justify-content: flex-start;
     align-content: flex-start;
-    align-items: flex-start;
     background: $ui-secondary;
     flex-grow: 1;
     flex-wrap: wrap;
     overflow-y: auto;
     height: calc(100% - $library-header-height);
     padding: 0.5rem;
+    align-items: stretch;
 }
 
 .library-scroll-grid.withFilterBar {
@@ -143,4 +143,20 @@
 
 .header-tag img{
     margin-right: .5rem;
+}
+
+.library-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-basis: 160px;
+    max-width: 160px;
+    margin: .8rem;
+    background: #f4f8ff;
+    cursor: pointer;
+    border: 1px solid rgba(223,223,223,1);
+    box-shadow: 0px 7px 13px 0px rgba(17,68,154,0.1);
+    border-radius: 10px;
+    height: 187px;
+    justify-content: center;
 }

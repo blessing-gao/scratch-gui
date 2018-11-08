@@ -10,13 +10,7 @@ import {connect} from 'react-redux';
 import {setWork} from '../../reducers/scratch';
 import Modal from 'react-modal';
 import QRCode from 'qrcode.react';
-
-import delIcon from '../../lib/assets/delete-icon.png';
-import editIcon from '../../lib/assets/edit-icon.png';
-import moreIcon from '../../lib/assets/more-icon.png';
-import moreIconAct from '../../lib/assets/more-icon-active.png';
 import shareIcon from '../../lib/assets/share-icon.png';
-import shareIconAct from '../../lib/assets/share-icon-active.png';
 
 const host = getHost();
 
@@ -54,16 +48,17 @@ class WorkLibraryItem extends React.PureComponent {
     handleEditClick () {
         window.location.href = `${host}/?id=${this.props.id}&platFormId=${this.props.work.platFormId}`;
     }
-    handleShareClick () {
+    handleShareClick (e) {
         const ercode = `http://imayuan.com/player/mobile/game.html?projectId=${this.props.id}`;
         this.setState({isModal: true,codeSrc: ercode});
+        e.stopPropagation();
     }
 
     handleShareClose(){
         this.setState({isModal: false});
     }
 
-    handleDeleteClick () {
+    handleDeleteClick (e) {
         const conf = confirm('是否确认删除');
         if(conf === true){
             let work = this.props.work;
@@ -76,8 +71,9 @@ class WorkLibraryItem extends React.PureComponent {
                     this.props.onDelete();
                 }
             });
-        }else{
-            return false;
+            e.stopPropagation();
+        }else {
+            e.stopPropagation();
         }
     }
     handleMouseEnter () {
@@ -101,24 +97,22 @@ class WorkLibraryItem extends React.PureComponent {
                     onMouseLeave={this.handleMouseLeave}
                 >
                     {/* Layers of wrapping is to prevent layout thrashing on animation */}
-                    <Box className={styles.libraryItemImageContainerWrapper}>
+                    <Box className={styles.libraryItemImageContainerWrapper}
+                         onClick={this.handleEditClick}
+                    >
                         <img
                             className={styles.libraryItemImage}
                             src={this.props.iconURL}
                         />
                     </Box>
                     <Box className={styles.libraryItemContainer}>
-                        <Box className={styles.libraryItemContent}>
+                        <Box className={classNames(styles.libraryItemContent,styles.libraryItemTop)}>
                             <span className={styles.libraryItemName}>{this.props.name}</span>
-                            <img className={styles.iconButton} src={shareIcon}/>
+                            <div className={classNames(styles.iconButton,styles.iconItemShare)} onClick={e => this.handleShareClick(e)}><img src={shareIcon}/>分享</div>
                         </Box>
                         <Box className={styles.libraryItemContent}>
                             <span className={styles.libraryItemTime}>{this.props.datetime}</span>
-                            <img className={styles.iconButton} src={moreIcon}/>
-                            <div className={styles.iconShowBox}>
-                                <div className={classNames(styles.iconItem, styles.iconItemEdit)}>编辑</div>
-                                <div className={classNames(styles.iconItem, styles.iconItemDel)}>删除</div>
-                            </div>
+                            <div className={classNames(styles.iconButton,styles.iconItemDel)} onClick={e => this.handleDeleteClick(e)}>删除</div>
                         </Box>
                     </Box>
                     {/* <br />*/}
@@ -132,7 +126,7 @@ class WorkLibraryItem extends React.PureComponent {
                     overlayClassName={styles.modalOverlay}
                 >
                     <p className={styles.shareTitle}>{this.props.name}</p>
-                    <QRCode size={200} value={this.state.codeSrc}/>
+                    <QRCode size={180} value={this.state.codeSrc}/>
                     <div className={styles.closeBtn} onClick={this.handleShareClose}>关闭</div>
                 </Modal>
 

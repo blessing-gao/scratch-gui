@@ -31,7 +31,8 @@ class SpriteLibrary extends React.PureComponent {
             activeSprite: null,
             costumeIndex: 0,
             sprites: [],
-            tags: null
+            tags: null,
+            type: 1 // 素材类型:个人,课程,默认
         };
     }
 
@@ -52,6 +53,12 @@ class SpriteLibrary extends React.PureComponent {
                 this.setState({sprites: result});
             }
         },'//cdn.imayuan.com');
+    }
+    
+    
+    getUserResource(){
+        // 获取个人素材
+        this.setState({sprites: []});
     }
 
     getType (type){
@@ -118,13 +125,14 @@ class SpriteLibrary extends React.PureComponent {
         this.stopRotatingCostumes();
     }
     handleChange (type){
-        // 课程素材{type=1},默认素材{type=2}切换
+        // 个人素材{type=0},课程素材{type=1},默认素材{type=2}切换
+        this.setState({ type: type});
         if(type == 1){
             this.checkResource();
         }else if(type == 2) {
             this.getDefault();
         }else {
-            // 获取个人素材
+            this.getUserResource();
         }
     }
     startRotatingCostumes () {

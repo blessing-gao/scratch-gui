@@ -5,6 +5,7 @@ import React from 'react';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import LibraryItem from '../library-item/library-item.jsx';
+import LibraryUpload from '../library-upload/library-upload.jsx';
 import Modal from '../../containers/modal.jsx';
 import Divider from '../divider/divider.jsx';
 import Filter from '../filter/filter.jsx';
@@ -19,6 +20,7 @@ import defRes from '../../lib/assets/def-res.png';
 import defResAct from '../../lib/assets/def-res-active.png';
 import userRes from '../../lib/assets/user-res.png';
 import userResAct from '../../lib/assets/user-res-active.png';
+import uploadBg from '../../lib/assets/upload-bg.png';
 
 
 // const ALL_TAG_TITLE = 'All';
@@ -50,13 +52,17 @@ class LibraryComponent extends React.Component {
             'handleTagClick',
             'handleTypeClick',
             'setFilteredDataRef',
-            'handleMenu'
+            'handleMenu',
+            'handleUploadClose',
+            'handleUploadOpen'
         ]);
         this.state = {
             selectedItem: null,
             filterQuery: '',
             selectedTag: ALL_TAG_TITLE,
-            selectedType: '1'
+            selectedType: '1',
+            uploadVisible: false,
+            rescourseId: '0'
         };
     }
     componentDidUpdate (prevProps, prevState) {
@@ -136,6 +142,15 @@ class LibraryComponent extends React.Component {
     handleMenu (e) {
         e.preventDefault();
     }
+    
+    handleUploadClose(){
+        this.setState({uploadVisible: false});
+    }
+
+    handleUploadOpen(){
+        this.setState({uploadVisible: true});
+    }
+    
     render () {
         return (
             <Modal
@@ -205,6 +220,13 @@ class LibraryComponent extends React.Component {
                     })}
                             ref={this.setFilteredDataRef}
                         >
+                            {this.state.selectedType === '0' &&
+                                <div className={styles.libraryUpload}
+                                     onClick={this.handleUploadOpen}
+                                >
+                                    <img src={uploadBg}/>
+                                </div>
+                            }
                             {this.getFilteredData().map((dataItem, index) => {
                                 const scratchURL = dataItem.md5 ?
                                     `//cdn.imayuan.com/${dataItem.md5}` :
@@ -229,6 +251,12 @@ class LibraryComponent extends React.Component {
                         </div>
                     </div>
                     </div>
+                <LibraryUpload
+                    id={this.state.rescourseId}
+                    tags={this.props.tags}
+                    visible={this.state.uploadVisible}
+                    handleUploadClose={this.handleUploadClose}
+                />
             </Modal>
         );
     }
