@@ -58,7 +58,7 @@ class LibraryUpload extends React.PureComponent {
 
     // 上传封面
     coverChange(){
-
+        
     }
 
     render (){
