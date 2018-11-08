@@ -230,6 +230,7 @@ class SoundLibrary extends React.PureComponent {
                 id="soundLibrary"
                 tags={this.state.tags}
                 title="选择声音"
+                type={4}
                 onItemMouseEnter={this.handleItemMouseEnter}
                 onItemMouseLeave={this.handleItemMouseLeave}
                 onItemSelected={this.handleItemSelected}

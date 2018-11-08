@@ -253,6 +253,7 @@ class LibraryComponent extends React.Component {
                     </div>
                 <LibraryUpload
                     id={this.state.rescourseId}
+                    type={this.props.type}
                     tags={this.props.tags}
                     visible={this.state.uploadVisible}
                     handleUploadClose={this.handleUploadClose}

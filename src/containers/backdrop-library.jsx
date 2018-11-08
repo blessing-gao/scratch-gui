@@ -131,6 +131,7 @@ class BackdropLibrary extends React.Component {
                 id="backdropLibrary"
                 tags={this.state.tags}
                 title="选择背景"
+                type={1}
                 iLogin={this.props.work.userToken ? true : false}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}

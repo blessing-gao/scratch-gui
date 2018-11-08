@@ -21,20 +21,73 @@ const customStyles = {
     }
 };
 
+let contentFormat = [
+    {
+        name: "",
+        md5: "",
+        type: "backdrop",
+        tags: [],
+        info: [480, 360, 1]
+    },
+    {
+        name: "",
+        md5: "",
+        type: "sprite",
+        tags: [],
+        info: [0, 4, 1],
+        json: {
+            objName: "",
+            sounds: [],
+            costumes: [],
+            currentCostumeIndex: 0,
+            scratchX: -20,
+            scratchY: -38,
+            scale: 1,
+            direction: 90,
+            rotationStyle: "normal",
+            isDraggable: false,
+            visible: true,
+            spriteInfo: {}
+        }
+    },
+    {
+        name: "",
+        md5: "",
+        type: "costume",
+        tags: [],
+        info: [31, 100, 1]
+    },
+    {
+        name: "",
+        md5: "",
+        sampleCount: 28160,
+        rate: 22050,
+        format: "",
+        tags: []
+    }
+];
+
 class LibraryUpload extends React.PureComponent {
     constructor (props){
         super(props);
         bindAll(this,[
             'handleTagClick',
-            'uploadCover'
+            'uploadOpen',
+            'coverChange',
+            'soundChange',
+            'modelChange',
+            'handleUpload'
         ]);
         this.state = {
+            content: {},
             checkedTags: []
         }
     }
 
     componentDidMount(){
-
+        this.setState({
+            content: contentFormat[this.props.type-1]
+        });
     }
 
     // 标签的选择与取消
@@ -52,13 +105,43 @@ class LibraryUpload extends React.PureComponent {
     }
 
     // 打开文件上传封面
-    uploadCover(){
-        this.coverInput.click();
+    uploadOpen(type){
+        switch (type){
+            case 'cover':
+                this.coverInput.click();
+                break;
+            case 'sound':
+                this.soundInput.click();
+                break;
+            case 'model':
+                this.modelInput.click();
+                break;
+        }
     }
 
-    // 上传封面
-    coverChange(){
-        
+    // 上传文件
+    handleUpload(e, callback){
+        let reqData = {
+            file: e.target.files[0]
+        };
+        request.file_request(request.POST, reqData, '/api/aliyun/fileUpload', result => {
+            callback(result);
+        });
+    }
+
+    // 上传封面回调
+    coverChange(res){
+        console.log(res);
+    }
+
+    // 上传声音回调
+    soundChange(res){
+        console.log(res);
+    }
+
+    // 上传造型回调
+    modelChange(res){
+        console.log(res);
     }
 
     render (){
@@ -77,24 +160,44 @@ class LibraryUpload extends React.PureComponent {
                       <div className={styles.classItem}>
                           <div className={styles.classTitle}>封面</div>
                           <div className={classNames(styles.uploadBox,styles.uploadCover)}
-                               onClick={this.uploadCover}
+                               onClick={this.uploadOpen.bind(this,'cover')}
                           >
                               <input
-                                  accept={'.svg, .png, .jpg, .jpeg'}
+                                  accept={'image/*'}
                                   className={styles.fileInput}
                                   ref={(c) => this.coverInput = c}
                                   type="file"
-                                  onChange={this.coverChange}
+                                  onChange={(e)=>this.handleUpload(e, this.coverChange)}
                               />
                           </div>
                       </div>
                       <div className={styles.classItem}>
                           <div className={styles.classTitle}>声音</div>
-                          <div className={classNames(styles.uploadBox,styles.uploadSound)}></div>
+                          <div className={classNames(styles.uploadBox,styles.uploadSound)}
+                               onClick={this.uploadOpen.bind(this,'sound')}
+                          >
+                              <input
+                                  accept={'audio/*'}
+                                  className={styles.fileInput}
+                                  ref={(c) => this.soundInput = c}
+                                  type="file"
+                                  onChange={(e)=>this.handleUpload(e, this.soundChange)}
+                              />
+                          </div>
                       </div>
                       <div className={styles.classItem}>
                           <div className={styles.classTitle}>造型</div>
-                          <div className={classNames(styles.uploadBox,styles.uploadModel)}></div>
+                          <div className={classNames(styles.uploadBox,styles.uploadModel)}
+                               onClick={this.uploadOpen.bind(this,'model')}
+                          >
+                              <input
+                                  accept={'image/*'}
+                                  className={styles.fileInput}
+                                  ref={(c) => this.modelInput = c}
+                                  type="file"
+                                  onChange={(e)=>this.handleUpload(e, this.modelChange)}
+                              />
+                          </div>
                       </div>
                   </div>
                   <div className={styles.modalDivider}></div>

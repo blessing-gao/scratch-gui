@@ -166,6 +166,7 @@ class SpriteLibrary extends React.PureComponent {
                 id="spriteLibrary"
                 tags={this.state.tags}
                 title="选择角色"
+                type={2}
                 iLogin={this.props.work.userToken ? true : false}
                 onItemMouseEnter={this.handleMouseEnter}
                 onItemMouseLeave={this.handleMouseLeave}

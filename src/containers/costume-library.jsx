@@ -127,6 +127,7 @@ class CostumeLibrary extends React.PureComponent {
                 id="costumeLibrary"
                 tags={this.state.tags}
                 title="选择造型"
+                type={3}
                 iLogin={this.props.work.userToken ? true : false}
                 onItemSelected={this.handleItemSelected}
                 onRequestClose={this.props.onRequestClose}
