@@ -6,6 +6,8 @@ import React from 'react';
 import Box from '../box/box.jsx';
 import styles from './library-item.css';
 import classNames from 'classnames';
+import editIcon from '../../lib/assets/edit-icon-white.png';
+import deleteIcon from '../../lib/assets/delete-icon-white.png';
 
 class LibraryItem extends React.PureComponent {
     constructor (props) {
@@ -16,8 +18,18 @@ class LibraryItem extends React.PureComponent {
             'handleFocus',
             'handleKeyPress',
             'handleMouseEnter',
-            'handleMouseLeave'
+            'handleMouseLeave',
+            'handleEdit',
+            'handleDelete'
         ]);
+    }
+    handleDelete(e){
+        this.props.onDelete(this.props.md5);
+        e.stopPropagation();
+    }
+    handleEdit(e){
+        this.props.onEdit(this.props.md5);
+        e.stopPropagation();
     }
     handleBlur () {
         this.props.onBlur(this.props.id);
@@ -97,6 +109,17 @@ class LibraryItem extends React.PureComponent {
                             className={styles.libraryItemImage}
                             src={this.props.iconURL}
                         />
+                        {
+                            this.props.isEdit &&
+                            <Box className={styles.editArea}>
+                                <Box className={styles.editItem} onClick={this.handleEdit}>
+                                    <img className={styles.editItemImg} src={editIcon}/> 编辑
+                                </Box>
+                                <Box className={styles.editItem} onClick={this.handleDelete}>
+                                    <img className={styles.editItemImg} src={deleteIcon}/> 删除
+                                </Box>
+                            </Box>
+                        }
                     </Box>
                 </Box>
                 <span className={styles.libraryItemName}>{this.props.name}</span>

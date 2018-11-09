@@ -11,6 +11,12 @@
     background: rgba(0,0,0,.3);
 }
 
+.upload-btn{
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+}
+
 .upload-btn img{
     margin-left: 2.4rem;
     width: calc(100% - 2.4rem);
@@ -34,7 +40,7 @@
     flex: 1;
     background-color: rgba(244,248,255,1);
     background-repeat: no-repeat;
-    background-size: 90%;
+    background-size: 70%;
     background-position: center;
     border: .1rem dashed rgba(216,232,255,1);
     border-radius: 6px;
@@ -54,11 +60,13 @@
 }
 
 .modal-left{
-    width: 9rem;
+    width: 12rem;
 }
 
 .modal-right{
-    width: 18rem;
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .class-title{
@@ -85,7 +93,7 @@
     line-height: 2rem;
     font-size: .8rem;
     border-radius: 1rem;
-    margin-bottom: .5rem;
+    margin-bottom: .8rem;
     width: 26%;
     text-align: center;
     margin-right: 11%;
@@ -104,7 +112,7 @@
 }
 
 .uploadCover{
-    height: 6.6rem;
+    height: 9.6rem;
 }
 
 .uploadSound{
@@ -140,4 +148,53 @@
 
 .file-input{
     display: none;
+}
+
+.img-list{
+    padding-left: 2.4rem;
+    overflow: auto;
+    margin-bottom: .6rem;
+    max-height: 3.3rem;
+}
+
+.cover-box{
+    height: 9.6rem;
+    background: rgba(244,248,255,1);
+    border: 1px solid rgba(231,231,231,1);
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.cover-bg{
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.cover-img{
+    max-width: 60%;
+    max-height: 60%;
+}
+
+.cover-del-btn{
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 27%;
+    background-color: rgba(0,41,76,.7);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("../../lib/assets/delete-icon-white.png");
+}
+
+.cover-box:hover .cover-del-btn{
+    display: block;
 }

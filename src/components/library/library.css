@@ -11,7 +11,7 @@
     overflow-y: auto;
     height: calc(100% - $library-header-height);
     padding: 0.5rem;
-    align-items: stretch;
+    align-items: flex-start;
 }
 
 .library-scroll-grid.withFilterBar {
@@ -157,6 +157,28 @@
     border: 1px solid rgba(223,223,223,1);
     box-shadow: 0px 7px 13px 0px rgba(17,68,154,0.1);
     border-radius: 10px;
-    height: 187px;
+    /*height: 187px;*/
     justify-content: center;
+    height: calc(138px + 2.8rem);
+}
+
+.library-edit-btn{
+    float: right;
+    height: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: #9099A6;
+    cursor: pointer;
+    padding: 0 2rem;
+}
+
+.library-edit-btn:hover{
+    color: #4D97FF;
+}
+
+.library-edit-btn-img{
+    width: 20px;
+    height: 20px;
+    margin-right: .2rem;
 }

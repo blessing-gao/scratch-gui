@@ -21,6 +21,7 @@ import defResAct from '../../lib/assets/def-res-active.png';
 import userRes from '../../lib/assets/user-res.png';
 import userResAct from '../../lib/assets/user-res-active.png';
 import uploadBg from '../../lib/assets/upload-bg.png';
+import libraryEditBtn from '../../lib/assets/edit-icon.png';
 
 
 // const ALL_TAG_TITLE = 'All';
@@ -54,7 +55,10 @@ class LibraryComponent extends React.Component {
             'setFilteredDataRef',
             'handleMenu',
             'handleUploadClose',
-            'handleUploadOpen'
+            'handleUploadOpen',
+            'handleDelete',
+            'handleEdit',
+            'handleChangeEditStatus'
         ]);
         this.state = {
             selectedItem: null,
@@ -62,7 +66,8 @@ class LibraryComponent extends React.Component {
             selectedTag: ALL_TAG_TITLE,
             selectedType: '1',
             uploadVisible: false,
-            rescourseId: '0'
+            rescourseId: '0',
+            isEdit: false
         };
     }
     componentDidUpdate (prevProps, prevState) {
@@ -70,6 +75,12 @@ class LibraryComponent extends React.Component {
             prevState.selectedTag !== this.state.selectedTag) {
             this.scrollToTop();
         }
+    }
+    handleEdit (md5){
+        this.props.onEdit(md5)
+    }
+    handleDelete (md5){
+        this.props.onDelete(md5)
     }
     handleBlur (id) {
         this.handleMouseLeave(id);
@@ -142,6 +153,12 @@ class LibraryComponent extends React.Component {
     handleMenu (e) {
         e.preventDefault();
     }
+
+    handleChangeEditStatus(){
+        this.setState({
+            isEdit: !this.state.isEdit
+        })
+    }
     
     handleUploadClose(){
         this.setState({uploadVisible: false});
@@ -213,6 +230,13 @@ class LibraryComponent extends React.Component {
                                     </div>
                                 )
                             })}
+                            {
+                                this.state.selectedType === '0' &&
+                                <div className={styles.libraryEditBtn} onClick={this.handleChangeEditStatus}>
+                                    <img src={libraryEditBtn} className={styles.libraryEditBtnImg}/>
+                                    { this.state.isEdit ? '完成' : '编辑'}
+                                </div>
+                            }
                         </div>
                         <div
                             className={classNames(styles.libraryScrollGrid, {
@@ -224,7 +248,7 @@ class LibraryComponent extends React.Component {
                                 <div className={styles.libraryUpload}
                                      onClick={this.handleUploadOpen}
                                 >
-                                    <img src={uploadBg}/>
+                                    <img src={uploadBg} style={{width: '50%'}}/>
                                 </div>
                             }
                             {this.getFilteredData().map((dataItem, index) => {
@@ -240,6 +264,10 @@ class LibraryComponent extends React.Component {
                                         id={index}
                                         key={`item_${index}`}
                                         name={dataItem.name}
+                                        isEdit={this.state.isEdit}
+                                        md5={dataItem.md5}
+                                        onEdit={this.handleEdit}
+                                        onDelete={this.handleDelete}
                                         onBlur={this.handleBlur}
                                         onFocus={this.handleFocus}
                                         onMouseEnter={this.handleMouseEnter}

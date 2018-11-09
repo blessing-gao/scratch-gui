@@ -24,7 +24,9 @@ class SpriteLibrary extends React.PureComponent {
             'handleChange',
             'getResource',
             'getDefault',
-            'getType'
+            'getType',
+            'handleDelete',
+            'handleEdit'
 
         ]);
         this.state = {
@@ -32,8 +34,16 @@ class SpriteLibrary extends React.PureComponent {
             costumeIndex: 0,
             sprites: [],
             tags: null,
-            type: 1 // 素材类型:个人,课程,默认
+            type: 1, // 素材类型:个人,课程,默认
         };
+    }
+
+    handleEdit(md5){
+        console.log(md5);
+    }
+
+    handleDelete(md5){
+        console.log(md5);
     }
 
     getResource (type, typeId){
@@ -54,11 +64,17 @@ class SpriteLibrary extends React.PureComponent {
             }
         },'//cdn.imayuan.com');
     }
-    
-    
-    getUserResource(){
+
+
+    getUserResource(type, typeId){
         // 获取个人素材
-        this.setState({sprites: []});
+        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
+            if (result) {
+                this.setState({sprites: result.result});
+            }else {
+                this.setState({sprites: []});
+            }
+        });
     }
 
     getType (type){
@@ -132,7 +148,7 @@ class SpriteLibrary extends React.PureComponent {
         }else if(type == 2) {
             this.getDefault();
         }else {
-            this.getUserResource();
+            this.getUserResource(1, 2);
         }
     }
     startRotatingCostumes () {
@@ -167,6 +183,8 @@ class SpriteLibrary extends React.PureComponent {
                 tags={this.state.tags}
                 title="选择角色"
                 type={2}
+                onDelete={this.handleDelete}
+                onEdit={this.handleEdit}
                 iLogin={this.props.work.userToken ? true : false}
                 onItemMouseEnter={this.handleMouseEnter}
                 onItemMouseLeave={this.handleMouseLeave}
