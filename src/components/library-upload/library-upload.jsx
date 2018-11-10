@@ -306,7 +306,7 @@ class LibraryUpload extends React.PureComponent {
         const { type } = this.props;
         return (
             <Modal
-                id={this.props.id}
+                id={this.props.md5}
                 isOpen={this.props.visible}
                 onRequestClose={this.props.handleUploadClose}
                 contentLabel="Example Modal"

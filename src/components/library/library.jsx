@@ -22,6 +22,7 @@ import userRes from '../../lib/assets/user-res.png';
 import userResAct from '../../lib/assets/user-res-active.png';
 import uploadBg from '../../lib/assets/upload-bg.png';
 import libraryEditBtn from '../../lib/assets/edit-icon.png';
+import request from '../../lib/request';
 
 
 // const ALL_TAG_TITLE = 'All';
@@ -77,10 +78,19 @@ class LibraryComponent extends React.Component {
         }
     }
     handleEdit (md5){
-        this.props.onEdit(md5)
+        this.setState({
+            md5: md5,
+            uploadVisible: true
+        });
+        request.default_request(request.GET, null, `/api/resource/getUserResByMd5?md5=${md5}`, result => {
+            if (result.result) {
+                console.log(result.result)
+            }
+        },'http://192.168.0.112:8081');
     }
+    
     handleDelete (md5){
-        this.props.onDelete(md5)
+        // this.props.onDelete(md5)
     }
     handleBlur (id) {
         this.handleMouseLeave(id);
@@ -125,6 +135,9 @@ class LibraryComponent extends React.Component {
         this.setState({filterQuery: ''});
     }
     getFilteredData () {
+        if(this.state.selectedType == '0'){
+            console.log(this.props.data);
+        }
         if (this.state.selectedTag === '全部素材') {
             if (!this.state.filterQuery) return this.props.data;
             return this.props.data.filter(dataItem => (
@@ -159,7 +172,7 @@ class LibraryComponent extends React.Component {
             isEdit: !this.state.isEdit
         })
     }
-    
+
     handleUploadClose(){
         this.setState({uploadVisible: false});
     }
@@ -167,7 +180,7 @@ class LibraryComponent extends React.Component {
     handleUploadOpen(){
         this.setState({uploadVisible: true});
     }
-    
+
     render () {
         return (
             <Modal
@@ -221,7 +234,7 @@ class LibraryComponent extends React.Component {
                                         key={item.value}
                                         onClick={()=>this.handleTypeClick(item.value)}
                                         className={classNames(
-                                        styles.headerTag, 
+                                        styles.headerTag,
                                         {[styles.headerTagActive]: this.state.selectedType == item.value})
                                     }
                                     >
@@ -280,7 +293,7 @@ class LibraryComponent extends React.Component {
                     </div>
                     </div>
                 <LibraryUpload
-                    id={this.state.rescourseId}
+                    md5={this.state.md5}
                     type={this.props.type}
                     tags={this.props.tags}
                     visible={this.state.uploadVisible}

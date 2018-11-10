@@ -68,13 +68,13 @@ class SpriteLibrary extends React.PureComponent {
 
     getUserResource(type, typeId){
         // 获取个人素材
+        this.setState({sprites: []});
         request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
-            if (result) {
+            if (result.result) {
+                console.log(result.result);
                 this.setState({sprites: result.result});
-            }else {
-                this.setState({sprites: []});
             }
-        });
+        },'http://192.168.0.112:8081');
     }
 
     getType (type){
@@ -183,8 +183,6 @@ class SpriteLibrary extends React.PureComponent {
                 tags={this.state.tags}
                 title="选择角色"
                 type={2}
-                onDelete={this.handleDelete}
-                onEdit={this.handleEdit}
                 iLogin={this.props.work.userToken ? true : false}
                 onItemMouseEnter={this.handleMouseEnter}
                 onItemMouseLeave={this.handleMouseLeave}
