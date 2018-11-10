@@ -71,10 +71,9 @@ class SpriteLibrary extends React.PureComponent {
         this.setState({sprites: []});
         request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
             if (result.result) {
-                console.log(result.result);
                 this.setState({sprites: result.result});
             }
-        },'http://192.168.0.112:8081');
+        });
     }
 
     getType (type){
@@ -189,6 +188,7 @@ class SpriteLibrary extends React.PureComponent {
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
                 onTabChange={this.handleChange}
+                handleReload={() => this.getUserResource(1,2)}
             />
         );
     }

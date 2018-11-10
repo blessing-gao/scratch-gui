@@ -24,11 +24,11 @@ class LibraryItem extends React.PureComponent {
         ]);
     }
     handleDelete(e){
-        this.props.onDelete(this.props.md5);
+        this.props.onDelete(this.props.resourceId);
         e.stopPropagation();
     }
     handleEdit(e){
-        this.props.onEdit(this.props.md5);
+        this.props.onEdit(this.props.resourceId);
         e.stopPropagation();
     }
     handleBlur () {
@@ -95,8 +95,8 @@ class LibraryItem extends React.PureComponent {
                 className={styles.libraryItem}
                 role="button"
                 tabIndex="0"
-                onBlur={this.handleBlur}
                 onClick={this.handleClick}
+                onBlur={this.handleBlur}
                 onFocus={this.handleFocus}
                 onKeyPress={this.handleKeyPress}
                 onMouseEnter={this.handleMouseEnter}

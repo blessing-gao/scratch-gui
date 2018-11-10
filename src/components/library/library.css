@@ -180,5 +180,11 @@
 .library-edit-btn-img{
     width: 20px;
     height: 20px;
-    margin-right: .2rem;
+    margin-right: .3rem;
+    background-image: url("../../lib/assets/edit-circle.png");
+    background-size: 100% 100%;
+}
+
+.library-edit-btn:hover .library-edit-btn-img{
+    background-image: url("../../lib/assets/edit-circle-active.png");
 }

@@ -8,142 +8,129 @@
     right: 0;
     bottom: 0;
     z-index: 1000;
-    background-color: rgba(0,0,0,.6);
+    background-color: rgba(0,0,0,.3);
 }
 
-.modal-content {
-    margin: 100px auto;
-    outline: none;
-    /*border: .25rem solid $ui-white-transparent;*/
-    padding: 0;
-    border-radius: $space;
-    user-select: none;
-    width: 400px;
-    color: $text-primary;
-    overflow: hidden;
-}
-
-.logo{
-    width: 100px;
-    margin: 1rem 0;
-}
-
-.body {
-    background: #FFF;
-    padding: 1.5rem 2.25rem;
+.text-center{
     text-align: center;
 }
 
-.label {
-    font-weight: 500;
-    margin: 0 0 0.75rem;
+.login-box {
+    width: 40rem;
+    height: 25rem;
+    background-image: url("../../lib/assets/login-bg.png");
+    background-size: 100% 100%;
 }
 
-.input {
+.login-inner{
+    width: 22rem;
+    height: 100%;
+    float: right;
+    padding: 2rem 3rem;
+}
+
+.login-top{
+    margin-top: 2.4rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.login-type{
+    color: #999;
+    text-align: center;
+}
+
+.login-type-act{
+    font-size: 1.3rem;
+    color: #333;
+    position: relative;
+    padding-bottom: .6rem;
+    letter-spacing: .1rem;
+}
+
+.login-type-act:after{
+    content: "";
+    width:100%;
+    height:.2rem;
+    background:linear-gradient(90deg,rgba(51,200,255,1),rgba(112,146,255,1));
+    border-radius:3px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.login-content{
+    padding: 1.6rem 0 1rem;
+}
+
+.login-item{
+    background-repeat: no-repeat;
+    background-position: .3rem center;
+    border-bottom: 1px solid #eaeaea;
     margin-bottom: 1rem;
-    width: 100%;
-    border: 1px solid rgba(0,0,0,.1);
-    border-radius: 5px;
-    padding: 0 1rem;
-    height: 2.4rem;
-    color: #6b6b6b;
-    font-size: .875rem;
+    height: 2.2rem;
+    padding-left: 2rem;
+    display: flex;
+    background-size: auto 1rem;
+    align-items: center;
+}
+
+.login-phone{
+    background-image: url("../../lib/assets/phone-icon.png");
+}
+
+.login-psd{
+    background-image: url("../../lib/assets/psd-icon.png");
+}
+
+.login-input{
+    border: none;
+    flex: 1;
+    height: 1.5rem;
+    border-left: 1px solid #f7f7f7;
     outline: none;
-}
-
-.textarea{
-    padding: .8rem 1rem;
-    height: 6rem;
-    margin-bottom: .6rem;
-}
-
-.label-title{
-    font-size: 1.2rem;
-    margin: .5rem 0 1.8rem;
-}
-
-.class-title{
-    font-size: .9rem;
-    text-align: left;
-    margin: 0;
-}
-
-.class-box{
-    text-align: left;
-    padding: .8rem 0;
-    margin-bottom: 1rem;
-}
-
-.class-btn{
-    display: inline-block;
-    padding: .4rem 1rem;
-    border: 1px dashed #ccc;
-    border-radius: .2rem;
+    text-indent: 1rem;
     font-size: .8rem;
-    margin: 0 .45rem .4rem 0;
-    cursor: pointer;
+    transition: all .3s;
 }
 
-.button-row {
-    font-weight: bolder;
+.login-input:focus{
+    text-indent: 1.2rem;
+}
+
+.login-btn{
+    background:linear-gradient(90deg,rgba(51,200,255,1),rgba(112,146,255,1));
+    color: #fff;
+    font-size: 1.1rem;
     text-align: center;
-    margin-top: 1.2rem;
-}
-
-.button-row button {
-    padding: .7rem 1.8rem;
-    border-radius: 0.4rem;
-    background: white;
-    border: 1px solid $ui-pane-border;
-    font-weight: 600;
-    font-size: 0.85rem;
-    outline: none;
+    height: 2.4rem;
+    line-height: 2.4rem;
+    border-radius: 1.2rem;
+    letter-spacing: .5rem;
     cursor: pointer;
-    width: 100%;
+    box-shadow: 0 8px 7px 0 rgba(112,146,255,0.22);
 }
 
-.button-row button.ok-button {
-    background: $motion-primary;
-    border: $motion-primary;
-    color: white;
+.reg-href{
+    color: #999;
+    font-size: .7rem;
+    text-decoration: none;
 }
 
-.button-row button + button {
-    margin-left: 0.5rem;
+.reg-href:hover{
+    text-decoration: underline;
+    color: #4d97ff;
 }
 
-.class-btn:hover, .active-btn{
-    color: #1dacf4;
-    border-color: #1dacf4;
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #BBBBBB;
 }
-
-.content-box{
-    overflow: auto;
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #BBBBBB;
 }
-
-.cover-img{
-    width: 46%;
-    margin-right: 4%;
-    float: left;
-    border: 1px dashed #ccc;
-    font-size: 0;
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #BBBBBB;
 }
-
-.cover-img img{
-    width: 100%;
-    background-color: #ccc;
-}
-
-.main-box{
-    float: left;
-    width: 50%;
-}
-
-.i-anon{
-    float: left;
-    font-size: 14px;
-    line-height: 40px;
-}
-.ok-button-disable{
-    cursor: wait;
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    #BBBBBB;
 }

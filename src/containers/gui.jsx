@@ -48,10 +48,19 @@ class GUI extends React.Component {
         // const userId = "5a54badb45f647a29a4ef6c801abc8d6";
         // const nickname = "mayuan";
         const userToken= cookies.get("token");
-        const userId = cookies.get("userId");
-        
-        const nickname = cookies.get("nickname") ? decodeURI(cookies.get("nickname"),"utf-8") : "mayuan";
-        const picUrl = cookies.get("picUrl");
+        let nickname , picUrl, userId;
+        if(userToken){
+            request.default_request(request.GET, null, `/sys/users/getUserInfo`, result => {
+                if(result.code == 0){
+                    nickname = result.result.nickname || 'mayuan';
+                    picUrl = result.result.cover || '';
+                    userId = result.result.userId;
+                }
+            }, 'http://imayuan.com:8279', null, false);
+        }
+        // const userId = cookies.get("userId");
+        // const nickname = cookies.get("nickname") ? decodeURI(cookies.get("nickname"),"utf-8") : "mayuan";
+        // const picUrl = cookies.get("picUrl");
         const platFormId= getQueryString("platFormId") || "mayuan";
         const deviceIdentify = '1';
         if (id !== null){

@@ -104,12 +104,50 @@ class LibraryUpload extends React.PureComponent {
     }
 
     componentDidMount(){
+        // console.log(this.props.formData);
+        let {id , type, formData} = this.props;
         let typeNameList = ['背景','封面','造型','声音'];
+        let detail = {
+            type: type,
+            typeName: typeNameList[type-1],
+            content: contentFormat[type-1]
+        };
+        if(id){
+            let data = {...formData};
+            detail = {
+                id: id,
+                name: data.name,
+                sort: data.sort,
+                ...detail
+            };
+            let content = JSON.parse(data.content);
+            detail.cover = content.md5;
+            detail.content = content;
+            detail.checkedTags = content.tags;
+            if(data.type == 2){
+                let costumes = content.json.costumes;
+                let sounds = content.json.sounds;
+                if(costumes){
+                    detail.modelList = costumes.map(item => {
+                        return {
+                            name: item.baseLayerMD5,
+                            href: RESBASEURL + item.baseLayerMD5
+                        }
+                    });
+                }
+                if(sounds){
+                    detail.soundList = sounds.map(item => {
+                        return {
+                            name: item.md5,
+                            href: RESBASEURL + item.md5
+                        }
+                    });
+                }
+            }
+        }
         this.setState({
-            type: this.props.type,
-            typeName: typeNameList[this.props.type-1],
-            content: contentFormat[this.props.type-1]
-        });
+            ...detail
+        })
     }
 
     // 更改名称
@@ -286,27 +324,39 @@ class LibraryUpload extends React.PureComponent {
     }
 
     handleSubmit(){
-        let { name, type, content, sort} = this.state;
+        let { name, type, content, sort, id} = this.state;
         let reqData = {
             name: name,
             content: JSON.stringify(content),
             type: type,
             platformId: "1",
-            sort: sort
+            sort: sort,
+            id: id || ''
         };
+        let url = id ? 'admin/Resource/update' : 'api/resource/saveUserResource';
         // console.log(reqData);
-        request.default_request(request.POST, JSON.stringify(reqData), `api/resource/saveUserResource`, result => {
+        request.default_request(id ? request.PUT : request.POST, JSON.stringify(reqData), url, result => {
+            let msg = {
+                type: 1,
+                message: result.code == 0 ? '保存成功' : '保存失败',
+                status: result.code == 0 ? 1 : 2,
+                timeout: 2000,
+                show: true
+            };
+            this.props.setConfirm(msg);
             if (result.code == 0) {
                 // console.log(result);
+                this.props.handleUploadClose();
+                this.props.handleReload();
             }
-        }, 'http://192.168.0.102:8081/', 'application/json');
+        }, null, 'application/json');
     }
 
     render (){
         const { type } = this.props;
         return (
             <Modal
-                id={this.props.md5}
+                id={this.props.id}
                 isOpen={this.props.visible}
                 onRequestClose={this.props.handleUploadClose}
                 contentLabel="Example Modal"
@@ -439,6 +489,7 @@ class LibraryUpload extends React.PureComponent {
 LibraryUpload.propTypes = {
     visible: PropTypes.bool,
     handleUploadClose: PropTypes.func,
+    handleReload: PropTypes.func,
 };
 
 const mapDispatchToProps = dispatch => ({
