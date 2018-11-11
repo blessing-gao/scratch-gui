@@ -2,7 +2,7 @@ import bindAll from 'lodash.bindall';
 import {FormattedMessage} from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
-
+import LazyLoad from 'react-lazy-load';
 import Box from '../box/box.jsx';
 import styles from './library-item.css';
 import classNames from 'classnames';
@@ -106,14 +106,16 @@ class LibraryItem extends React.PureComponent {
                 {/* Layers of wrapping is to prevent layout thrashing on animation */}
                 <Box className={styles.libraryItemImageContainerWrapper}>
                     <Box className={styles.libraryItemImageContainer}>
-                        <img
-                            className={classNames(
-                                {[styles.libraryItemBg]: this.props.type == 1},
-                                {[styles.libraryItemImage]: this.props.type !== 1}
-                            )}
-                            src={this.props.type == 4 ? soundIcon : this.props.iconURL}
-                            crossOrigin="anonymous"
-                        />
+                        <LazyLoad width="100%" height="100%" className={styles.libraryItemImageContainer}>
+                            <img
+                                className={classNames(
+                                    {[styles.libraryItemBg]: this.props.type == 1},
+                                    {[styles.libraryItemImage]: this.props.type !== 1}
+                                )}
+                                src={this.props.type == 4 ? soundIcon : this.props.iconURL}
+                                crossOrigin="anonymous"
+                            />
+                        </LazyLoad>
                         {
                             this.props.isEdit &&
                             <Box className={styles.editArea}>
