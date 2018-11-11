@@ -112,6 +112,7 @@ class LibraryItem extends React.PureComponent {
                                 {[styles.libraryItemImage]: this.props.type !== 1}
                             )}
                             src={this.props.type == 4 ? soundIcon : this.props.iconURL}
+                            crossOrigin="anonymous"
                         />
                         {
                             this.props.isEdit &&
