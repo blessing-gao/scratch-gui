@@ -44,25 +44,26 @@ class GUI extends React.Component {
     componentDidMount () {
         // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
         const id = getQueryString("id");
-        // const userToken= "02216a6594819693b9d2a7d4716708c2dbf6255ce062ff046749ce1fe4c1cee6";
-        // const userId = "5a54badb45f647a29a4ef6c801abc8d6";
-        // const nickname = "mayuan";
+        const platFormId= getQueryString("platFormId") || "mayuan";
+        const deviceIdentify = '1';
         const userToken= cookies.get("token");
-        let nickname , picUrl, userId;
-        if(userToken){
-            request.default_request(request.GET, null, `/sys/users/getUserInfo`, result => {
-                if(result.code == 0){
-                    nickname = result.result.nickname || 'mayuan';
-                    picUrl = result.result.cover || '';
-                    userId = result.result.userId;
-                }
-            }, 'http://imayuan.com:8279', null, false);
-        }
         // const userId = cookies.get("userId");
         // const nickname = cookies.get("nickname") ? decodeURI(cookies.get("nickname"),"utf-8") : "mayuan";
         // const picUrl = cookies.get("picUrl");
-        const platFormId= getQueryString("platFormId") || "mayuan";
-        const deviceIdentify = '1';
+        let nickname = 'mayuan' , 
+            picUrl = '',
+            userId = '';
+        if(userToken){
+            request.default_request(request.GET, null, `/sys/users/getUserInfo`, result => {
+                if(result.code == 0){
+                    let work = {...this.props.work};
+                    work.nickname = result.result.nickname || 'mayuan';
+                    work.picUrl = result.result.cover || '';
+                    work.userId = result.result.userId;
+                    this.props.setWork(work);
+                }
+            }, 'http://imayuan.com:8279');
+        }
         if (id !== null){
             request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&deviceIdentify=${deviceIdentify}`, result => {
                 let workData = {
@@ -208,7 +209,8 @@ const mapStateToProps = state => ({
     confirmMessage: state.scratchGui.confirm.confirmConf.message,
     confirmStatus: state.scratchGui.confirm.confirmConf.status,
     confirmTimeout: state.scratchGui.confirm.confirmConf.timeout,
-    confirmHandleSure: state.scratchGui.confirm.confirmConf.sure
+    confirmHandleSure: state.scratchGui.confirm.confirmConf.sure,
+    work: state.scratchGui.scratch.work
 });
 
 const mapDispatchToProps = dispatch => ({

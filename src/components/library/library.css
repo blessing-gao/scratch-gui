@@ -188,3 +188,7 @@
 .library-edit-btn:hover .library-edit-btn-img{
     background-image: url("../../lib/assets/edit-circle-active.png");
 }
+
+.tag-hidden{
+    display: none;
+}

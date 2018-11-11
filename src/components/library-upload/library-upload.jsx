@@ -325,6 +325,10 @@ class LibraryUpload extends React.PureComponent {
 
     handleSubmit(){
         let { name, type, content, sort, id} = this.state;
+        if(!name || !content.md5){
+            alert(`请先完善素材信息(名称,${this.state.typeName}为必填)`);
+            return;
+        }
         let reqData = {
             name: name,
             content: JSON.stringify(content),
@@ -333,7 +337,7 @@ class LibraryUpload extends React.PureComponent {
             sort: sort,
             id: id || ''
         };
-        let url = id ? 'admin/Resource/update' : 'api/resource/saveUserResource';
+        let url = id ? '/admin/Resource/update' : '/api/resource/saveUserResource';
         // console.log(reqData);
         request.default_request(id ? request.PUT : request.POST, JSON.stringify(reqData), url, result => {
             let msg = {
@@ -367,7 +371,7 @@ class LibraryUpload extends React.PureComponent {
               <div className={styles.modalInner}>
                   <div className={styles.modalLeft}>
                       <div className={styles.classItem}>
-                          <div className={styles.classTitle}>{this.state.typeName}</div>
+                          <div className={styles.classTitle}>{this.state.typeName}<span className={styles.isRequired}>*</span></div>
                           {
                               this.state.cover ?
                                   <div className={classNames(styles.uploadBox,styles.coverBox)}>
@@ -442,7 +446,7 @@ class LibraryUpload extends React.PureComponent {
                   <div className={styles.modalDivider}></div>
                   <div className={styles.modalRight}>
                       <div className={styles.classItem}>
-                          <div className={styles.classTitle}>名称</div>
+                          <div className={styles.classTitle}>名称<span className={styles.isRequired}>*</span></div>
                           <input
                               placeholder="请输入素材名称"
                               className={styles.input}

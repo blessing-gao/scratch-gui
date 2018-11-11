@@ -198,3 +198,7 @@
 .cover-box:hover .cover-del-btn{
     display: block;
 }
+
+.is-required{
+    color: #fe554c;
+}

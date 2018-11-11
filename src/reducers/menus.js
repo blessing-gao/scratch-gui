@@ -4,12 +4,14 @@ const CLOSE_MENU = 'scratch-gui/menus/CLOSE_MENU';
 const MENU_FILE = 'fileMenu';
 const MENU_EDIT = 'editMenu';
 const MENU_LANGUAGE = 'languageMenu';
+const MENU_USER = 'userMenu';
 
 
 const initialState = {
     [MENU_FILE]: false,
     [MENU_EDIT]: false,
-    [MENU_LANGUAGE]: false
+    [MENU_LANGUAGE]: false,
+    [MENU_USER]: false
 };
 
 const reducer = function (state, action) {
@@ -44,6 +46,9 @@ const editMenuOpen = state => state.scratchGui.menus[MENU_EDIT];
 const openLanguageMenu = () => openMenu(MENU_LANGUAGE);
 const closeLanguageMenu = () => closeMenu(MENU_LANGUAGE);
 const languageMenuOpen = state => state.scratchGui.menus[MENU_LANGUAGE];
+const openUserMenu = () => openMenu(MENU_USER);
+const closeUserMenu = () => closeMenu(MENU_USER);
+const userMenuOpen = state => state.scratchGui.menus[MENU_USER];
 
 export {
     reducer as default,
@@ -54,7 +59,10 @@ export {
     closeEditMenu,
     openLanguageMenu,
     closeLanguageMenu,
+    openUserMenu,
+    closeUserMenu,
     fileMenuOpen,
     editMenuOpen,
-    languageMenuOpen
+    languageMenuOpen,
+    userMenuOpen
 };

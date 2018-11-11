@@ -58,11 +58,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    border-radius: 6px;
 }
 
 .library-item-image {
     max-width: 55%;
     max-height: 55%;
+}
+
+.library-item-bg {
+    height: 100%;
 }
 
 .library-item-name {

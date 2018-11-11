@@ -31,7 +31,8 @@ class LoginModalComponent extends React.Component {
         bindAll(this, [
             "handleChangePhone",
             "handleChangePassword",
-            "handleSubmit"
+            "handleSubmit",
+            "handleTurnRegister"
         ]);
         this.state = {
             phone: '',
@@ -56,6 +57,10 @@ class LoginModalComponent extends React.Component {
             phone: this.state.phone,
             password: this.state.password
         });
+    }
+
+    handleTurnRegister(){
+        window.location.href = 'http://www.imayuan.com/login';
     }
 
 
@@ -83,7 +88,7 @@ class LoginModalComponent extends React.Component {
                                     styles.loginItem,
                                     styles.loginPhone
                                 )}>
-                                <input className={styles.loginInput} 
+                                <input className={styles.loginInput}
                                        type="text"
                                        placeholder="请输入您的手机号"
                                        onChange={this.handleChangePhone}
@@ -94,7 +99,7 @@ class LoginModalComponent extends React.Component {
                                     styles.loginItem,
                                     styles.loginPsd
                                 )}>
-                                <input className={styles.loginInput} 
+                                <input className={styles.loginInput}
                                        type="password"
                                        placeholder="请输入您的密码"
                                        onChange={this.handleChangePassword}
@@ -103,7 +108,7 @@ class LoginModalComponent extends React.Component {
                         </div>
                         <div className={styles.loginBtn} onClick={this.handleSubmit}>登录</div>
                         <p className={styles.textCenter}>
-                            <a href="#" className={styles.regHref}>新用户,点击前往注册</a>
+                            <a href="#" className={styles.regHref} onClick={this.handleTurnRegister}>新用户,点击前往注册</a>
                         </p>
                     </div>
                 </div>

@@ -17,7 +17,8 @@ class CostumeLibrary extends React.PureComponent {
             'handleChange',
             'getResource',
             'getDefault',
-            'getType'
+            'getType',
+            'getUserResource'
         ]);
         this.state = {
             costumes: [],
@@ -58,6 +59,16 @@ class CostumeLibrary extends React.PureComponent {
             if (result.code !== request.NotFindError && result.result) {
                 localStorage.setItem('scripts3', JSON.stringify(result.result));
                 localStorage.setItem('scriptsMd3', result.msg);
+                this.setState({costumes: result.result});
+            }
+        });
+    }
+
+    getUserResource(type, typeId){
+        // 获取个人素材
+        this.setState({costumes: []});
+        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
+            if (result.result) {
                 this.setState({costumes: result.result});
             }
         });
@@ -117,6 +128,7 @@ class CostumeLibrary extends React.PureComponent {
             this.getDefault();
         }else {
             // 获取个人素材
+            this.getUserResource(1,3);
         }
     }
  
@@ -132,6 +144,7 @@ class CostumeLibrary extends React.PureComponent {
                 onItemSelected={this.handleItemSelected}
                 onRequestClose={this.props.onRequestClose}
                 onTabChange={this.handleChange}
+                handleReload={() => this.getUserResource(1,3)}
             />
         );
     }

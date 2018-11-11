@@ -18,7 +18,7 @@ import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import ProjectSave from '../../containers/my/project-save.jsx';
 import {openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal, openLoginModal} from '../../reducers/modals';
 import TurboMode from '../../containers/turbo-mode.jsx';
-
+import Cookies from 'universal-cookie';
 import {setPlayer} from '../../reducers/mode';
 import {
     openFileMenu,
@@ -29,7 +29,10 @@ import {
     editMenuOpen,
     openLanguageMenu,
     closeLanguageMenu,
-    languageMenuOpen
+    languageMenuOpen,
+    openUserMenu,
+    closeUserMenu,
+    userMenuOpen,
 } from '../../reducers/menus';
 
 import styles from './menu-bar.css';
@@ -46,13 +49,21 @@ import scratchLogo from './logo.png';
 
 
 import backIcon from './icon--back.svg';
-import {getHost} from '../../lib/request';
+import {getHost, getQueryString} from '../../lib/request';
 
 const host = getHost();
+const cookies = new Cookies();
+
 const newWork = function (){
     const r = confirm('离开前请确定作品已经保存');
     if (r === true) {
-        window.location.reload();
+        // window.location.reload();
+        let url = host;
+        let platFormId = getQueryString('platFormId');
+        if(platFormId){
+            url = `${url}?platFormId=${platFormId}`;
+        }
+        window.location.href = url;
     } else {
         return;
     }
@@ -152,7 +163,8 @@ class MenuBar extends React.Component {
         bindAll(this, [
             'handleLanguageMouseUp',
             'handleRestoreOption',
-            'restoreOptionMessage'
+            'restoreOptionMessage',
+            'handleSignOff'
         ]);
     }
     handleLanguageMouseUp (e) {
@@ -165,6 +177,13 @@ class MenuBar extends React.Component {
             restoreFun();
             this.props.onRequestCloseEdit();
         };
+    }
+    handleBackHome(){
+        window.location.href = 'http://www.imayuan.com/';
+    }
+    handleSignOff(){
+        cookies.remove('token', { path: '/' });
+        window.location.reload();
     }
     restoreOptionMessage (deletedItem) {
         switch (deletedItem) {
@@ -200,7 +219,7 @@ class MenuBar extends React.Component {
             <Box className={styles.menuBar}>
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
-                        <div className={classNames(styles.menuBarItem)}>
+                        <div className={classNames(styles.menuBarItem)} onClick={this.handleBackHome}>
                             <img
                                 alt="阿尔法猿"
                                 className={styles.scratchLogo}
@@ -293,7 +312,7 @@ class MenuBar extends React.Component {
                         </div>
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    <div
+                    {/*<div
                         className={classNames(
                             styles.menuBarItem,
                             styles.hoverable,
@@ -306,22 +325,25 @@ class MenuBar extends React.Component {
                             src={backIcon}
                             title="返回"
                         />
-                    </div>
-                    <div
-                        className={classNames(
-                            styles.menuBarItem,
-                            styles.hoverable,
-                            styles.mystuffButton
-                        )}
-                        onClick={this.props.onOpenWorkLibrary}
-                    >
-                        <img
-                            className={styles.mystuffIcon}
-                            src={mystuffIcon}
-                            title="我的作品库"
-                        />
-                    </div>
-                    <div
+                    </div>*/}
+                    { this.props.work.userToken &&
+                        <div
+                            className={classNames(
+                                styles.menuBarItem,
+                                styles.hoverable,
+                                styles.mystuffButton
+                            )}
+                            onClick={this.props.onOpenWorkLibrary}
+                        >
+                            <img
+                                className={styles.mystuffIcon}
+                                src={mystuffIcon}
+                                title="我的作品库"
+                            />
+                            <span>我的作品库</span>
+                        </div>
+                    }
+                    {/*<div
                         aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
                         className={classNames(styles.menuBarItem, styles.hoverable)}
                         onClick={this.props.onOpenTipLibrary}
@@ -331,7 +353,7 @@ class MenuBar extends React.Component {
                             src={helpIcon}
                         />
                         <FormattedMessage {...ariaMessages.tutorials} />
-                    </div>
+                    </div>*/}
                     <Divider className={classNames(styles.divider)} />
                 </div>
                 {/*<div className={classNames(styles.menuBarItem, styles.feedbackButtonWrapper)}>*/}
@@ -368,7 +390,42 @@ class MenuBar extends React.Component {
                             {/*/>*/}
                         {/*</div>*/}
                     {/*</MenuBarItemTooltip>*/}
-
+                    
+                    { this.props.work.userToken ?
+                        <div
+                            className={classNames(styles.menuBarItem, styles.hoverable, {
+                                [styles.active]: this.props.fileMenuOpen
+                            })}
+                            onMouseUp={this.props.onClickUser}
+                        >
+                            <div
+                                className={classNames(
+                                styles.menuBarItem,
+                                styles.accountNavMenu
+                            )}
+                            >
+                                <img
+                                    className={styles.profileIcon}
+                                    src={this.props.work.picUrl || scratchLogo}
+                                />
+                                <span>{this.props.work.nickname || 'mayuan'}</span>
+                                <img
+                                    className={styles.dropdownCaretIcon}
+                                    src={dropdownCaret}
+                                />
+                            </div>
+                            <MenuBarMenu
+                                open={this.props.userMenuOpen}
+                                place='left'
+                                onRequestClose={this.props.onRequestCloseUser}
+                            >
+                                <MenuSection>
+                                    <MenuItem onClick={this.handleSignOff}>
+                                        退出
+                                    </MenuItem>
+                                </MenuSection>
+                            </MenuBarMenu>
+                        </div> :
                         <div
                             className={classNames(
                                 styles.menuBarItem,
@@ -378,20 +435,12 @@ class MenuBar extends React.Component {
                         >
                             <img
                                 className={styles.profileIcon}
-                                src={this.props.work.picUrl || scratchLogo}
+                                src={scratchLogo}
                             />
-                            {this.props.work.userToken ? (
-                                <span>
-                                    {this.props.work.nickname || 'mayuan'}
-                                </span>
-                            ) : (
-                                <a onClick={this.props.onOpenLoginModal} className={styles.loginName}>登录</a>
-                            )}
-                            <img
-                                className={styles.dropdownCaretIcon}
-                                src={dropdownCaret}
-                            />
+                            <a onClick={this.props.onOpenLoginModal} className={styles.loginName}>登录</a>
                         </div>
+                        
+                    }
 
                 </div>
             </Box>
@@ -403,17 +452,20 @@ MenuBar.propTypes = {
     editMenuOpen: PropTypes.bool,
     enableCommunity: PropTypes.bool,
     fileMenuOpen: PropTypes.bool,
+    userMenuOpen: PropTypes.bool,
     intl: intlShape,
     isRtl: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
     onClickEdit: PropTypes.func,
     onClickFile: PropTypes.func,
     onClickLanguage: PropTypes.func,
+    onClickUser: PropTypes.func,
     onOpenSaveModal: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
     onOpenWorkLibrary: PropTypes.func,
     onRequestCloseEdit: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
+    onRequestCloseUser: PropTypes.func,
     onSeeCommunity: PropTypes.func,
     onViewProject: PropTypes.func,
     work: PropTypes.object
@@ -423,6 +475,7 @@ const mapStateToProps = state => ({
     work: state.scratchGui.scratch.work,
     fileMenuOpen: fileMenuOpen(state),
     editMenuOpen: editMenuOpen(state),
+    userMenuOpen: userMenuOpen(state),
     isRtl: state.locales.isRtl,
     languageMenuOpen: languageMenuOpen(state)
 });
@@ -434,6 +487,8 @@ const mapDispatchToProps = dispatch => ({
     onRequestCloseFile: () => dispatch(closeFileMenu()),
     onClickEdit: () => dispatch(openEditMenu()),
     onRequestCloseEdit: () => dispatch(closeEditMenu()),
+    onClickUser: () => dispatch(openUserMenu()),
+    onRequestCloseUser: () => dispatch(closeUserMenu()),
     onSeeCommunity: () => dispatch(setPlayer(true)),
     onViewProject: () => {
         dispatch(openImportInfo());

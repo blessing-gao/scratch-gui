@@ -22,7 +22,8 @@ class BackdropLibrary extends React.Component {
             'handleChange',
             'getResource',
             'getDefault',
-            'getType'
+            'getType',
+            'getUserResource'
         ]);
         this.state = {
             backdrop: [],
@@ -44,6 +45,16 @@ class BackdropLibrary extends React.Component {
             if (result.code !== request.NotFindError && result.result) {
                 localStorage.setItem('scripts1', JSON.stringify(result.result));
                 localStorage.setItem('scriptsMd1', result.msg);
+                this.setState({backdrop: result.result});
+            }
+        });
+    }
+
+    getUserResource(type, typeId){
+        // 获取个人素材
+        this.setState({backdrop: []});
+        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
+            if (result.result) {
                 this.setState({backdrop: result.result});
             }
         });
@@ -97,6 +108,7 @@ class BackdropLibrary extends React.Component {
             this.getDefault();
         }else {
             // 获取个人
+            this.getUserResource(1,1)
         }
     }
 
@@ -136,6 +148,7 @@ class BackdropLibrary extends React.Component {
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
                 onTabChange={this.handleChange}
+                handleReload={() => this.getUserResource(1,1)}
             />
         );
     }

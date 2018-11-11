@@ -5,9 +5,11 @@ import LoginModalComponent from '../../components/my/login-modal.jsx';
 import {getQueryString, encode64} from '../../lib/request';
 import request from '../../lib/request';
 import {closeLoginModal} from '../../reducers/modals';
+import {setConfirm,setConfirmBack} from '../../reducers/confirm';
 import Cookies from 'universal-cookie';
 import VM from 'scratch-vm';
 import {connect} from 'react-redux';
+import {setWork} from "../../reducers/scratch";
 import fireKeyEvent from '../../lib/key-map';
 // import Base64 from 'crypto-js/enc-base64';
 // import UTF_8 from 'crypto-js/enc-utf8';
@@ -52,13 +54,23 @@ class LoginModal extends React.Component {
             };
             this.props.setConfirm(msg);
             if(result.code == 0){
-                let token = data.result.token;
+                let token = result.result.token;
+                // let userInfo = result.result.userMsg.userInfo;
+                // let work = {...this.props.work};
+                // work.nickname = userInfo.nickname || 'mayuan';
+                // work.picUrl = userInfo.cover || '';
+                // work.userId = result.result.userId;
+                // this.props.setWork(work);
+                // 设置token
                 let d = new Date();
                 d.setTime(d.getTime() + (7*60*60*1000));
-                // path设置为'/'时，该token所有页面都可访问，否则token会被默认设置在本页面之下，其他页面无法访问到该token
-                cookies.set('token', token, {expires: d, path: '/', domain: '.imayuan.com'});
+                // todo 修改domain到imayuan下
+                cookies.set('token', token, {expires: d, path: '/'});
+                // cookies.set('token', token, {expires: d, path: '/', domain: '.imayuan.com'});
+                // this.props.closeLoginModal();
+                window.location.reload();
             }
-        }, 'http://imayuan.com:8279');
+        }, 'http://imayuan.com:8279','application/json');
     }
 
     onHandleCancel () {
@@ -80,14 +92,16 @@ LoginModal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    // work: state.scratchGui.scratch.work,
+    work: state.scratchGui.scratch.work,
     // vm: state.scratchGui.vm
 });
 
 const mapDispatchToProps = dispatch => ({
     closeLoginModal: () => {
         dispatch(closeLoginModal());
-    }
+    },
+    setConfirm:(confirm) => {dispatch(setConfirm(confirm));},
+    setWork:work => {dispatch(setWork(work));},
 });
 
 export default connect(

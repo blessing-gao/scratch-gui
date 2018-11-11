@@ -8,6 +8,7 @@ import styles from './library-item.css';
 import classNames from 'classnames';
 import editIcon from '../../lib/assets/edit-icon-white.png';
 import deleteIcon from '../../lib/assets/delete-icon-white.png';
+import soundIcon from '../../lib/assets/sound-icon.png';
 
 class LibraryItem extends React.PureComponent {
     constructor (props) {
@@ -106,8 +107,11 @@ class LibraryItem extends React.PureComponent {
                 <Box className={styles.libraryItemImageContainerWrapper}>
                     <Box className={styles.libraryItemImageContainer}>
                         <img
-                            className={styles.libraryItemImage}
-                            src={this.props.iconURL}
+                            className={classNames(
+                                {[styles.libraryItemBg]: this.props.type == 1},
+                                {[styles.libraryItemImage]: this.props.type !== 1}
+                            )}
+                            src={this.props.type == 4 ? soundIcon : this.props.iconURL}
                         />
                         {
                             this.props.isEdit &&

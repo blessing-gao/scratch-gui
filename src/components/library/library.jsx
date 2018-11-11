@@ -90,7 +90,7 @@ class LibraryComponent extends React.Component {
                     formData: result
                 });
             }
-        },'http://192.168.0.119:8081');
+        });
     }
 
     // 个人素材的删除
@@ -98,11 +98,11 @@ class LibraryComponent extends React.Component {
         if(!resourceId) return;
         const conf = confirm('是否确认删除');
         if(conf === true){
-            request.default_request(request.POST, null, `api/resource/deleteResource/${resourceId}`, result => {
+            request.default_request(request.POST, null, `/api/resource/deleteResource/${resourceId}`, result => {
                 if (result.code == 0) {
                     this.props.handleReload();
                 }
-            },'http://192.168.0.119:8081/');
+            });
         }
     }
 
@@ -252,10 +252,15 @@ class LibraryComponent extends React.Component {
                                         onClick={()=>this.handleTypeClick(item.value)}
                                         className={classNames(
                                         styles.headerTag,
-                                        {[styles.headerTagActive]: this.state.selectedType == item.value})
+                                        {[styles.headerTagActive]: this.state.selectedType == item.value || !this.props.iLogin && item.value == '2'},
+                                        {[styles.tagHidden]: !this.props.iLogin && item.value != '2'}
+                                        )
                                     }
                                     >
-                                        <img src={this.state.selectedType == item.value ? item.active : item.def}/>
+                                        <img src={
+                                            this.state.selectedType == item.value || !this.props.iLogin? 
+                                            item.active : item.def
+                                        }/>
                                         {item.label}
                                     </div>
                                 )
@@ -294,6 +299,7 @@ class LibraryComponent extends React.Component {
                                         id={index}
                                         key={`item_${index}`}
                                         name={dataItem.name}
+                                        type={this.props.type}
                                         isEdit={this.state.isEdit}
                                         resourceId={dataItem.resourceId || ''}
                                         onEdit={this.handleEdit}

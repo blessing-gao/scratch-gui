@@ -25,7 +25,8 @@ class SoundLibrary extends React.PureComponent {
             'handleChange',
             'getResource',
             'getDefault',
-            'getType'
+            'getType',
+            'getUserResource'
         ]);
         this.state = {
             sound: [],
@@ -59,6 +60,16 @@ class SoundLibrary extends React.PureComponent {
             if (result.code !== request.NotFindError && result.result) {
                 localStorage.setItem('scripts4', JSON.stringify(result.result));
                 localStorage.setItem('scriptsMd4', result.msg);
+                this.setState({sound: result.result});
+            }
+        });
+    }
+
+    getUserResource(type, typeId){
+        // 获取个人素材
+        this.setState({sound: []});
+        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
+            if (result.result) {
                 this.setState({sound: result.result});
             }
         });
@@ -105,6 +116,7 @@ class SoundLibrary extends React.PureComponent {
             this.getDefault();
         }else {
             // 获取个人素材
+            this.getUserResource(1,4);
         }
     }
 
@@ -231,11 +243,13 @@ class SoundLibrary extends React.PureComponent {
                 tags={this.state.tags}
                 title="选择声音"
                 type={4}
+                iLogin={this.props.work.userToken ? true : false}
                 onItemMouseEnter={this.handleItemMouseEnter}
                 onItemMouseLeave={this.handleItemMouseLeave}
                 onItemSelected={this.handleItemSelected}
                 onRequestClose={this.props.onRequestClose}
                 onTabChange={this.handleChange}
+                handleReload={() => this.getUserResource(1,4)}
             />
         );
     }

@@ -26,7 +26,8 @@ class SpriteLibrary extends React.PureComponent {
             'getDefault',
             'getType',
             'handleDelete',
-            'handleEdit'
+            'handleEdit',
+            'getUserResource'
 
         ]);
         this.state = {
