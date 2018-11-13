@@ -22,6 +22,30 @@
  * createStore用来生成Store，由redux提供
  */
 
+### 截图
+修改依赖scratch-render的RenderWebGL中的draw方法
+```
+ draw () {
+        this._doExitDrawRegion();
+
+        const gl = this._gl;
+
+        twgl.bindFramebufferInfo(gl, null);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.clearColor.apply(gl, this._backgroundColor);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        this._drawThese(this._drawList, ShaderManager.DRAW_MODE.default, this._projection);
+        let img = new Image();
+        img.src = gl.canvas.toDataURL('image/png',0.7)
+        document.onkeydown = function (e) {
+            if(e.keyCode == 16){
+                window.sessionStorage.setItem("coverImg",img.src)
+                console.log('webGL')
+            }
+        }
+    }
+```
 
 ### git拉取代码操作
 
