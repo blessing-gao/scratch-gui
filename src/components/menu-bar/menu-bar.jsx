@@ -182,7 +182,8 @@ class MenuBar extends React.Component {
         window.location.href = 'http://www.imayuan.com/';
     }
     handleSignOff(){
-        cookies.remove('token', { path: '/' });
+        // cookies.remove('token', { path: '/' });
+        cookies.remove('token', { path: '/', domain: '.imayuan.com'});
         window.location.reload();
     }
     restoreOptionMessage (deletedItem) {
@@ -390,7 +391,7 @@ class MenuBar extends React.Component {
                             {/*/>*/}
                         {/*</div>*/}
                     {/*</MenuBarItemTooltip>*/}
-                    
+
                     { this.props.work.userToken ?
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
@@ -439,7 +440,7 @@ class MenuBar extends React.Component {
                             />
                             <a onClick={this.props.onOpenLoginModal} className={styles.loginName}>登录</a>
                         </div>
-                        
+
                     }
 
                 </div>
