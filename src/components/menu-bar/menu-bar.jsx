@@ -441,12 +441,13 @@ class MenuBar extends React.Component {
                                 styles.hoverable,
                                 styles.accountNavMenu
                             )}
+                            onClick={this.props.onOpenLoginModal}
                         >
                             <img
                                 className={styles.profileIcon}
                                 src={scratchLogo}
                             />
-                            <a onClick={this.props.onOpenLoginModal} className={styles.loginName}>登录</a>
+                            <a className={styles.loginName}>登录</a>
                         </div>
 
                     }
