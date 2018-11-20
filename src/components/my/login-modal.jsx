@@ -12,16 +12,16 @@ const messages = {
 };
 
 const customStyles = {
-    content : {
-        top                   : '45%',
-        left                  : '50%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        transform             : 'translate(-50%, -50%)',
-        padding               : '0',
-        background            : 'none',
-        border                : '0'
+    content: {
+        top: '45%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding: '0',
+        background: 'none',
+        border: '0'
     }
 };
 
@@ -29,10 +29,10 @@ class LoginModalComponent extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            "handleChangePhone",
-            "handleChangePassword",
-            "handleSubmit",
-            "handleTurnRegister"
+            'handleChangePhone',
+            'handleChangePassword',
+            'handleSubmit',
+            'handleTurnRegister'
         ]);
         this.state = {
             phone: '',
@@ -40,75 +40,91 @@ class LoginModalComponent extends React.Component {
         };
     }
 
-    handleChangePhone(event){
+    handleChangePhone (event){
         this.setState({
             phone: event.target.value
-        })
+        });
     }
 
-    handleChangePassword(event){
+    handleChangePassword (event){
         this.setState({
             password: event.target.value
-        })
+        });
     }
 
-    handleSubmit(){
+    handleSubmit (){
         this.props.handleOnSave({
             phone: this.state.phone,
             password: this.state.password
         });
     }
 
-    handleTurnRegister(){
+    handleTurnRegister (){
         window.location.href = 'http://www.imayuan.com/login';
     }
 
 
-    render(){
+    render (){
         return (
             <ReactModal
-                isOpen
-                style={customStyles}
                 contentLabel={messages.label}
-                overlayClassName={styles.modalOverlay}
+                isOpen
                 onRequestClose={this.props.handleCancel}
+                overlayClassName={styles.modalOverlay}
+                style={customStyles}
             >
                 <div className={styles.loginBox}>
                     <div className={styles.loginInner}>
                         <div className={styles.loginTop}>
-                            <div className={
-                                classNames(
-                                    styles.loginType,
-                                    styles.loginTypeAct
-                                )}>密码登录</div>
+                            <div
+                                className={
+                                    classNames(
+                                        styles.loginType,
+                                        styles.loginTypeAct
+                                    )}
+                            >密码登录</div>
                         </div>
                         <div className={styles.loginContent}>
-                            <Box className={
-                                classNames(
-                                    styles.loginItem,
-                                    styles.loginPhone
-                                )}>
-                                <input className={styles.loginInput}
-                                       type="text"
-                                       placeholder="请输入您的手机号"
-                                       onChange={this.handleChangePhone}
+                            <Box
+                                className={
+                                    classNames(
+                                        styles.loginItem,
+                                        styles.loginPhone
+                                    )}
+                            >
+                                <input
+                                    className={styles.loginInput}
+                                    onChange={this.handleChangePhone}
+                                    placeholder="请输入您的手机号"
+                                    type="text"
                                 />
                             </Box>
-                            <Box className={
-                                classNames(
-                                    styles.loginItem,
-                                    styles.loginPsd
-                                )}>
-                                <input className={styles.loginInput}
-                                       type="password"
-                                       placeholder="请输入您的密码"
-                                       onChange={this.handleChangePassword}
+                            <Box
+                                className={
+                                    classNames(
+                                        styles.loginItem,
+                                        styles.loginPsd
+                                    )}
+                            >
+                                <input
+                                    className={styles.loginInput}
+                                    onChange={this.handleChangePassword}
+                                    placeholder="请输入您的密码"
+                                    type="password"
                                 />
                             </Box>
                         </div>
-                        <div className={styles.loginBtn} onClick={this.handleSubmit}>登录</div>
+                        <div
+                            className={styles.loginBtn}
+                            onClick={this.handleSubmit}
+                        >登录</div>
                         <p className={styles.textCenter}>
-                            <a href="#" className={styles.regHref} onClick={this.handleTurnRegister}>新用户,点击前往注册</a>
+                            <a
+                                className={styles.regHref}
+                                href="//imayuan.com/login"
+                                target="_blank"
+                                onClick={this.handleTurnRegister}
+                            >新用户,点击前往注册</a>
                         </p>
                     </div>
                 </div>

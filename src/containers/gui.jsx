@@ -50,7 +50,7 @@ class GUI extends React.Component {
             picUrl = '',
             userId = '';
         if(userToken){
-            request.default_request(request.GET, null, `/sys/users/getUserInfo`, result => {
+            request.default_request(request.GET, null, `/api/getUserInfo`, result => {
                 if(result.code == 0){
                     let work = {};
                     work.nickname = result.result.nickname || 'mayuan';
@@ -59,7 +59,7 @@ class GUI extends React.Component {
                     work.userToken = userToken;
                     this.props.setWork(work);
                 }
-            }, '//imayuan.com:8279');
+            }, '//imayuan.com');
         }
         if (id !== null){
             request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&deviceIdentify=${deviceIdentify}`, result => {

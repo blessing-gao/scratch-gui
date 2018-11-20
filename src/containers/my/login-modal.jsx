@@ -44,7 +44,7 @@ class LoginModal extends React.Component {
             username: phone,
             password:encode64(password)
         };
-        request.default_request(request.POST, JSON.stringify(reqData), '/login/login', result => {
+        request.default_request(request.POST, JSON.stringify(reqData), '/api/login', result => {
             let msg = {
                 type: 1,
                 message: result.code == 0 ? '登录成功' : '登录失败',
