@@ -44,7 +44,7 @@ class LoginModal extends React.Component {
             username: phone,
             password:encode64(password)
         };
-        request.default_request(request.POST, JSON.stringify(reqData), '/api/login', result => {
+        request.default_request(request.POST, JSON.stringify(reqData), '/login/login', result => {
             let msg = {
                 type: 1,
                 message: result.code == 0 ? '登录成功' : '登录失败',
@@ -55,22 +55,23 @@ class LoginModal extends React.Component {
             this.props.setConfirm(msg);
             if(result.code == 0){
                 let token = result.result.token;
-                // let userInfo = result.result.userMsg.userInfo;
-                // let work = {...this.props.work};
-                // work.nickname = userInfo.nickname || 'mayuan';
-                // work.picUrl = userInfo.cover || '';
-                // work.userId = result.result.userId;
-                // this.props.setWork(work);
+                let userInfo = result.result.userMsg.userInfo;
+                let work = {...this.props.work};
+                work.nickname = userInfo.nickname || 'mayuan';
+                work.picUrl = userInfo.cover || '';
+                work.userId = result.result.userId;
+                work.userToken = token;
+                this.props.setWork(work);
                 // 设置token
                 let d = new Date();
                 d.setTime(d.getTime() + (15*60*60*1000));
                 // todo 修改domain到imayuan下
-                // cookies.set('token', token, {expires: d, path: '/'});
-                cookies.set('token', token, {expires: d, path: '/', domain: '.imayuan.com'});
-                // this.props.closeLoginModal();
-                window.location.reload();
+                cookies.set('token', token, {expires: d, path: '/'});
+                // cookies.set('token', token, {expires: d, path: '/', domain: '.imayuan.com'});
+                this.props.closeLoginModal();
+                // window.location.reload();
             }
-        }, 'http://imayuan.com:8279','application/json');
+        }, '//imayuan.com','application/json');
     }
 
     onHandleCancel () {

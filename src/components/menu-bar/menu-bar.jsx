@@ -20,6 +20,7 @@ import {openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal, openLogi
 import TurboMode from '../../containers/turbo-mode.jsx';
 import Cookies from 'universal-cookie';
 import {setPlayer} from '../../reducers/mode';
+import {setWork} from "../../reducers/scratch";
 import {
     openFileMenu,
     closeFileMenu,
@@ -184,7 +185,14 @@ class MenuBar extends React.Component {
     handleSignOff(){
         // cookies.remove('token', { path: '/' });
         cookies.remove('token', { path: '/', domain: '.imayuan.com'});
-        window.location.reload();
+        // window.location.reload();
+        let workData = {
+            userToken: "",
+            userId: "",
+            nickname: "",
+            picUrl: ""
+        };
+        this.props.setWork(workData);
     }
     restoreOptionMessage (deletedItem) {
         switch (deletedItem) {
@@ -499,7 +507,8 @@ const mapDispatchToProps = dispatch => ({
     },
     onOpenLoginModal: () => {
         dispatch(openLoginModal());
-    }
+    },
+    setWork:work => {dispatch(setWork(work));}
 });
 
 export default injectIntl(connect(

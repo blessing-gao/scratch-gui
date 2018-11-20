@@ -42,36 +42,30 @@ class GUI extends React.Component {
         };
     }
     componentDidMount () {
-        // todo 获取作品详细信息,约定userToken从cookie中获取,待对接后台
         const id = getQueryString("id");
         const platFormId= getQueryString("platFormId") || "mayuan";
         const deviceIdentify = '1';
         const userToken= cookies.get("token");
-        // const userId = cookies.get("userId");
-        // const nickname = cookies.get("nickname") ? decodeURI(cookies.get("nickname"),"utf-8") : "mayuan";
-        // const picUrl = cookies.get("picUrl");
-        let nickname = 'mayuan' , 
+        let nickname = 'mayuan' ,
             picUrl = '',
             userId = '';
         if(userToken){
             request.default_request(request.GET, null, `/sys/users/getUserInfo`, result => {
                 if(result.code == 0){
-                    let work = {...this.props.work};
+                    let work = {};
                     work.nickname = result.result.nickname || 'mayuan';
                     work.picUrl = result.result.cover || '';
                     work.userId = result.result.userId;
+                    work.userToken = userToken;
                     this.props.setWork(work);
                 }
-            }, 'http://imayuan.com:8279');
+            }, '//imayuan.com:8279');
         }
         if (id !== null){
             request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&deviceIdentify=${deviceIdentify}`, result => {
                 let workData = {
                     userToken: userToken,
-                    platFormId: platFormId,
-                    userId: userId,
-                    nickname: nickname,
-                    picUrl: picUrl
+                    platFormId: platFormId
                 };
                 if (result.code !== request.NotFindError && result.result){
                     let res = result.result;
