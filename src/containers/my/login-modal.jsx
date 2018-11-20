@@ -66,8 +66,8 @@ class LoginModal extends React.Component {
                 let d = new Date();
                 d.setTime(d.getTime() + (15*60*60*1000));
                 // todo 修改domain到imayuan下
-                cookies.set('token', token, {expires: d, path: '/'});
-                // cookies.set('token', token, {expires: d, path: '/', domain: '.imayuan.com'});
+                // cookies.set('token', token, {expires: d, path: '/'});
+                cookies.set('token', token, {expires: d, path: '/', domain: '.imayuan.com'});
                 this.props.closeLoginModal();
                 // window.location.reload();
             }
