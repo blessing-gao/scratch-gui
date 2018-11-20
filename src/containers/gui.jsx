@@ -51,8 +51,10 @@ class GUI extends React.Component {
             userId = '';
         if(userToken){
             request.default_request(request.GET, null, `/api/getUserInfo`, result => {
+                if(!result) return;
+                result = JSON.parse(result);
                 if(result.code == 0){
-                    let work = {};
+                    let work = {...this.props.work};
                     work.nickname = result.result.nickname || 'mayuan';
                     work.picUrl = result.result.cover || '';
                     work.userId = result.result.userId;
@@ -63,10 +65,9 @@ class GUI extends React.Component {
         }
         if (id !== null){
             request.default_request(request.GET, null, `/api/scratch/getWork?scratchId=${id}&deviceIdentify=${deviceIdentify}`, result => {
-                let workData = {
-                    userToken: userToken,
-                    platFormId: platFormId
-                };
+                let workData = {...this.props.work};
+                workData.userToken= userToken;
+                workData.platFormId= platFormId;
                 if (result.code !== request.NotFindError && result.result){
                     let res = result.result;
                     for(let x in res){
