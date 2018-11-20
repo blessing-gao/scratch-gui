@@ -274,8 +274,8 @@ class LibraryUpload extends React.PureComponent {
             baseLayerID: -1,
             baseLayerMD5: res.msg,
             bitmapResolution: 1,
-            rotationCenterX: res.result.width/2,
-            rotationCenterY: res.result.height/2
+            rotationCenterX: res.result.width ? res.result.width/2 : 0,
+            rotationCenterY: res.result.height ? res.result.height/2 : 0
         };
         // 用于显示
         let newModelList = [...this.state.modelList];
@@ -324,9 +324,13 @@ class LibraryUpload extends React.PureComponent {
     }
 
     handleSubmit(){
-        let { name, type, content, sort, id} = this.state;
+        let { name, type, content, sort, id, modelList} = this.state;
         if(!name || !content.md5){
             alert(`请先完善素材信息(名称,${this.state.typeName}为必填)`);
+            return;
+        }
+        if(type == 2 && modelList.length == 0){
+            alert('请先上传造型');
             return;
         }
         let reqData = {
