@@ -8,6 +8,7 @@ import {getWork,setWork} from '../../reducers/scratch';
 import {closeSaveModal} from "../../reducers/modals";
 import {setConfirm,setConfirmBack} from '../../reducers/confirm';
 import fireKeyEvent from '../../lib/key-map';
+import Cookies from 'universal-cookie';
 /**
  * 本组件用于向服务器保存作品
  * Project saver component passes a saveProject function to its child.
@@ -23,6 +24,7 @@ import fireKeyEvent from '../../lib/key-map';
  *     />
  * )}</ProjectSaver>
  */
+
 class ProjectSave extends React.Component {
     constructor (props) {
         super(props);
@@ -51,6 +53,7 @@ class ProjectSave extends React.Component {
      * @param notNewProject，true是保存，flase是另存
      */
     saveProject (notNewProject = true) {
+        if(!this.props.checkUser()) return;
         let work = this.props.work;
         let name = '';
         if (!work.name){

@@ -165,9 +165,33 @@ class MenuBar extends React.Component {
             'handleLanguageMouseUp',
             'handleRestoreOption',
             'restoreOptionMessage',
-            'handleSignOff'
+            'handleSignOff',
+            'handleRelease',
+            'checkUser'
         ]);
     }
+
+    // 判断用户登录是否失效,返回true或false,继续执行或提前返回
+    checkUser(){
+        const cookies = new Cookies();
+        if(!cookies.get("token")){
+            alert('请先登录');
+            let work = {...this.props.work};
+            work.nickname = '';
+            work.picUrl = '';
+            work.userId = '';
+            work.userToken = '';
+            this.props.setWork(work);
+            return false;
+        }
+        return true;
+    }
+
+    handleRelease(){
+        if(!this.checkUser()) return;
+        this.props.onOpenSaveModal();
+    }
+
     handleLanguageMouseUp (e) {
         if (!this.props.languageMenuOpen) {
             this.props.onClickLanguage(e);
@@ -184,8 +208,8 @@ class MenuBar extends React.Component {
     }
     handleSignOff(){
         // cookies.remove('token', { path: '/' });
+        const cookies = new Cookies();
         cookies.remove('token', { path: '/', domain: '.imayuan.com'});
-        // window.location.reload();
         let workData = {
             userToken: "",
             userId: "",
@@ -236,7 +260,7 @@ class MenuBar extends React.Component {
                                 src={scratchLogo}
                             />
                         </div>
-                        <ProjectSave />
+                        <ProjectSave checkUser={this.checkUser} />
                         <Divider className={classNames(styles.divider)} />
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
@@ -278,7 +302,7 @@ class MenuBar extends React.Component {
                         <div className={classNames(styles.menuBarItem)}>
                             <Button
                                 className={classNames(styles.shareButton)}
-                                onClick={this.props.onOpenSaveModal}
+                                onClick={this.handleRelease}
                             >
                                 作品发布
                             </Button>
