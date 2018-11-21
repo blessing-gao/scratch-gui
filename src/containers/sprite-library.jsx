@@ -11,6 +11,12 @@ import spriteTags from '../lib/libraries/sprite-tags';
 import LibraryComponent from '../components/library/library.jsx';
 import request from '../lib/request';
 
+const PUBLIC_RESOURCE = 1;
+const PERSONAL_RESOURCE = 0;
+const DEFAULT_RESOURCE = 2;
+const SpriteType = 2;
+const Personal = 1;
+const notPersonal = 0;
 class SpriteLibrary extends React.PureComponent {
     constructor (props) {
         super(props);
@@ -35,21 +41,21 @@ class SpriteLibrary extends React.PureComponent {
             costumeIndex: 0,
             sprites: [],
             tags: null,
-            type: 1, // 素材类型:个人,课程,默认
+            type: DEFAULT_RESOURCE // 素材类型:个人,课程,默认
         };
     }
 
-    handleEdit(md5){
+    handleEdit (md5){
         console.log(md5);
     }
 
-    handleDelete(md5){
+    handleDelete (md5){
         console.log(md5);
     }
 
-    getResource (type, typeId){
-        let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&typeId=${typeId}`, result => {
+    getResource (type, isPersonal){
+        const work = this.props.work;
+        request.default_request(request.GET, null, `/api/resource/getResourceByType?type=${type}&isPersonal=${isPersonal}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 localStorage.setItem('scripts2', JSON.stringify(result.result));
                 localStorage.setItem('scriptsMd2', result.msg);
@@ -63,14 +69,14 @@ class SpriteLibrary extends React.PureComponent {
             if (result) {
                 this.setState({sprites: result});
             }
-        },'//cdn.imayuan.com');
+        }, '//cdn.imayuan.com');
     }
 
 
-    getUserResource(type, typeId){
+    getUserResource (type){
         // 获取个人素材
         this.setState({sprites: []});
-        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}`, result => {
             if (result.result) {
                 this.setState({sprites: result.result});
             }
@@ -78,46 +84,48 @@ class SpriteLibrary extends React.PureComponent {
     }
 
     getType (type){
-        let work = this.props.work;
-        if(work.userToken){
+        const work = this.props.work;
+        if (work.userToken){
             request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
                 if (result.code !== request.NotFindError && result.result) {
-                    let tags = [];
+                    const tags = [];
                     result.result.map(tag => {
-                        tags.push({id:tag.typeId,title:tag.name});
+                        tags.push({id: tag.typeId, title: tag.name});
                     });
-                    this.setState({tags:tags});
+                    this.setState({tags: tags});
                 }
             });
         }
     }
 
     checkResource (){
-        let work = this.props.work;
-        if(work.userToken) {
+        const work = this.props.work;
+        if (work.userToken) {
             // 校验md5是否失效
             // 若失效,则请求获取资源且存入localstorage
             // 若未失效,则直接从localstorage中获取资源
             const scriptsMd2 = localStorage.getItem('scriptsMd2');
             if (scriptsMd2 !== null && scriptsMd2 !== '') {
                 request.default_request(request.GET, null,
-                    `/api/scratch/checkResource?type=2&value=${scriptsMd2}`, result => {
+                    `/api/resource/checkResource?type=${SpriteType}&value=${scriptsMd2}`, result => {
                         if (result) {
                             this.setState({sprites: JSON.parse(localStorage.getItem('scripts2'))});
                         } else {
-                            this.getResource(1, 2);
+                            // 资源失效
+                            this.getResource(SpriteType, notPersonal);
                         }
                     });
             } else {
-                this.getResource(1, 2);
+                // 重新加载
+                this.getResource(SpriteType, notPersonal);
             }
-        }else {
+        } else {
             this.getDefault();
         }
     }
 
     componentDidMount () {
-        this.getType(2);    // 获取类别 type
+        this.getType(SpriteType); // 获取类别 type
         // this.getResource(1,2);    // 获取素材 type, typeId
         this.checkResource();
     }
@@ -142,13 +150,13 @@ class SpriteLibrary extends React.PureComponent {
     }
     handleChange (type){
         // 个人素材{type=0},课程素材{type=1},默认素材{type=2}切换
-        this.setState({ type: type});
-        if(type == 1){
+        this.setState({type: type});
+        if (type == PUBLIC_RESOURCE){
             this.checkResource();
-        }else if(type == 2) {
+        } else if (type == DEFAULT_RESOURCE) {
             this.getDefault();
-        }else {
-            this.getUserResource(1, 2);
+        } else {
+            this.getUserResource(SpriteType);
         }
     }
     startRotatingCostumes () {
@@ -182,14 +190,14 @@ class SpriteLibrary extends React.PureComponent {
                 id="spriteLibrary"
                 tags={this.state.tags}
                 title="选择角色"
-                type={2}
+                type={SpriteType}
+                handleReload={() => this.getUserResource(SpriteType)}
                 iLogin={this.props.work.userToken ? true : false}
                 onItemMouseEnter={this.handleMouseEnter}
                 onItemMouseLeave={this.handleMouseLeave}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
                 onTabChange={this.handleChange}
-                handleReload={() => this.getUserResource(1,2)}
             />
         );
     }
@@ -206,7 +214,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setWork:work => {
+    setWork: work => {
         dispatch(setWork(work));
     }
 });
@@ -215,4 +223,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(SpriteLibrary);
-
