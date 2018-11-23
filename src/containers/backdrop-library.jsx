@@ -14,6 +14,13 @@ import analytics from '../lib/analytics';
 import LibraryComponent from '../components/library/library.jsx';
 import {setWork} from '../reducers/scratch';
 
+
+const PUBLIC_RESOURCE = 1;
+const PERSONAL_RESOURCE = 0;
+const DEFAULT_RESOURCE = 2;
+const BackdropType = 1;
+const Personal = 1;
+const notPersonal = 0;
 class BackdropLibrary extends React.Component {
     constructor (props) {
         super(props);
@@ -31,17 +38,23 @@ class BackdropLibrary extends React.Component {
         };
     }
 
+    componentDidMount () {
+        this.getType(BackdropType);// 获取类别 type, platFormId, userToken
+        this.checkResource();
+        // this.getResource(1,1);    // 获取素材 type, platFormId, userToken, typeId
+    }
+
     getDefault (){
         request.default_request(request.GET, null, '/backdrops.json', result => {
             if (result) {
                 this.setState({backdrop: result});
             }
-        },'//cdn.imayuan.com');
+        }, '//cdn.imayuan.com');
     }
 
-    getResource (type, typeId){
+    getResource (type, isPersonal){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/resource/getResourceByType?type=${type}&isPersonal=${isPersonal}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 localStorage.setItem('scripts1', JSON.stringify(result.result));
                 localStorage.setItem('scriptsMd1', result.msg);
@@ -50,10 +63,10 @@ class BackdropLibrary extends React.Component {
         });
     }
 
-    getUserResource(type, typeId){
+    getUserResource (type){
         // 获取个人素材
         this.setState({backdrop: []});
-        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}`, result => {
             if (result.result) {
                 this.setState({backdrop: result.result});
             }
@@ -84,39 +97,34 @@ class BackdropLibrary extends React.Component {
             const scriptsMd1 = localStorage.getItem('scriptsMd1');
             if (scriptsMd1 !== null && scriptsMd1 !== '') {
                 request.default_request(request.GET, null,
-                    `/api/scratch/checkResource?type=1&value=${scriptsMd1}`, result => {
+                    `/api/resource/checkResource?type=${BackdropType}&value=${scriptsMd1}`, result => {
                         if (result) {
                             this.setState({backdrop: JSON.parse(localStorage.getItem('scripts1'))});
                         } else {
-                            this.getResource(1, 1);
+                            this.getResource(BackdropType, notPersonal);
                         }
                     });
             } else {
-                this.getResource(1, 1);
+                this.getResource(BackdropType, notPersonal);
             }
-        }else {
+        } else {
             this.getDefault();
         }
     }
 
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
-        if(type == 1){
+        if (type == PUBLIC_RESOURCE){
             // this.getResource(1,1);
             this.checkResource();
-        }else if(type == 2) {
+            } else if (type == DEFAULT_RESOURCE) {
             this.getDefault();
-        }else {
+        } else {
             // 获取个人
-            this.getUserResource(1,1)
+            this.getUserResource(BackdropType);
         }
     }
 
-    componentDidMount () {
-        this.getType(1);    // 获取类别 type, platFormId, userToken
-        this.checkResource();
-        // this.getResource(1,1);    // 获取素材 type, platFormId, userToken, typeId
-    }
 
     handleItemSelect (item) {
         const vmBackdrop = {
@@ -143,12 +151,12 @@ class BackdropLibrary extends React.Component {
                 id="backdropLibrary"
                 tags={this.state.tags}
                 title="选择背景"
-                type={1}
+                type={BackdropType}
                 iLogin={this.props.work.userToken ? true : false}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
                 onTabChange={this.handleChange}
-                handleReload={() => this.getUserResource(1,1)}
+                handleReload={() => this.getUserResource(BackdropType)}
             />
         );
     }

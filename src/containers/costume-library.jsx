@@ -9,6 +9,13 @@ import request from '../lib/request';
 import {connect} from 'react-redux';
 import {setWork} from '../reducers/scratch';
 
+
+const PUBLIC_RESOURCE = 1;
+const PERSONAL_RESOURCE = 0;
+const DEFAULT_RESOURCE = 2;
+const CostumeType = 3;
+const Personal = 1;
+const notPersonal = 0;
 class CostumeLibrary extends React.PureComponent {
     constructor (props) {
         super(props);
@@ -25,6 +32,12 @@ class CostumeLibrary extends React.PureComponent {
             tags: null
         };
     }
+
+    componentDidMount () {
+        this.getType(CostumeType);    // 获取类别 type, platFormId, userToken
+        this.checkResource();
+    }
+
     handleItemSelected (item) {
         const split = item.md5.split('.');
         const type = split.length > 1 ? split[1] : null;
@@ -50,12 +63,12 @@ class CostumeLibrary extends React.PureComponent {
             if (result) {
                 this.setState({costumes: result});
             }
-        },'//cdn.imayuan.com');
+        }, '//cdn.imayuan.com');
     }
 
-    getResource (type, typeId){
+    getResource (type, isPersonal){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/resource/getResourceByType?type=${type}&isPersonal=${isPersonal}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 localStorage.setItem('scripts3', JSON.stringify(result.result));
                 localStorage.setItem('scriptsMd3', result.msg);
@@ -64,10 +77,10 @@ class CostumeLibrary extends React.PureComponent {
         });
     }
 
-    getUserResource(type, typeId){
+    getUserResource (type){
         // 获取个人素材
         this.setState({costumes: []});
-        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}`, result => {
             if (result.result) {
                 this.setState({costumes: result.result});
             }
@@ -98,37 +111,32 @@ class CostumeLibrary extends React.PureComponent {
             const scriptsMd3 = localStorage.getItem('scriptsMd3');
             if (scriptsMd3 !== null && scriptsMd3 !== ''){
                 request.default_request(request.GET, null,
-                    `/api/scratch/checkResource?type=3&value=${scriptsMd3}`, result => {
+                    `/api/resource/checkResource?type=${CostumeType}&value=${scriptsMd3}`, result => {
                         if (result){
                             this.setState({costumes: JSON.parse(localStorage.getItem('scripts3'))});
                         } else {
-                            this.getResource(1,3);
+                            this.getResource(CostumeType, notPersonal);
                         }
                     });
-            }else{
-                this.getResource(1,3);
+            } else {
+                this.getResource(CostumeType, notPersonal);
             }
-        }else {
+        } else {
             this.getDefault();
         }
     }
 
-    componentDidMount () {
-        this.getType(3);    // 获取类别 type, platFormId, userToken
-        this.checkResource();
-        // this.getResource(1,3);    // 获取素材 type, platFormId, userToken, typeId
-    }
 
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
-        if(type == 1){
+        if (type == PUBLIC_RESOURCE){
             // this.getResource(1,3);
             this.checkResource();
-        }else if(type == 2) {
+        } else if(type == DEFAULT_RESOURCE) {
             this.getDefault();
-        }else {
+        } else {
             // 获取个人素材
-            this.getUserResource(1,3);
+            this.getUserResource(CostumeType);
         }
     }
  

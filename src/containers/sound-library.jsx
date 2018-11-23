@@ -14,7 +14,12 @@ import soundLibraryContent from '../lib/libraries/sounds.json';
 import soundTags from '../lib/libraries/sound-tags';
 import request from '../lib/request';
 
-
+const PUBLIC_RESOURCE = 1;
+const PERSONAL_RESOURCE = 0;
+const DEFAULT_RESOURCE = 2;
+const SoundType = 4;
+const Personal = 1;
+const notPersonal = 0;
 class SoundLibrary extends React.PureComponent {
     constructor (props) {
         super(props);
@@ -46,17 +51,30 @@ class SoundLibrary extends React.PureComponent {
         this.playingSoundPromise = null;
     }
 
+    componentDidMount () {
+        this.getType(SoundLibrary); // 获取类别 type, platFormId, userToken
+        this.checkResource();
+        // this.getResource(1,4);    // 获取素材 type, platFormId, userToken, typeId
+        this.audioEngine = new AudioEngine();
+        this.playingSoundPromise = null;
+    }
+
+    componentWillUnmount () {
+        this.stopPlayingSound();
+    }
+
+
     getDefault (){
         request.default_request(request.GET, null, '/sounds.json', result => {
             if (result) {
                 this.setState({sound: result});
             }
-        },'//cdn.imayuan.com');
+        }, '//cdn.imayuan.com');
     }
 
-    getResource (type, typeId){
+    getResource (type, isPersonal){
         let work = this.props.work;
-        request.default_request(request.GET, null, `/api/scratch/getResByType?type=${type}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/resource/getResourceByType?type=${type}&isPersonal=${isPersonal}`, result => {
             if (result.code !== request.NotFindError && result.result) {
                 localStorage.setItem('scripts4', JSON.stringify(result.result));
                 localStorage.setItem('scriptsMd4', result.msg);
@@ -65,10 +83,10 @@ class SoundLibrary extends React.PureComponent {
         });
     }
 
-    getUserResource(type, typeId){
+    getUserResource (type){
         // 获取个人素材
         this.setState({sound: []});
-        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}&typeId=${typeId}`, result => {
+        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}`, result => {
             if (result.result) {
                 this.setState({sound: result.result});
             }
@@ -81,9 +99,9 @@ class SoundLibrary extends React.PureComponent {
             if (result.code !== request.NotFindError && result.result) {
                 let tags = [];
                 result.result.map(tag => {
-                    tags.push({id:tag.typeId,title:tag.name});
+                    tags.push({id: tag.typeId, title: tag.name});
                 });
-                this.setState({tags:tags});
+                this.setState({tags: tags});
             }
         });
     }
@@ -95,42 +113,31 @@ class SoundLibrary extends React.PureComponent {
         const scriptsMd4 = localStorage.getItem('scriptsMd4');
         if (scriptsMd4 !== null && scriptsMd4 !== ''){
             request.default_request(request.GET, null,
-                `/api/scratch/checkResource?type=4&value=${scriptsMd4}`, result => {
+                `/api/resource/checkResource?type=${SoundType}&value=${scriptsMd4}`, result => {
                     if (result){
                         this.setState({sound: JSON.parse(localStorage.getItem('scripts4'))});
                     } else {
-                        this.getResource(1,4);
+                        this.getResource(SoundType, notPersonal);
                     }
                 });
-        }else{
-            this.getResource(1,4);
+        } else {
+            this.getResource(SoundType, notPersonal);
         }
     }
 
     handleChange (type){
         // 课程素材{type=1},默认素材{type=2}切换
-        if(type == 1){
+        if (type == PUBLIC_RESOURCE){
             // this.getResource(1,4);
             this.checkResource();
-        }else if(type == 2) {
+        } else if (type == DEFAULT_RESOURCE) {
             this.getDefault();
-        }else {
+        } else {
             // 获取个人素材
-            this.getUserResource(1,4);
+            this.getUserResource(SoundType);
         }
     }
 
-    componentDidMount () {
-        this.getType(4);    // 获取类别 type, platFormId, userToken
-        this.checkResource();
-        // this.getResource(1,4);    // 获取素材 type, platFormId, userToken, typeId
-        this.audioEngine = new AudioEngine();
-        this.playingSoundPromise = null;
-    }
-
-    componentWillUnmount () {
-        this.stopPlayingSound();
-    }
     stopPlayingSound () {
         // Playback is queued, playing, or has played recently and finished
         // normally.
@@ -242,14 +249,14 @@ class SoundLibrary extends React.PureComponent {
                 id="soundLibrary"
                 tags={this.state.tags}
                 title="选择声音"
-                type={4}
+                type={SoundType}
                 iLogin={this.props.work.userToken ? true : false}
                 onItemMouseEnter={this.handleItemMouseEnter}
                 onItemMouseLeave={this.handleItemMouseLeave}
                 onItemSelected={this.handleItemSelected}
                 onRequestClose={this.props.onRequestClose}
                 onTabChange={this.handleChange}
-                handleReload={() => this.getUserResource(1,4)}
+                handleReload={() => this.getUserResource(SoundType)}
             />
         );
     }
@@ -267,7 +274,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setWork:work => {
+    setWork: work => {
         dispatch(setWork(work));
     }
 });
