@@ -31,7 +31,10 @@ class ProjectSave extends React.Component {
         bindAll(this, [
             'saveProject',
             'handleChange',
-            'saveCover'
+            'saveCover',
+            'resetLoading',
+            'changeLoadStatus',
+            'loadBack'
         ]);
         this.state = {
             projectName: '',
@@ -48,13 +51,44 @@ class ProjectSave extends React.Component {
     componentDidMount (){
 
     }
+
+    componentWillUnmount() {
+        if(this.timer){
+            clearInterval(this.timer);
+        }
+    }
+
+    resetLoading(iFlag){
+        let work = {...this.props.work};
+        work.isLoading = !!iFlag;   // 是否正在上传
+        work.loadStatus = 0;   // 上传的状态,0:预处理,1:提交中,2:解析中
+        this.props.setWork(work);
+    }
+
+    changeLoadStatus(status){
+        let work = {...this.props.work};
+        work.loadStatus = status;
+        this.props.setWork(work);
+    }
+
+    loadBack(iFlag){
+        let msg = {
+            type: 1,
+            message: iFlag ? '上传成功' : '上传失败,请稍后再试',
+            status: iFlag ? 1 : 2,
+            timeout: 1500,
+            show: true
+        };
+        this.props.setConfirm(msg);
+    }
+
     /**
      * 作品向服务端保存方法
      * @param notNewProject，true是保存，flase是另存
      */
     saveProject (notNewProject = true) {
         if(!this.props.checkUser()) return;
-        let work = this.props.work;
+        let work = {...this.props.work};
         let name = '';
         if (!work.name){
             alert('请先为作品命名!');
@@ -62,6 +96,7 @@ class ProjectSave extends React.Component {
         }else{
             name = work.name;
         }
+        this.resetLoading(true);
         this.setState({iDisable: true});
         this.props.vm.saveProjectSb3().then(content => {
             // Use special ms version if available to get it working on Edge.
@@ -77,49 +112,44 @@ class ProjectSave extends React.Component {
                 'cover' :sessionStorage.getItem('coverImg')
             };
             if(work.id && notNewProject){
-                // saveData.scratchFile = JSON.stringify(work);
                 saveData.id = work.id;
             }
-            // let msg = {
-            //     type: 2,
-            //     message: '保存成功',
-            //     show: true,
-            //     selected: ''
-            // };
-            // this.props.setConfirm(msg);
-            // this.timer = setInterval(()=>{
-            //     let selected = this.props.confirm.selected;
-            //     if(selected == 'yes'){
-            //         clearInterval(this.timer);
-            //     }else if(selected == 'no'){
-            //         clearInterval(this.timer);
-            //     }
-            // },1000);
             request.file_request(request.POST, saveData, '/api/scratch/saveWork', result => {
-                this.setState({iDisable:false});
+                let workData = {...this.props.work};
                 if (result.code == 0 && result.result){
                     // 上传成功
-                    let workData = this.props.work;
                     workData.id = result.result.id;
+                    workData.loadStatus = 1;    // 更改loading状态为提交中
                     this.props.setWork(workData);
-                    let msg = {
-                        type: 1,
-                        message: '保存成功',
-                        status: 1,
-                        timeout: 3000,
-                        show: true
-                    };
-                    this.props.setConfirm(msg);
+                    // 开始轮询,检测是否解析成功
+                    this.timer = setInterval(()=>{
+                        request.default_request(request.GET, null, `/api/scratch/judgeWorkMemoryStatus?scratchId=${result.result.id}`, result => {
+                            let status = result.msg;
+                            if(status == "0") return;
+                            this.setState({iDisable:false});
+                            if(status == "1"){
+                                // 成功
+                                console.log("成功");
+                                this.changeLoadStatus(2);
+                                this.loadBack(true);
+                                setTimeout(()=>this.resetLoading(false),500);
+                            }else if(status == "-1"){
+                                // 失败
+                                console.log("失败");
+                                this.resetLoading(false);
+                                this.loadBack(false);
+                            }
+                            clearInterval(this.timer);
+                        });
+                    },1000);
                 }else{
-                    let msg = {
-                        type: 1,
-                        message: '保存失败',
-                        status: 2,
-                        timeout: 3000,
-                        show: true
-                    };
-                    this.props.setConfirm(msg);
+                   // 上传失败
+                    // 更改状态为失败,延时显示2s后关闭,提示上传失败,请重新上传
+                    this.setState({iDisable:false});
+                    this.resetLoading(false);
+                    this.loadBack(false);
                 }
+                this.props.setWork(workData);
             });
         });
     }

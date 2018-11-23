@@ -16,6 +16,7 @@ import {MenuItem, MenuSection} from '../menu/menu.jsx';
 import ProjectSaver from '../../containers/project-saver.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import ProjectSave from '../../containers/my/project-save.jsx';
+import SaveProgress from '../../containers/my/save-progress.jsx';
 import {openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal, openLoginModal} from '../../reducers/modals';
 import TurboMode from '../../containers/turbo-mode.jsx';
 import Cookies from 'universal-cookie';
@@ -388,6 +389,12 @@ class MenuBar extends React.Component {
                         <FormattedMessage {...ariaMessages.tutorials} />
                     </div>*/}
                     <Divider className={classNames(styles.divider)} />
+                    {
+                        this.props.work.isLoading &&
+                        <div className={classNames(styles.menuBarItem)}>
+                            <SaveProgress loadStatus={this.props.work.loadStatus}/>
+                        </div>
+                    }
                 </div>
                 {/*<div className={classNames(styles.menuBarItem, styles.feedbackButtonWrapper)}>*/}
                     {/*<a*/}

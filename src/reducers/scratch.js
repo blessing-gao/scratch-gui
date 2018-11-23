@@ -10,7 +10,9 @@ const initialState = {
         description: null,
         homeworkId: null,
         classId: null,
-        type: null
+        type: null,
+        isLoading: false,   // 是否正在上传
+        loadStatus: 0   // 上传的状态,0:预处理,1:提交中,2:解析中
     }
 };
 
