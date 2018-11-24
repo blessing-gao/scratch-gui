@@ -86,6 +86,10 @@ class SaveModal extends React.Component {
     }
 
     handleOnSave (){
+        if(!this.state.workName){
+            alert("请先为作品命名");
+            return;
+        }
         this.setState({iDisable: true});
         let work = JSON.parse(JSON.stringify(this.props.work));
         // this.props.vm.saveProjectSb3().then(content => {
