@@ -25,7 +25,7 @@ class WorkLibrary extends React.Component {
             tags: [],
             nowPage: 1,
             totalPage: 0,
-            numbers: 14,
+            numbers: 15,
             searchContent: '',
             searchHis: '',
             searchType: ''

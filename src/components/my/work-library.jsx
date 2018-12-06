@@ -106,14 +106,14 @@ class WorkLibraryComponent extends React.Component {
                                 />);
                         })
                         }
-                        {/*<div className={styles.pagesBox}>*/}
-                        {/*<Pagination*/}
-                         {/*getLast={this.props.getLast}*/}
-                         {/*getNext={this.props.getNext}*/}
-                         {/*nowPage={this.props.nowPage}*/}
-                         {/*totalPage={this.props.totalPage}*/}
-                         {/*/>*/}
-                        {/*</div>*/}
+                        <div className={styles.pagesBox}>
+                        <Pagination
+                         getLast={this.props.getLast}
+                         getNext={this.props.getNext}
+                         nowPage={this.props.nowPage}
+                         totalPage={this.props.totalPage}
+                         />
+                        </div>
                     </div>
                 </div>
                 {/*<div className={styles.filterBar}>*/}
