@@ -52,7 +52,7 @@ class SoundLibrary extends React.PureComponent {
     }
 
     componentDidMount () {
-        this.getType(SoundLibrary); // 获取类别 type, platFormId, userToken
+        this.getType(SoundType); // 获取类别 type, platFormId, userToken
         this.checkResource();
         // this.getResource(1,4);    // 获取素材 type, platFormId, userToken, typeId
         this.audioEngine = new AudioEngine();
