@@ -109,7 +109,8 @@ class ProjectSave extends React.Component {
                 'name':name,
                 'nickname':work.nickname,
                 "userId":work.userId,
-                'cover' :sessionStorage.getItem('coverImg')
+                'cover' :sessionStorage.getItem('coverImg'),
+                'version': '2.0'
             };
             if(work.id && notNewProject){
                 saveData.id = work.id;

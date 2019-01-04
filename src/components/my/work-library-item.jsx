@@ -12,7 +12,7 @@ import Modal from 'react-modal';
 import QRCode from 'qrcode.react';
 import shareIcon from '../../lib/assets/share-icon.png';
 
-const host = getHost();
+const host = '';
 
 const customStyles = {
     content : {
@@ -46,7 +46,7 @@ class WorkLibraryItem extends React.PureComponent {
         };
     }
     handleEditClick () {
-        window.location.href = `${host}/?id=${this.props.id}&platFormId=${this.props.work.platFormId}`;
+        window.location.href = `/?id=${this.props.id}&platFormId=${this.props.work.platFormId}`;
     }
     handleShareClick (e) {
         const ercode = `http://imayuan.com/player/mobile/game.html?projectId=${this.props.id}`;
@@ -107,7 +107,7 @@ class WorkLibraryItem extends React.PureComponent {
                     </Box>
                     <Box className={styles.libraryItemContainer}>
                         <Box className={classNames(styles.libraryItemContent,styles.libraryItemTop)}>
-                            <span className={styles.libraryItemName}>{this.props.name}</span>
+                            <span className={styles.libraryItemName}>{this.props.name.length > 6 ? this.props.name.substring(0,5) + '...' : this.props.name}</span>
                             <div className={classNames(styles.iconButton,styles.iconItemShare)} onClick={e => this.handleShareClick(e)}><img src={shareIcon}/>分享</div>
                         </Box>
                         <Box className={styles.libraryItemContent}>

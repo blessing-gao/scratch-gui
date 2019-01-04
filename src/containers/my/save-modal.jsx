@@ -117,6 +117,7 @@ class SaveModal extends React.Component {
             saveData.cover = sessionStorage.getItem('coverImg');
             saveData.isRelease = 1;
             saveData.isAnon = this.state.iAnon - 0;
+            saveData.version = '2.0';
             console.log(saveData);
             request.file_request(request.POST, saveData, '/api/scratch/saveWork1', result => {
                 this.setState({iDisable: true});
