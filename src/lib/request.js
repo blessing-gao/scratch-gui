@@ -10,7 +10,7 @@ export const ASSET_SERVER = '//owkomi1zd.bkt.clouddn.com/';
 export const COVER_SERVER = '//cdn.imayuan.com/cover/';
 export function getHost () {
     // console.log(`${window.location.protocol}//${window.location.host}`);
-    return '//scratch.imayuan.com:8088';
+    return '';
     // return `${window.location.protocol}//${window.location.host}`;
     // return 'http://192.168.1.100:8081';
 }
