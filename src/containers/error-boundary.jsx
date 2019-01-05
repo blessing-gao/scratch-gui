@@ -50,7 +50,6 @@ class ErrorBoundary extends React.Component {
     }
 
     handleReload () {
-        // window.location.replace(`${host}/?userToken=${this.props.work.userToken}&platFormId=${this.props.work.platFormId}`);
         window.location.replace(window.location.origin + window.location.pathname);
     }
 

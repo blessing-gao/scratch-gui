@@ -7,7 +7,7 @@ const blockSeparator = '<sep gap="36"/>'; // At default scale, about 28px
 const motion = function (isStage, targetId) {
     const stageSelected = ScratchBlocks.ScratchMsgs.translate(
         'MOTION_STAGE_SELECTED',
-        '舞台: 没有动作块'
+        'Stage selected: no motion blocks'
     );
     return `
     <category name="%{BKY_CATEGORY_MOTION}" id="motion" colour="#4C97FF" secondaryColour="#3373CC">
@@ -139,10 +139,10 @@ const motion = function (isStage, targetId) {
 };
 
 const looks = function (isStage, targetId) {
-    const hello = ScratchBlocks.ScratchMsgs.translate('LOOKS_HELLO', '嗨!');
-    const hmm = ScratchBlocks.ScratchMsgs.translate('LOOKS_HMM', '嘿...');
+    const hello = ScratchBlocks.ScratchMsgs.translate('LOOKS_HELLO', 'Hello!');
+    const hmm = ScratchBlocks.ScratchMsgs.translate('LOOKS_HMM', 'Hmm...');
     return `
-    <category name="外观" id="looks" colour="#9966FF" secondaryColour="#774DCB">
+    <category name="%{BKY_CATEGORY_LOOKS}" id="looks" colour="#9966FF" secondaryColour="#774DCB">
         ${isStage ? '' : `
         <block type="looks_sayforsecs">
             <value name="MESSAGE">
@@ -269,7 +269,7 @@ const looks = function (isStage, targetId) {
 
 const sound = function (isStage, targetId) {
     return `
-    <category name="声音" id="sound" colour="#D65CD6" secondaryColour="#BD42BD">
+    <category name="%{BKY_CATEGORY_SOUND}" id="sound" colour="#D65CD6" secondaryColour="#BD42BD">
         <block id="${targetId}_sound_playuntildone" type="sound_playuntildone">
             <value name="SOUND_MENU">
                 <shadow type="sound_sounds_menu"/>
@@ -312,7 +312,7 @@ const sound = function (isStage, targetId) {
                 </shadow>
             </value>
         </block>
-        <block id="volume" type="sound_volume"/>
+        <block id="${targetId}_volume" type="sound_volume"/>
         ${categorySeparator}
     </category>
     `;
@@ -589,7 +589,7 @@ const operators = function () {
         <block type="operator_join">
             <value name="STRING1">
                 <shadow type="text">
-                    <field name="TEXT">${apple}</field>
+                    <field name="TEXT">${apple} </field>
                 </shadow>
             </value>
             <value name="STRING2">

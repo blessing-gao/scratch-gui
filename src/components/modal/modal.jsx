@@ -75,7 +75,11 @@ const ModalComponent = props => (
                             iconSrc={backIcon}
                             onClick={props.onRequestClose}
                         >
-                            返回
+                            <FormattedMessage
+                                defaultMessage="Back"
+                                description="Back button in modal"
+                                id="gui.modal.back"
+                            />
                         </Button>
                     ) : (
                         <CloseButton

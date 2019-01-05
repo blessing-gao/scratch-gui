@@ -7,7 +7,7 @@ import {setStageSize} from '../reducers/stage-size';
 import {setFullScreen} from '../reducers/mode';
 
 import {connect} from 'react-redux';
-import fireKeyEvent from '../lib/key-map';
+
 import StageHeaderComponent from '../components/stage-header/stage-header.jsx';
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -15,8 +15,7 @@ class StageHeader extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleKeyPress',
-            'quickScreenshot'
+            'handleKeyPress'
         ]);
     }
     componentDidMount () {
@@ -30,12 +29,6 @@ class StageHeader extends React.Component {
             this.props.onSetStageUnFull(false);
         }
     }
-    quickScreenshot (){
-
-        const shotBtn = document.getElementById('shotBtn');
-        fireKeyEvent(shotBtn, 'keydown', 16);
-        console.log('fireKeyEvent');
-    }
     render () {
         const {
             ...props
@@ -44,7 +37,6 @@ class StageHeader extends React.Component {
             <StageHeaderComponent
                 {...props}
                 onKeyPress={this.handleKeyPress}
-                onQuickScreenshot={this.quickScreenshot}
             />
         );
     }

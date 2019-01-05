@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
+import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import VM from 'scratch-vm';
 
 import AssetPanel from '../components/asset-panel/asset-panel.jsx';
 import soundIcon from '../components/asset-panel/icon--sound.svg';
+import soundIconRtl from '../components/asset-panel/icon--sound-rtl.svg';
 import addSoundFromLibraryIcon from '../components/asset-panel/icon--add-sound-lib.svg';
 import addSoundFromRecordingIcon from '../components/asset-panel/icon--add-sound-record.svg';
 import fileUploadIcon from '../components/action-menu/icon--file-upload.svg';
@@ -157,6 +159,7 @@ class SoundTab extends React.Component {
         const {
             dispatchUpdateRestore, // eslint-disable-line no-unused-vars
             intl,
+            isRtl,
             vm,
             onNewSoundFromLibraryClick,
             onNewSoundFromRecordingClick
@@ -170,49 +173,64 @@ class SoundTab extends React.Component {
 
         const sounds = sprite.sounds ? sprite.sounds.map(sound => (
             {
-                url: soundIcon,
+                url: isRtl ? soundIconRtl : soundIcon,
                 name: sound.name,
                 details: (sound.sampleCount / sound.rate).toFixed(2),
                 dragPayload: sound
             }
         )) : [];
 
-        const messages = {
-            fileUploadSound: '上传声音',
-            surpriseSound: '随机',
-            recordSound: '录音',
-            addSound: '选择声音',
-        };
+        const messages = defineMessages({
+            fileUploadSound: {
+                defaultMessage: 'Upload Sound',
+                description: 'Button to upload sound from file in the editor tab',
+                id: 'gui.soundTab.fileUploadSound'
+            },
+            surpriseSound: {
+                defaultMessage: 'Surprise',
+                description: 'Button to get a random sound in the editor tab',
+                id: 'gui.soundTab.surpriseSound'
+            },
+            recordSound: {
+                defaultMessage: 'Record',
+                description: 'Button to record a sound in the editor tab',
+                id: 'gui.soundTab.recordSound'
+            },
+            addSound: {
+                defaultMessage: 'Choose a Sound',
+                description: 'Button to add a sound in the editor tab',
+                id: 'gui.soundTab.addSoundFromLibrary'
+            }
+        });
 
         return (
             <AssetPanel
                 buttons={[{
-                    title: messages.addSound,
+                    title: intl.formatMessage(messages.addSound),
                     img: addSoundFromLibraryIcon,
                     onClick: onNewSoundFromLibraryClick
                 }, {
-                    title: messages.fileUploadSound,
+                    title: intl.formatMessage(messages.fileUploadSound),
                     img: fileUploadIcon,
                     onClick: this.handleFileUploadClick,
                     fileAccept: '.wav, .mp3',
                     fileChange: this.handleSoundUpload,
                     fileInput: this.setFileInput
                 }, {
-                    title: messages.recordSound,
+                    title: intl.formatMessage(messages.surpriseSound),
+                    img: surpriseIcon,
+                    onClick: this.handleSurpriseSound
+                }, {
+                    title: intl.formatMessage(messages.recordSound),
                     img: addSoundFromRecordingIcon,
                     onClick: onNewSoundFromRecordingClick
                 }, {
-                    title: messages.addSound,
+                    title: intl.formatMessage(messages.addSound),
                     img: searchIcon,
                     onClick: onNewSoundFromLibraryClick
-                }
-                    // {
-                    //     title: messages.surpriseSound,
-                    //     img: surpriseIcon,
-                    //     onClick: this.handleSurpriseSound
-                    // },
-                ]}
+                }]}
                 dragType={DragConstants.SOUND}
+                isRtl={isRtl}
                 items={sounds}
                 selectedItemIndex={this.state.selectedSoundIndex}
                 onDeleteClick={this.handleDeleteSound}
@@ -243,6 +261,8 @@ class SoundTab extends React.Component {
 SoundTab.propTypes = {
     dispatchUpdateRestore: PropTypes.func,
     editingTarget: PropTypes.string,
+    intl: intlShape,
+    isRtl: PropTypes.bool,
     onActivateCostumesTab: PropTypes.func.isRequired,
     onNewSoundFromLibraryClick: PropTypes.func.isRequired,
     onNewSoundFromRecordingClick: PropTypes.func.isRequired,
@@ -266,6 +286,7 @@ SoundTab.propTypes = {
 
 const mapStateToProps = state => ({
     editingTarget: state.scratchGui.targets.editingTarget,
+    isRtl: state.locales.isRtl,
     sprites: state.scratchGui.targets.sprites,
     stage: state.scratchGui.targets.stage,
     soundLibraryVisible: state.scratchGui.modals.soundLibrary,
@@ -290,8 +311,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default errorBoundaryHOC('Sound Tab')(
-    connect(
+    injectIntl(connect(
         mapStateToProps,
         mapDispatchToProps
-    )(SoundTab)
+    )(SoundTab))
 );

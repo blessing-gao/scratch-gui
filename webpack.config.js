@@ -41,13 +41,16 @@ const base = {
                 // in much lower dependencies.
                 babelrc: false,
                 plugins: [
-                    'syntax-dynamic-import',
-                    'transform-async-to-generator',
-                    'transform-object-rest-spread',
+                    '@babel/plugin-syntax-dynamic-import',
+                    '@babel/plugin-transform-async-to-generator',
+                    '@babel/plugin-proposal-object-rest-spread',
                     ['react-intl', {
                         messagesDir: './translations/messages/'
                     }]],
-                presets: [['env', {targets: {browsers: ['last 3 versions', 'Safari >= 8', 'iOS >= 8']}}], 'react']
+                presets: [
+                    ['@babel/preset-env', {targets: {browsers: ['last 3 versions', 'Safari >= 8', 'iOS >= 8']}}],
+                    '@babel/preset-react'
+                ]
             }
         },
         {
@@ -136,30 +139,26 @@ module.exports = [
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'gui'],
                 template: 'src/playground/index.ejs',
-                title: 'Scratch学习平台',
-                sentryConfig: process.env.SENTRY_CONFIG ? '"' + process.env.SENTRY_CONFIG + '"' : null,
-                hash: true
+                title: 'Scratch 3.0 GUI',
+                sentryConfig: process.env.SENTRY_CONFIG ? '"' + process.env.SENTRY_CONFIG + '"' : null
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'blocksonly'],
                 template: 'src/playground/index.ejs',
                 filename: 'blocks-only.html',
-                title: 'Scratch学习平台',
-                hash: true
+                title: 'Scratch 3.0 GUI: Blocks Only Example'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'compatibilitytesting'],
                 template: 'src/playground/index.ejs',
                 filename: 'compatibility-testing.html',
-                title: 'Scratch学习平台',
-                hash: true
+                title: 'Scratch 3.0 GUI: Compatibility Testing'
             }),
             new HtmlWebpackPlugin({
                 chunks: ['lib.min', 'player'],
                 template: 'src/playground/index.ejs',
                 filename: 'player.html',
-                title: 'Scratch学习平台',
-                hash: true
+                title: 'Scratch 3.0 GUI: Player Example'
             }),
             new CopyWebpackPlugin([{
                 from: 'static',

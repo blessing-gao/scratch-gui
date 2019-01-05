@@ -37,30 +37,27 @@
     justify-content: flex-start;
     flex-wrap: nowrap;
     align-items: center;
+    flex-grow: 1;
 }
 
 .scratch-logo {
     height:  1.6rem;
     vertical-align: middle;
-    cursor: pointer;
 }
 
 .language-icon {
     height:  1.5rem;
+    vertical-align: middle;
 }
 
 .language-caret {
-    margin-bottom: .625rem;
+    margin: 0 .125rem;
 }
 
 .language-menu {
+    box-sizing: border-box;
     display: inline-flex;
     width: $language-selector-width;
-}
-
-.menu {
-    z-index: $z-index-menu-bar;
-    top: $menu-bar-height;
 }
 
 .menu-bar-item {
@@ -85,6 +82,16 @@
     background-color: $ui-black-transparent;
 }
 
+.menu-bar-item.growable {
+    max-width: 12rem;
+    flex: 1;
+}
+
+.title-field-growable {
+    flex-grow: 1;
+    width: 2rem;
+}
+
 .file-group {
     display: flex;
     flex-direction: row;
@@ -93,6 +100,15 @@
 
 .file-group .menu-bar-item {
     padding: 0 0.75rem;
+}
+
+.menu-bar-item.language-menu {
+    padding: 0 0.5rem;
+}
+
+.menu-bar-menu {
+    margin-top: $menu-bar-height;
+    z-index: $z-index-menu-bar;
 }
 
 .feedback-link {
@@ -110,30 +126,19 @@
     height: 34px;
 }
 
-.title-field {
-    border: 1px dashed $ui-black-transparent;
-    border-radius: .25rem;
-    width: 12rem;
-    height: 34px;
-    background-color: transparent;
-    padding: .5rem;
-}
-
-.title-field,
-.title-field::placeholder {
-    color: $ui-white;
-    font-weight: bold;
-    font-size: .8rem;
+.menu-bar-button {
+    height: 2rem;
 }
 
 .share-button {
     background: $data-primary;
-    height: 32px;
-    box-shadow: 0 0 0 1px $ui-black-transparent;
+}
+
+.share-button-is-shared {
+    background: $ui-black-transparent;
 }
 
 .community-button {
-    height: 32px;
     box-shadow: 0 0 0 1px $ui-black-transparent;
 }
 
@@ -141,29 +146,35 @@
     height: 1.25rem;
 }
 
+.remix-button {
+    background-color: $pen-primary
+}
+
+.remix-button-icon {
+    height: 1.25rem;
+}
+
 .coming-soon >:not(.coming-soon-tooltip) {
     opacity: 0.5;
 }
 
-.account-info-wrapper {
+.account-info-group {
     display: flex;
     flex-direction: row;
-    padding: 0 .5rem;
     align-items: center;
+}
+
+.account-info-group .menu-bar-item {
+    padding: 0 0.75rem;
 }
 
 .mystuff-icon {
     margin: 0 .25rem;
-    height: 1.1rem;
+    height: 1rem;
 }
 
 .help-icon {
     margin-right: 0.35rem;
-}
-
-.my-back-icon{
-    height: 1.5rem;
-    margin: 0 .25rem;
 }
 
 .account-nav-menu, .mystuff-button {
@@ -180,14 +191,8 @@
 }
 
 .dropdown-caret-icon {
-    margin-left: .5rem;
     width: 0.5rem;
     height: 0.5rem;
-}
-.view-project-button {
-    background: $pen-primary;
-    border-color: $pen-primary;
-    color: white;
 }
 
 [dir="ltr"] .dropdown-caret-icon {
@@ -202,6 +207,34 @@
     opacity: 0.5;
 }
 
-.login-name{
-    color: #fff;
+.save-in-progress {
+  animation: hue-rotate 3s linear infinite;
+}
+
+@keyframes hue-rotate {
+  from {
+    filter: hue-rotate();
+  }
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.mystuff > a {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 45%;
+  padding-right: 10px;
+  padding-left: 10px;
+  width: 30px;
+  overflow: hidden;
+  text-indent: 50px;
+  white-space: nowrap;
+}
+.mystuff > a:hover {
+  background-size: 50%;
+}
+
+.mystuff > a {
+  background-image: url("/images/mystuff.png");
 }

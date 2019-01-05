@@ -2,7 +2,7 @@ import {addLocaleData} from 'react-intl';
 
 import {localeData} from 'scratch-l10n';
 import editorMessages from 'scratch-l10n/locales/editor-msgs';
-import RtlLocales from '../lib/rtl-locales';
+import {isRtl} from 'scratch-l10n';
 
 addLocaleData(localeData);
 
@@ -11,7 +11,7 @@ const SELECT_LOCALE = 'scratch-gui/locales/SELECT_LOCALE';
 
 const initialState = {
     isRtl: false,
-    locale: 'zh',
+    locale: 'en',
     messagesByLocale: editorMessages,
     messages: editorMessages.en
 };
@@ -21,7 +21,7 @@ const reducer = function (state, action) {
     switch (action.type) {
     case SELECT_LOCALE:
         return Object.assign({}, state, {
-            isRtl: RtlLocales.indexOf(action.locale) !== -1,
+            isRtl: isRtl(action.locale),
             locale: action.locale,
             messagesByLocale: state.messagesByLocale,
             messages: state.messagesByLocale[action.locale]
@@ -57,7 +57,7 @@ const initLocale = function (currentState, locale) {
             {},
             currentState,
             {
-                isRtl: RtlLocales.indexOf(locale) !== -1,
+                isRtl: isRtl(locale),
                 locale: locale,
                 messagesByLocale: currentState.messagesByLocale,
                 messages: currentState.messagesByLocale[locale]

@@ -8,20 +8,28 @@ import VMScratchBlocks from '../lib/blocks';
 import VM from 'scratch-vm';
 
 import analytics from '../lib/analytics';
+import log from '../lib/log.js';
 import Prompt from './prompt.jsx';
-import ConnectionModal from './connection-modal.jsx';
 import BlocksComponent from '../components/blocks/blocks.jsx';
 import ExtensionLibrary from './extension-library.jsx';
 import extensionData from '../lib/libraries/extensions/index.jsx';
 import CustomProcedures from './custom-procedures.jsx';
 import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import {STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
+import DropAreaHOC from '../lib/drop-area-hoc.jsx';
+import DragConstants from '../lib/drag-constants';
 
 import {connect} from 'react-redux';
 import {updateToolbox} from '../reducers/toolbox';
 import {activateColorPicker} from '../reducers/color-picker';
-import {closeExtensionLibrary} from '../reducers/modals';
+import {closeExtensionLibrary, openSoundRecorder, openConnectionModal} from '../reducers/modals';
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
+import {setConnectionModalExtensionId} from '../reducers/connection-modal';
+
+import {
+    activateTab,
+    SOUNDS_TAB_INDEX
+} from '../reducers/editor-tab';
 
 const addFunctionListener = (object, property, callback) => {
     const oldFn = object[property];
@@ -32,6 +40,10 @@ const addFunctionListener = (object, property, callback) => {
     };
 };
 
+const DroppableBlocks = DropAreaHOC([
+    DragConstants.BACKPACK_CODE
+])(BlocksComponent);
+
 class Blocks extends React.Component {
     constructor (props) {
         super(props);
@@ -41,8 +53,9 @@ class Blocks extends React.Component {
             'detachVM',
             'handleCategorySelected',
             'handleConnectionModalStart',
-            'handleConnectionModalClose',
+            'handleDrop',
             'handleStatusButtonUpdate',
+            'handleOpenSoundRecorder',
             'handlePromptStart',
             'handlePromptCallback',
             'handlePromptClose',
@@ -62,10 +75,11 @@ class Blocks extends React.Component {
         ]);
         this.ScratchBlocks.prompt = this.handlePromptStart;
         this.ScratchBlocks.statusButtonCallback = this.handleConnectionModalStart;
+        this.ScratchBlocks.recordSoundCallback = this.handleOpenSoundRecorder;
+
         this.state = {
             workspaceMetrics: {},
-            prompt: null,
-            connectionModal: null
+            prompt: null
         };
         this.onTargetsUpdate = debounce(this.onTargetsUpdate, 100);
         this.toolboxUpdateQueue = [];
@@ -105,7 +119,6 @@ class Blocks extends React.Component {
     shouldComponentUpdate (nextProps, nextState) {
         return (
             this.state.prompt !== nextState.prompt ||
-            this.state.connectionModal !== nextState.connectionModal ||
             this.props.isVisible !== nextProps.isVisible ||
             this.props.toolboxXML !== nextProps.toolboxXML ||
             this.props.extensionLibraryVisible !== nextProps.extensionLibraryVisible ||
@@ -220,7 +233,7 @@ class Blocks extends React.Component {
         this.props.vm.addListener('EXTENSION_ADDED', this.handleExtensionAdded);
         this.props.vm.addListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.addListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
-        this.props.vm.addListener('PERIPHERAL_ERROR', this.handleStatusButtonUpdate);
+        this.props.vm.addListener('PERIPHERAL_DISCONNECT_ERROR', this.handleStatusButtonUpdate);
     }
     detachVM () {
         this.props.vm.removeListener('SCRIPT_GLOW_ON', this.onScriptGlowOn);
@@ -233,7 +246,7 @@ class Blocks extends React.Component {
         this.props.vm.removeListener('EXTENSION_ADDED', this.handleExtensionAdded);
         this.props.vm.removeListener('BLOCKSINFO_UPDATE', this.handleBlocksInfoUpdate);
         this.props.vm.removeListener('PERIPHERAL_CONNECTED', this.handleStatusButtonUpdate);
-        this.props.vm.removeListener('PERIPHERAL_ERROR', this.handleStatusButtonUpdate);
+        this.props.vm.removeListener('PERIPHERAL_DISCONNECT_ERROR', this.handleStatusButtonUpdate);
     }
 
     updateToolboxBlockValue (id, value) {
@@ -300,7 +313,21 @@ class Blocks extends React.Component {
         // Remove and reattach the workspace listener (but allow flyout events)
         this.workspace.removeChangeListener(this.props.vm.blockListener);
         const dom = this.ScratchBlocks.Xml.textToDom(data.xml);
-        this.ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(dom, this.workspace);
+        try {
+            this.ScratchBlocks.Xml.clearWorkspaceAndLoadFromXml(dom, this.workspace);
+        } catch (error) {
+            // The workspace is likely incomplete. What did update should be
+            // functional.
+            //
+            // Instead of throwing the error, by logging it and continuing as
+            // normal lets the other workspace update processes complete in the
+            // gui and vm, which lets the vm run even if the workspace is
+            // incomplete. Throwing the error would keep things like setting the
+            // correct editing target from happening which can interfere with
+            // some blocks and processes in the vm.
+            error.message = `Workspace Update Error: ${error.message}`;
+            log.error(error);
+        }
         this.workspace.addChangeListener(this.props.vm.blockListener);
 
         if (this.props.vm.editingTarget && this.state.workspaceMetrics[this.props.vm.editingTarget.id]) {
@@ -336,7 +363,7 @@ class Blocks extends React.Component {
     }
     handleCategorySelected (categoryId) {
         const extension = extensionData.find(ext => ext.extensionId === categoryId);
-        if (extension && extension.launchDeviceConnectionFlow) {
+        if (extension && extension.launchPeripheralConnectionFlow) {
             this.handleConnectionModalStart(categoryId);
         }
 
@@ -360,25 +387,13 @@ class Blocks extends React.Component {
         this.setState(p);
     }
     handleConnectionModalStart (extensionId) {
-        const extension = extensionData.find(ext => ext.extensionId === extensionId);
-        if (extension) {
-            this.setState({connectionModal: {
-                extensionId: extensionId,
-                useAutoScan: extension.useAutoScan,
-                deviceImage: extension.deviceImage,
-                smallDeviceImage: extension.smallDeviceImage,
-                deviceButtonImage: extension.deviceButtonImage,
-                name: extension.name,
-                connectingMessage: extension.connectingMessage,
-                helpLink: extension.helpLink
-            }});
-        }
-    }
-    handleConnectionModalClose () {
-        this.setState({connectionModal: null});
+        this.props.onOpenConnectionModal(extensionId);
     }
     handleStatusButtonUpdate () {
         this.ScratchBlocks.refreshStatusButtons(this.workspace);
+    }
+    handleOpenSoundRecorder () {
+        this.props.onOpenSoundRecorder();
     }
     handlePromptCallback (input, optionSelection) {
         this.state.prompt.callback(
@@ -396,6 +411,14 @@ class Blocks extends React.Component {
         ws.refreshToolboxSelection_();
         ws.toolbox_.scrollToCategoryById('myBlocks');
     }
+    handleDrop (dragInfo) {
+        fetch(dragInfo.payload.bodyUrl)
+            .then(response => response.json())
+            .then(blocks => this.props.vm.shareBlocksToTarget(blocks, this.props.vm.editingTarget.id))
+            .then(() => {
+                this.props.vm.refreshWorkspace();
+            });
+    }
     render () {
         /* eslint-disable no-unused-vars */
         const {
@@ -408,6 +431,8 @@ class Blocks extends React.Component {
             isRtl,
             isVisible,
             onActivateColorPicker,
+            onOpenConnectionModal,
+            onOpenSoundRecorder,
             updateToolboxState,
             onActivateCustomProcedures,
             onRequestCloseExtensionLibrary,
@@ -417,9 +442,10 @@ class Blocks extends React.Component {
         } = this.props;
         /* eslint-enable no-unused-vars */
         return (
-            <div>
-                <BlocksComponent
+            <React.Fragment>
+                <DroppableBlocks
                     componentRef={this.setBlocks}
+                    onDrop={this.handleDrop}
                     {...props}
                 />
                 {this.state.prompt ? (
@@ -431,14 +457,6 @@ class Blocks extends React.Component {
                         title={this.state.prompt.title}
                         onCancel={this.handlePromptClose}
                         onOk={this.handlePromptCallback}
-                    />
-                ) : null}
-                {this.state.connectionModal ? (
-                    <ConnectionModal
-                        {...this.state.connectionModal}
-                        vm={vm}
-                        onCancel={this.handleConnectionModalClose}
-                        onStatusButtonUpdate={this.handleStatusButtonUpdate}
                     />
                 ) : null}
                 {extensionLibraryVisible ? (
@@ -456,7 +474,7 @@ class Blocks extends React.Component {
                         onRequestClose={this.handleCustomProceduresClose}
                     />
                 ) : null}
-            </div>
+            </React.Fragment>
         );
     }
 }
@@ -471,6 +489,8 @@ Blocks.propTypes = {
     messages: PropTypes.objectOf(PropTypes.string),
     onActivateColorPicker: PropTypes.func,
     onActivateCustomProcedures: PropTypes.func,
+    onOpenConnectionModal: PropTypes.func,
+    onOpenSoundRecorder: PropTypes.func,
     onRequestCloseCustomProcedures: PropTypes.func,
     onRequestCloseExtensionLibrary: PropTypes.func,
     options: PropTypes.shape({
@@ -550,6 +570,14 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onActivateColorPicker: callback => dispatch(activateColorPicker(callback)),
     onActivateCustomProcedures: (data, callback) => dispatch(activateCustomProcedures(data, callback)),
+    onOpenConnectionModal: id => {
+        dispatch(setConnectionModalExtensionId(id));
+        dispatch(openConnectionModal());
+    },
+    onOpenSoundRecorder: () => {
+        dispatch(activateTab(SOUNDS_TAB_INDEX));
+        dispatch(openSoundRecorder());
+    },
     onRequestCloseExtensionLibrary: () => {
         dispatch(closeExtensionLibrary());
     },

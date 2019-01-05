@@ -39,6 +39,7 @@ const SpriteSelectorItem = props => (
         {props.costumeURL ? (
             <img
                 className={styles.spriteImage}
+                draggable={false}
                 src={props.costumeURL}
             />
         ) : null}
@@ -52,12 +53,20 @@ const SpriteSelectorItem = props => (
             <ContextMenu id={`${props.name}-${contextMenuId++}`}>
                 {props.onDuplicateButtonClick ? (
                     <MenuItem onClick={props.onDuplicateButtonClick}>
-                        复制
+                        <FormattedMessage
+                            defaultMessage="duplicate"
+                            description="Menu item to duplicate in the right click menu"
+                            id="gui.spriteSelectorItem.contextMenuDuplicate"
+                        />
                     </MenuItem>
                 ) : null}
                 {props.onDeleteButtonClick ? (
                     <MenuItem onClick={props.onDeleteButtonClick}>
-                        删除
+                        <FormattedMessage
+                            defaultMessage="delete"
+                            description="Menu item to delete in the right click menu"
+                            id="gui.spriteSelectorItem.contextMenuDelete"
+                        />
                     </MenuItem>
                 ) : null }
                 {props.onExportButtonClick ? (

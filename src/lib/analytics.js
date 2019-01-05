@@ -1,6 +1,6 @@
 import GoogleAnalytics from 'react-ga';
 
-GoogleAnalytics.initialize('UA-112536261-1', {
+GoogleAnalytics.initialize(process.env.GA_ID, {
     debug: (process.env.NODE_ENV !== 'production'),
     titleCase: true,
     sampleRate: (process.env.NODE_ENV === 'production') ? 100 : 0,

@@ -10,19 +10,30 @@ import Button from '../button/button.jsx';
 import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
 import Divider from '../divider/divider.jsx';
 import LanguageSelector from '../../containers/language-selector.jsx';
-import ProjectLoader from '../../containers/project-loader.jsx';
-import Menu from '../../containers/menu.jsx';
+import SBFileUploader from '../../containers/sb-file-uploader.jsx';
+import MenuBarMenu from './menu-bar-menu.jsx';
 import {MenuItem, MenuSection} from '../menu/menu.jsx';
-import ProjectSaver from '../../containers/project-saver.jsx';
+import ProjectTitleInput from './project-title-input.jsx';
+import AccountNav from '../../containers/account-nav.jsx';
+import LoginDropdown from './login-dropdown.jsx';
+import SB3Downloader from '../../containers/sb3-downloader.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
-import ProjectSave from '../../containers/my/project-save.jsx';
-import SaveProgress from '../../containers/my/save-progress.jsx';
-import {openImportInfo, openTipsLibrary,openWorkLibrary, openSaveModal, openLoginModal} from '../../reducers/modals';
 import TurboMode from '../../containers/turbo-mode.jsx';
-import Cookies from 'universal-cookie';
+
+import {openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
-import {setWork} from "../../reducers/scratch";
 import {
+    getIsUpdating,
+    getIsShowingProject,
+    requestNewProject,
+    remixProject,
+    updateProject,
+    saveProjectAsCopy
+} from '../../reducers/project-state';
+import {
+    openAccountMenu,
+    closeAccountMenu,
+    accountMenuOpen,
     openFileMenu,
     closeFileMenu,
     fileMenuOpen,
@@ -32,9 +43,9 @@ import {
     openLanguageMenu,
     closeLanguageMenu,
     languageMenuOpen,
-    openUserMenu,
-    closeUserMenu,
-    userMenuOpen,
+    openLoginMenu,
+    closeLoginMenu,
+    loginMenuOpen
 } from '../../reducers/menus';
 
 import styles from './menu-bar.css';
@@ -44,32 +55,11 @@ import mystuffIcon from './icon--mystuff.png';
 import feedbackIcon from './icon--feedback.svg';
 import profileIcon from './icon--profile.png';
 import communityIcon from './icon--see-community.svg';
-import dropdownCaret from '../language-selector/dropdown-caret.svg';
+import remixIcon from './icon--remix.svg';
+import dropdownCaret from './dropdown-caret.svg';
 import languageIcon from '../language-selector/language-icon.svg';
 
-import scratchLogo from './logo.png';
-
-
-import backIcon from './icon--back.svg';
-import {getHost, getQueryString} from '../../lib/request';
-
-const host = getHost();
-const cookies = new Cookies();
-
-const newWork = function (){
-    const r = confirm('离开前请确定作品已经保存');
-    if (r === true) {
-        // window.location.reload();
-        let url = host;
-        let platFormId = getQueryString('platFormId');
-        if(platFormId){
-            url = `${url}?platFormId=${platFormId}`;
-        }
-        window.location.href = url;
-    } else {
-        return;
-    }
-};
+import scratchLogo from './scratch-logo.svg';
 
 const ariaMessages = defineMessages({
     language: {
@@ -83,6 +73,7 @@ const ariaMessages = defineMessages({
         description: 'accessibility text for the tutorials button'
     }
 });
+
 const MenuBarItemTooltip = ({
     children,
     className,
@@ -137,66 +128,45 @@ MenuItemTooltip.propTypes = {
     isRtl: PropTypes.bool
 };
 
-const MenuBarMenu = ({
-    children,
-    onRequestClose,
-    open,
-    place = 'right'
-}) => (
-    <Menu
-        className={styles.menu}
-        open={open}
-        place={place}
-        onRequestClose={onRequestClose}
-    >
-        {children}
-    </Menu>
-);
-
-MenuBarMenu.propTypes = {
-    children: PropTypes.node,
-    onRequestClose: PropTypes.func,
-    open: PropTypes.bool,
-    place: PropTypes.oneOf(['left', 'right'])
-};
 class MenuBar extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'handleClickNew',
+            'handleClickRemix',
+            'handleClickSave',
+            'handleClickSaveAsCopy',
+            'handleCloseFileMenuAndThen',
             'handleLanguageMouseUp',
             'handleRestoreOption',
-            'restoreOptionMessage',
-            'handleSignOff',
-            'handleRelease',
-            'checkUser'
+            'restoreOptionMessage'
         ]);
     }
-
-    // 判断用户登录是否失效,返回true或false,继续执行或提前返回
-    checkUser(){
-        const cookies = new Cookies();
-        if(!cookies.get("token")){
-            alert('请先登录');
-            let work = {...this.props.work};
-            work.nickname = '';
-            work.picUrl = '';
-            work.userId = '';
-            work.userToken = '';
-            this.props.setWork(work);
-            return false;
+    componentDidUpdate (prevProps) {
+        // if we're no longer showing the project (loading, or whatever), close menus
+        if (this.props.isShowingProject && !prevProps.isShowingProject) {
+            this.props.onRequestCloseFile();
+            this.props.onRequestCloseEdit();
         }
-        return true;
     }
-
-    handleRelease(){
-        if(!this.checkUser()) return;
-        this.props.onOpenSaveModal();
-    }
-
-    handleLanguageMouseUp (e) {
-        if (!this.props.languageMenuOpen) {
-            this.props.onClickLanguage(e);
+    handleClickNew () {
+        // if canSave===true and canCreateNew===true, it's safe to replace current project,
+        // since we will auto-save first. Else, confirm first.
+        const readyToReplaceProject = (this.props.canSave && this.props.canCreateNew) ||
+            confirm('Replace contents of the current project?'); // eslint-disable-line no-alert
+        this.props.onRequestCloseFile();
+        if (readyToReplaceProject) {
+            this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
         }
+    }
+    handleClickRemix () {
+        this.props.onClickRemix();
+    }
+    handleClickSave () {
+        this.props.onClickSave();
+    }
+    handleClickSaveAsCopy () {
+        this.props.onClickSaveAsCopy();
     }
     handleRestoreOption (restoreFun) {
         return () => {
@@ -204,20 +174,16 @@ class MenuBar extends React.Component {
             this.props.onRequestCloseEdit();
         };
     }
-    handleBackHome(){
-        window.location.href = 'http://www.imayuan.com/';
-    }
-    handleSignOff(){
-        // cookies.remove('token', { path: '/' });
-        const cookies = new Cookies();
-        cookies.remove('token', { path: '/', domain: '.imayuan.com'});
-        let workData = {
-            userToken: "",
-            userId: "",
-            nickname: "",
-            picUrl: ""
+    handleCloseFileMenuAndThen (fn) {
+        return () => {
+            this.props.onRequestCloseFile();
+            fn();
         };
-        this.props.setWork(workData);
+    }
+    handleLanguageMouseUp (e) {
+        if (!this.props.languageMenuOpen) {
+            this.props.onClickLanguage(e);
+        }
     }
     restoreOptionMessage (deletedItem) {
         switch (deletedItem) {
@@ -249,66 +215,187 @@ class MenuBar extends React.Component {
         }
     }
     render () {
+        const saveNowMessage = (
+            <FormattedMessage
+                defaultMessage="Save now"
+                description="Menu bar item for saving now"
+                id="gui.menuBar.saveNow"
+            />
+        );
+        const createCopyMessage = (
+            <FormattedMessage
+                defaultMessage="Save as a copy"
+                description="Menu bar item for saving as a copy"
+                id="gui.menuBar.saveAsCopy"
+            />
+        );
+        const remixMessage = (
+            <FormattedMessage
+                defaultMessage="Remix"
+                description="Menu bar item for remixing"
+                id="gui.menuBar.remix"
+            />
+        );
+        const newProjectMessage = (
+            <FormattedMessage
+                defaultMessage="New"
+                description="Menu bar item for creating a new project"
+                id="gui.menuBar.new"
+            />
+        );
+        const shareMessage = (
+            <FormattedMessage
+                defaultMessage="Share"
+                description="Label for project share button"
+                id="gui.menuBar.share"
+            />
+        );
+        const isSharedMessage = (
+            <FormattedMessage
+                defaultMessage="Shared"
+                description="Label for shared project"
+                id="gui.menuBar.isShared"
+            />
+        );
+        const shareButton = (
+            <Button
+                className={classNames(
+                    styles.menuBarButton,
+                    styles.shareButton,
+                    {[styles.shareButtonIsShared]: this.props.isShared}
+                )}
+                onClick={this.props.onShare}
+            >
+                {this.props.isShared ? isSharedMessage : shareMessage}
+            </Button>
+        );
+        const remixButton = (
+            <Button
+                className={classNames(
+                    styles.menuBarButton,
+                    styles.remixButton
+                )}
+                iconClassName={styles.remixButtonIcon}
+                iconSrc={remixIcon}
+                onClick={this.handleClickRemix}
+            >
+                {remixMessage}
+            </Button>
+        );
         return (
-            <Box className={styles.menuBar}>
+            <Box
+                className={classNames(
+                    this.props.className,
+                    styles.menuBar,
+                    {[styles.saveInProgress]: this.props.isUpdating}
+                )}
+            >
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
-                        <div className={classNames(styles.menuBarItem)} onClick={this.handleBackHome}>
-                            <img
-                                alt="阿尔法猿"
-                                className={styles.scratchLogo}
-                                draggable={false}
-                                src={scratchLogo}
-                            />
+                        <div className={classNames(styles.menuBarItem)}>
+                            <a
+                                href="https://scratch.mit.edu"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                            >
+                                <img
+                                    alt="Scratch"
+                                    className={styles.scratchLogo}
+                                    draggable={false}
+                                    src={scratchLogo}
+                                />
+                            </a>
                         </div>
-                        <ProjectSave checkUser={this.checkUser} />
-                        <Divider className={classNames(styles.divider)} />
+                        <div
+                            className={classNames(styles.menuBarItem, styles.hoverable, styles.languageMenu)}
+                        >
+                            <div>
+                                <img
+                                    className={styles.languageIcon}
+                                    src={languageIcon}
+                                />
+                                <img
+                                    className={styles.languageCaret}
+                                    src={dropdownCaret}
+                                />
+                            </div>
+                            <LanguageSelector label={this.props.intl.formatMessage(ariaMessages.language)} />
+                        </div>
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
                                 [styles.active]: this.props.fileMenuOpen
                             })}
                             onMouseUp={this.props.onClickFile}
                         >
-                            <div className={classNames(styles.fileMenu)}>
-                                文件
-                            </div>
+                            <FormattedMessage
+                                defaultMessage="File"
+                                description="Text for file dropdown menu"
+                                id="gui.menuBar.file"
+                            />
                             <MenuBarMenu
+                                className={classNames(styles.menuBarMenu)}
                                 open={this.props.fileMenuOpen}
                                 place={this.props.isRtl ? 'left' : 'right'}
                                 onRequestClose={this.props.onRequestCloseFile}
                             >
                                 <MenuSection>
-                                    <MenuItem onClick={newWork}>
-                                        新建
+                                    <MenuItem
+                                        isRtl={this.props.isRtl}
+                                        onClick={this.handleClickNew}
+                                    >
+                                        {newProjectMessage}
                                     </MenuItem>
-                                    <ProjectLoader>{(renderFileInput, loadProject, loadProps) => (
+                                </MenuSection>
+                                <MenuSection>
+                                    {this.props.canSave ? (
+                                        <MenuItem onClick={this.handleClickSave}>
+                                            {saveNowMessage}
+                                        </MenuItem>
+                                    ) : []}
+                                    {this.props.canCreateCopy ? (
+                                        <MenuItem onClick={this.handleClickSaveAsCopy}>
+                                            {createCopyMessage}
+                                        </MenuItem>
+                                    ) : []}
+                                    {this.props.canRemix ? (
+                                        <MenuItem onClick={this.handleClickRemix}>
+                                            {remixMessage}
+                                        </MenuItem>
+                                    ) : []}
+                                </MenuSection>
+                                <MenuSection>
+                                    <SBFileUploader onUpdateProjectTitle={this.props.onUpdateProjectTitle}>
+                                        {(className, renderFileInput, loadProject) => (
+                                            <MenuItem
+                                                className={className}
+                                                onClick={loadProject}
+                                            >
+                                                <FormattedMessage
+                                                    defaultMessage="Load from your computer"
+                                                    description={
+                                                        'Menu bar item for uploading a project from your computer'
+                                                    }
+                                                    id="gui.menuBar.uploadFromComputer"
+                                                />
+                                                {renderFileInput()}
+                                            </MenuItem>
+                                        )}
+                                    </SBFileUploader>
+                                    <SB3Downloader>{(className, downloadProject) => (
                                         <MenuItem
-                                            onClick={loadProject}
-                                            {...loadProps}
+                                            className={className}
+                                            onClick={this.handleCloseFileMenuAndThen(downloadProject)}
                                         >
-                                            从电脑里打开
-                                            {renderFileInput()}
+                                            <FormattedMessage
+                                                defaultMessage="Save to your computer"
+                                                description="Menu bar item for downloading a project to your computer"
+                                                id="gui.menuBar.downloadToComputer"
+                                            />
                                         </MenuItem>
-                                    )}</ProjectLoader>
-                                    <ProjectSaver>{(saveProject, saveProps) => (
-                                        <MenuItem
-                                            onClick={saveProject}
-                                            {...saveProps}
-                                        >本地下载
-                                        </MenuItem>
-                                    )}</ProjectSaver>
+                                    )}</SB3Downloader>
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
-                        <div className={classNames(styles.menuBarItem)}>
-                            <Button
-                                className={classNames(styles.shareButton)}
-                                onClick={this.handleRelease}
-                            >
-                                作品发布
-                            </Button>
-                        </div>
-
                         <div
                             className={classNames(styles.menuBarItem, styles.hoverable, {
                                 [styles.active]: this.props.editMenuOpen
@@ -316,9 +403,14 @@ class MenuBar extends React.Component {
                             onMouseUp={this.props.onClickEdit}
                         >
                             <div className={classNames(styles.editMenu)}>
-                               编辑
+                                <FormattedMessage
+                                    defaultMessage="Edit"
+                                    description="Text for edit dropdown menu"
+                                    id="gui.menuBar.edit"
+                                />
                             </div>
                             <MenuBarMenu
+                                className={classNames(styles.menuBarMenu)}
                                 open={this.props.editMenuOpen}
                                 place={this.props.isRtl ? 'left' : 'right'}
                                 onRequestClose={this.props.onRequestCloseEdit}
@@ -335,9 +427,17 @@ class MenuBar extends React.Component {
                                     <TurboMode>{(toggleTurboMode, {turboMode}) => (
                                         <MenuItem onClick={toggleTurboMode}>
                                             {turboMode ? (
-                                                "开启加速"
+                                                <FormattedMessage
+                                                    defaultMessage="Turn off Turbo Mode"
+                                                    description="Menu bar item for turning off turbo mode"
+                                                    id="gui.menuBar.turboModeOff"
+                                                />
                                             ) : (
-                                                "关闭加速"
+                                                <FormattedMessage
+                                                    defaultMessage="Turn on Turbo Mode"
+                                                    description="Menu bar item for turning on turbo mode"
+                                                    id="gui.menuBar.turboModeOn"
+                                                />
                                             )}
                                         </MenuItem>
                                     )}</TurboMode>
@@ -346,38 +446,7 @@ class MenuBar extends React.Component {
                         </div>
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    {/*<div
-                        className={classNames(
-                            styles.menuBarItem,
-                            styles.hoverable,
-                            styles.mystuffButton
-                        )}
-                        onClick={this.props.handleBack}
-                    >
-                        <img
-                            className={styles.myBackIcon}
-                            src={backIcon}
-                            title="返回"
-                        />
-                    </div>*/}
-                    { this.props.work.userToken &&
-                        <div
-                            className={classNames(
-                                styles.menuBarItem,
-                                styles.hoverable,
-                                styles.mystuffButton
-                            )}
-                            onClick={this.props.onOpenWorkLibrary}
-                        >
-                            <img
-                                className={styles.mystuffIcon}
-                                src={mystuffIcon}
-                                title="我的作品库"
-                            />
-                            <span>我的作品库</span>
-                        </div>
-                    }
-                    {/*<div
+                    <div
                         aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
                         className={classNames(styles.menuBarItem, styles.hoverable)}
                         onClick={this.props.onOpenTipLibrary}
@@ -387,102 +456,209 @@ class MenuBar extends React.Component {
                             src={helpIcon}
                         />
                         <FormattedMessage {...ariaMessages.tutorials} />
-                    </div>*/}
+                    </div>
                     <Divider className={classNames(styles.divider)} />
-                    {
-                        this.props.work.isLoading &&
-                        <div className={classNames(styles.menuBarItem)}>
-                            <SaveProgress loadStatus={this.props.work.loadStatus}/>
-                        </div>
-                    }
-                </div>
-                {/*<div className={classNames(styles.menuBarItem, styles.feedbackButtonWrapper)}>*/}
-                    {/*<a*/}
-                        {/*className={styles.feedbackLink}*/}
-                        {/*href="https://scratch.mit.edu/discuss/57/"*/}
-                        {/*rel="noopener noreferrer"*/}
-                        {/*target="_blank"*/}
-                    {/*>*/}
-                        {/*<Button*/}
-                            {/*className={styles.feedbackButton}*/}
-                            {/*iconSrc={feedbackIcon}*/}
-                        {/*>*/}
-                            {/*<FormattedMessage*/}
-                                {/*defaultMessage="Give Feedback"*/}
-                                {/*description="Label for feedback form modal button"*/}
-                                {/*id="gui.menuBar.giveFeedback"*/}
-                            {/*/>*/}
-                        {/*</Button>*/}
-                    {/*</a>*/}
-                {/*</div>*/}
-                <div className={styles.accountInfoWrapper}>
-                    {/*<MenuBarItemTooltip id="mystuff">*/}
-                        {/*<div*/}
-                            {/*className={classNames(*/}
-                                {/*styles.menuBarItem,*/}
-                                {/*styles.hoverable,*/}
-                                {/*styles.mystuffButton*/}
-                            {/*)}*/}
-                        {/*>*/}
-                            {/*<img*/}
-                                {/*className={styles.mystuffIcon}*/}
-                                {/*src={mystuffIcon}*/}
-                            {/*/>*/}
-                        {/*</div>*/}
-                    {/*</MenuBarItemTooltip>*/}
-
-                    { this.props.work.userToken ?
-                        <div
-                            className={classNames(styles.menuBarItem, styles.hoverable, {
-                                [styles.active]: this.props.fileMenuOpen
-                            })}
-                            onMouseUp={this.props.onClickUser}
+                    <div className={classNames(styles.menuBarItem, styles.growable)}>
+                        <MenuBarItemTooltip
+                            enable
+                            id="title-field"
                         >
-                            <div
-                                className={classNames(
-                                styles.menuBarItem,
-                                styles.accountNavMenu
-                            )}
-                            >
-                                <img
-                                    className={styles.profileIcon}
-                                    src={this.props.work.picUrl || scratchLogo}
-                                />
-                                <span>{this.props.work.nickname || 'mayuan'}</span>
-                                <img
-                                    className={styles.dropdownCaretIcon}
-                                    src={dropdownCaret}
-                                />
-                            </div>
-                            <MenuBarMenu
-                                open={this.props.userMenuOpen}
-                                place='left'
-                                onRequestClose={this.props.onRequestCloseUser}
-                            >
-                                <MenuSection>
-                                    <MenuItem onClick={this.handleSignOff}>
-                                        退出
-                                    </MenuItem>
-                                </MenuSection>
-                            </MenuBarMenu>
-                        </div> :
-                        <div
-                            className={classNames(
-                                styles.menuBarItem,
-                                styles.hoverable,
-                                styles.accountNavMenu
-                            )}
-                            onClick={this.props.onOpenLoginModal}
-                        >
-                            <img
-                                className={styles.profileIcon}
-                                src={scratchLogo}
+                            <ProjectTitleInput
+                                className={classNames(styles.titleFieldGrowable)}
+                                onUpdateProjectTitle={this.props.onUpdateProjectTitle}
                             />
-                            <a className={styles.loginName}>登录</a>
-                        </div>
+                        </MenuBarItemTooltip>
+                    </div>
+                    <div className={classNames(styles.menuBarItem)}>
+                        {this.props.canShare ? shareButton : (
+                            this.props.showComingSoon ? (
+                                <MenuBarItemTooltip id="share-button">
+                                    {shareButton}
+                                </MenuBarItemTooltip>
+                            ) : []
+                        )}
+                        {this.props.canRemix ? remixButton : []}
+                    </div>
+                    <div className={classNames(styles.menuBarItem, styles.communityButtonWrapper)}>
+                        {this.props.enableCommunity ? (
+                            <Button
+                                className={classNames(
+                                    styles.menuBarButton,
+                                    styles.communityButton
+                                )}
+                                iconClassName={styles.communityButtonIcon}
+                                iconSrc={communityIcon}
+                                onClick={this.props.onSeeCommunity}
+                            >
+                                <FormattedMessage
+                                    defaultMessage="See Community"
+                                    description="Label for see community button"
+                                    id="gui.menuBar.seeCommunity"
+                                />
+                            </Button>
+                        ) : (this.props.showComingSoon ? (
+                            <MenuBarItemTooltip id="community-button">
+                                <Button
+                                    className={classNames(
+                                        styles.menuBarButton,
+                                        styles.communityButton
+                                    )}
+                                    iconClassName={styles.communityButtonIcon}
+                                    iconSrc={communityIcon}
+                                >
+                                    <FormattedMessage
+                                        defaultMessage="See Community"
+                                        description="Label for see community button"
+                                        id="gui.menuBar.seeCommunity"
+                                    />
+                                </Button>
+                            </MenuBarItemTooltip>
+                        ) : [])}
+                    </div>
+                </div>
 
-                    }
-
+                {/* show the proper UI in the account menu, given whether the user is
+                logged in, and whether a session is available to log in with */}
+                <div className={styles.accountInfoGroup}>
+                    {this.props.sessionExists ? (
+                        this.props.username ? (
+                            // ************ user is logged in ************
+                            <React.Fragment>
+                                <a href="/mystuff/">
+                                    <div
+                                        className={classNames(
+                                            styles.menuBarItem,
+                                            styles.hoverable,
+                                            styles.mystuffButton
+                                        )}
+                                    >
+                                        <img
+                                            className={styles.mystuffIcon}
+                                            src={mystuffIcon}
+                                        />
+                                    </div>
+                                </a>
+                                <AccountNav
+                                    className={classNames(
+                                        styles.menuBarItem,
+                                        styles.hoverable,
+                                        {[styles.active]: this.props.accountMenuOpen}
+                                    )}
+                                    isOpen={this.props.accountMenuOpen}
+                                    isRtl={this.props.isRtl}
+                                    menuBarMenuClassName={classNames(styles.menuBarMenu)}
+                                    onClick={this.props.onClickAccount}
+                                    onClose={this.props.onRequestCloseAccount}
+                                    onLogOut={this.props.onLogOut}
+                                />
+                            </React.Fragment>
+                        ) : (
+                            // ********* user not logged in, but a session exists
+                            // ********* so they can choose to log in
+                            <React.Fragment>
+                                <div
+                                    className={classNames(
+                                        styles.menuBarItem,
+                                        styles.hoverable
+                                    )}
+                                    key="join"
+                                    onMouseUp={this.props.onOpenRegistration}
+                                >
+                                    <FormattedMessage
+                                        defaultMessage="Join Scratch"
+                                        description="Link for creating a Scratch account"
+                                        id="gui.menuBar.joinScratch"
+                                    />
+                                </div>
+                                <div
+                                    className={classNames(
+                                        styles.menuBarItem,
+                                        styles.hoverable
+                                    )}
+                                    key="login"
+                                    onMouseUp={this.props.onClickLogin}
+                                >
+                                    <FormattedMessage
+                                        defaultMessage="Sign in"
+                                        description="Link for signing in to your Scratch account"
+                                        id="gui.menuBar.signIn"
+                                    />
+                                    <LoginDropdown
+                                        className={classNames(styles.menuBarMenu)}
+                                        isOpen={this.props.loginMenuOpen}
+                                        isRtl={this.props.isRtl}
+                                        renderLogin={this.props.renderLogin}
+                                        onClose={this.props.onRequestCloseLogin}
+                                    />
+                                </div>
+                            </React.Fragment>
+                        )
+                    ) : (
+                        // ******** no login session is available, so don't show login stuff
+                        <React.Fragment>
+                            <div className={classNames(styles.menuBarItem, styles.feedbackButtonWrapper)}>
+                                <a
+                                    className={styles.feedbackLink}
+                                    href="https://scratch.mit.edu/discuss/topic/312261/"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    <Button
+                                        className={styles.feedbackButton}
+                                        iconSrc={feedbackIcon}
+                                    >
+                                        <FormattedMessage
+                                            defaultMessage="Give Feedback"
+                                            description="Label for feedback form modal button"
+                                            id="gui.menuBar.giveFeedback"
+                                        />
+                                    </Button>
+                                </a>
+                            </div>
+                            {this.props.showComingSoon ? (
+                                <React.Fragment>
+                                    <MenuBarItemTooltip id="mystuff">
+                                        <div
+                                            className={classNames(
+                                                styles.menuBarItem,
+                                                styles.hoverable,
+                                                styles.mystuffButton
+                                            )}
+                                        >
+                                            <img
+                                                className={styles.mystuffIcon}
+                                                src={mystuffIcon}
+                                            />
+                                        </div>
+                                    </MenuBarItemTooltip>
+                                    <MenuBarItemTooltip
+                                        id="account-nav"
+                                        place={this.props.isRtl ? 'right' : 'left'}
+                                    >
+                                        <div
+                                            className={classNames(
+                                                styles.menuBarItem,
+                                                styles.hoverable,
+                                                styles.accountNavMenu
+                                            )}
+                                        >
+                                            <img
+                                                className={styles.profileIcon}
+                                                src={profileIcon}
+                                            />
+                                            <span>
+                                                {'scratch-cat'}
+                                            </span>
+                                            <img
+                                                className={styles.dropdownCaretIcon}
+                                                src={dropdownCaret}
+                                            />
+                                        </div>
+                                    </MenuBarItemTooltip>
+                                </React.Fragment>
+                            ) : []}
+                        </React.Fragment>
+                    )}
                 </div>
             </Box>
         );
@@ -490,57 +666,88 @@ class MenuBar extends React.Component {
 }
 
 MenuBar.propTypes = {
+    accountMenuOpen: PropTypes.bool,
+    canCreateCopy: PropTypes.bool,
+    canCreateNew: PropTypes.bool,
+    canRemix: PropTypes.bool,
+    canSave: PropTypes.bool,
+    canShare: PropTypes.bool,
+    className: PropTypes.string,
     editMenuOpen: PropTypes.bool,
     enableCommunity: PropTypes.bool,
     fileMenuOpen: PropTypes.bool,
-    userMenuOpen: PropTypes.bool,
     intl: intlShape,
     isRtl: PropTypes.bool,
+    isShared: PropTypes.bool,
+    isShowingProject: PropTypes.bool,
+    isUpdating: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
+    loginMenuOpen: PropTypes.bool,
+    onClickAccount: PropTypes.func,
     onClickEdit: PropTypes.func,
     onClickFile: PropTypes.func,
     onClickLanguage: PropTypes.func,
-    onClickUser: PropTypes.func,
-    onOpenSaveModal: PropTypes.func,
+    onClickLogin: PropTypes.func,
+    onClickNew: PropTypes.func,
+    onClickRemix: PropTypes.func,
+    onClickSave: PropTypes.func,
+    onClickSaveAsCopy: PropTypes.func,
+    onLogOut: PropTypes.func,
+    onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
-    onOpenWorkLibrary: PropTypes.func,
+    onRequestCloseAccount: PropTypes.func,
     onRequestCloseEdit: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
-    onRequestCloseUser: PropTypes.func,
+    onRequestCloseLanguage: PropTypes.func,
+    onRequestCloseLogin: PropTypes.func,
     onSeeCommunity: PropTypes.func,
-    onViewProject: PropTypes.func,
-    work: PropTypes.object
+    onShare: PropTypes.func,
+    onToggleLoginOpen: PropTypes.func,
+    onUpdateProjectTitle: PropTypes.func,
+    renderLogin: PropTypes.func,
+    sessionExists: PropTypes.bool,
+    showComingSoon: PropTypes.bool,
+    username: PropTypes.string
 };
 
-const mapStateToProps = state => ({
-    work: state.scratchGui.scratch.work,
-    fileMenuOpen: fileMenuOpen(state),
-    editMenuOpen: editMenuOpen(state),
-    userMenuOpen: userMenuOpen(state),
-    isRtl: state.locales.isRtl,
-    languageMenuOpen: languageMenuOpen(state)
-});
+MenuBar.defaultProps = {
+    onShare: () => {}
+};
+
+const mapStateToProps = state => {
+    const loadingState = state.scratchGui.projectState.loadingState;
+    const user = state.session && state.session.session && state.session.session.user;
+    return {
+        accountMenuOpen: accountMenuOpen(state),
+        fileMenuOpen: fileMenuOpen(state),
+        editMenuOpen: editMenuOpen(state),
+        isRtl: state.locales.isRtl,
+        isUpdating: getIsUpdating(loadingState),
+        isShowingProject: getIsShowingProject(loadingState),
+        languageMenuOpen: languageMenuOpen(state),
+        loginMenuOpen: loginMenuOpen(state),
+        sessionExists: state.session && typeof state.session.session !== 'undefined',
+        username: user ? user.username : null
+    };
+};
 
 const mapDispatchToProps = dispatch => ({
-    onOpenWorkLibrary: () => dispatch(openWorkLibrary()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
+    onClickAccount: () => dispatch(openAccountMenu()),
+    onRequestCloseAccount: () => dispatch(closeAccountMenu()),
     onClickFile: () => dispatch(openFileMenu()),
     onRequestCloseFile: () => dispatch(closeFileMenu()),
     onClickEdit: () => dispatch(openEditMenu()),
     onRequestCloseEdit: () => dispatch(closeEditMenu()),
-    onClickUser: () => dispatch(openUserMenu()),
-    onRequestCloseUser: () => dispatch(closeUserMenu()),
-    onSeeCommunity: () => dispatch(setPlayer(true)),
-    onViewProject: () => {
-        dispatch(openImportInfo());
-    },
-    onOpenSaveModal: () => {
-        dispatch(openSaveModal());
-    },
-    onOpenLoginModal: () => {
-        dispatch(openLoginModal());
-    },
-    setWork:work => {dispatch(setWork(work));}
+    onClickLanguage: () => dispatch(openLanguageMenu()),
+    onRequestCloseLanguage: () => dispatch(closeLanguageMenu()),
+    onClickLogin: () => dispatch(openLoginMenu()),
+    onRequestCloseLogin: () => dispatch(closeLoginMenu()),
+    onClickNew: needSave => dispatch(requestNewProject(needSave)),
+    onClickRemix: () => dispatch(remixProject()),
+    onClickSave: () => dispatch(updateProject()),
+    onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
+    onSeeCommunity: () => dispatch(setPlayer(true))
 });
 
 export default injectIntl(connect(

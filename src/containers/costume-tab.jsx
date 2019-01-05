@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
+import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import VM from 'scratch-vm';
 
 import AssetPanel from '../components/asset-panel/asset-panel.jsx';
@@ -10,6 +11,8 @@ import {connect} from 'react-redux';
 import {handleFileUpload, costumeUpload} from '../lib/file-uploader.js';
 import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
 import DragConstants from '../lib/drag-constants';
+import {emptyCostume} from '../lib/empty-assets';
+import sharedMessages from '../lib/shared-messages';
 
 import {
     closeCameraCapture,
@@ -36,15 +39,45 @@ import searchIcon from '../components/action-menu/icon--search.svg';
 import costumeLibraryContent from '../lib/libraries/costumes.json';
 import backdropLibraryContent from '../lib/libraries/backdrops.json';
 
-const messages = {
-    addLibraryBackdropMsg: '选择背景',
-    addLibraryCostumeMsg: '选择造型',
-    addBlankCostumeMsg: '绘制',
-    addSurpriseCostumeMsg: '随机',
-    addFileBackdropMsg: '上传',
-    addFileCostumeMsg: '上传造型',
-    addCameraCostumeMsg:  '相机'
-};
+let messages = defineMessages({
+    addLibraryBackdropMsg: {
+        defaultMessage: 'Choose a Backdrop',
+        description: 'Button to add a backdrop in the editor tab',
+        id: 'gui.costumeTab.addBackdropFromLibrary'
+    },
+    addLibraryCostumeMsg: {
+        defaultMessage: 'Choose a Costume',
+        description: 'Button to add a costume in the editor tab',
+        id: 'gui.costumeTab.addCostumeFromLibrary'
+    },
+    addBlankCostumeMsg: {
+        defaultMessage: 'Paint',
+        description: 'Button to add a blank costume in the editor tab',
+        id: 'gui.costumeTab.addBlankCostume'
+    },
+    addSurpriseCostumeMsg: {
+        defaultMessage: 'Surprise',
+        description: 'Button to add a surprise costume in the editor tab',
+        id: 'gui.costumeTab.addSurpriseCostume'
+    },
+    addFileBackdropMsg: {
+        defaultMessage: 'Upload Backdrop',
+        description: 'Button to add a backdrop by uploading a file in the editor tab',
+        id: 'gui.costumeTab.addFileBackdrop'
+    },
+    addFileCostumeMsg: {
+        defaultMessage: 'Upload Costume',
+        description: 'Button to add a costume by uploading a file in the editor tab',
+        id: 'gui.costumeTab.addFileCostume'
+    },
+    addCameraCostumeMsg: {
+        defaultMessage: 'Camera',
+        description: 'Button to use the camera to create a costume costume in the editor tab',
+        id: 'gui.costumeTab.addCameraCostume'
+    }
+});
+
+messages = {...messages, ...sharedMessages};
 
 class CostumeTab extends React.Component {
     constructor (props) {
@@ -121,20 +154,10 @@ class CostumeTab extends React.Component {
         this.props.vm.addCostume(costume.md5, costume);
     }
     handleNewBlankCostume () {
-        const emptyItem = costumeLibraryContent.find(item => (
-            item.name === 'Empty'
-        ));
-        const name = this.props.vm.editingTarget.isStage ? `backdrop1` : `costume1`;
-        const vmCostume = {
-            name: name,
-            md5: emptyItem.md5,
-            rotationCenterX: emptyItem.info[0],
-            rotationCenterY: emptyItem.info[1],
-            bitmapResolution: emptyItem.info.length > 2 ? emptyItem.info[2] : 1,
-            skinId: null
-        };
-
-        this.handleNewCostume(vmCostume);
+        const name = this.props.vm.editingTarget.isStage ?
+            this.props.intl.formatMessage(messages.backdrop, {index: 1}) :
+            this.props.intl.formatMessage(messages.costume, {index: 1});
+        this.handleNewCostume(emptyCostume(name));
     }
     handleSurpriseCostume () {
         const item = costumeLibraryContent[Math.floor(Math.random() * costumeLibraryContent.length)];
@@ -172,7 +195,8 @@ class CostumeTab extends React.Component {
     }
     handleCameraBuffer (buffer) {
         const storage = this.props.vm.runtime.storage;
-        costumeUpload(buffer, 'image/png', 'costume1', storage, this.handleNewCostume);
+        const name = this.props.intl.formatMessage(messages.costume, {index: 1});
+        costumeUpload(buffer, 'image/png', name, storage, this.handleNewCostume);
     }
     handleFileUploadClick () {
         this.fileInput.click();
@@ -210,6 +234,8 @@ class CostumeTab extends React.Component {
     render () {
         const {
             dispatchUpdateRestore, // eslint-disable-line no-unused-vars
+            intl,
+            isRtl,
             onNewCostumeFromCameraClick,
             onNewLibraryBackdropClick,
             onNewLibraryCostumeClick,
@@ -233,7 +259,7 @@ class CostumeTab extends React.Component {
 
         const costumeData = target.costumes ? target.costumes.map(costume => ({
             name: costume.name,
-            assetId: costume.assetId,
+            asset: costume.asset,
             details: costume.size ? this.formatCostumeDetails(costume.size, costume.bitmapResolution) : null,
             dragPayload: costume
         })) : [];
@@ -241,40 +267,41 @@ class CostumeTab extends React.Component {
             <AssetPanel
                 buttons={[
                     {
-                        title: addLibraryMessage,
+                        title: intl.formatMessage(addLibraryMessage),
                         img: addLibraryIcon,
                         onClick: addLibraryFunc
                     },
                     {
-                        title: messages.addCameraCostumeMsg,
+                        title: intl.formatMessage(messages.addCameraCostumeMsg),
                         img: cameraIcon,
                         onClick: onNewCostumeFromCameraClick
                     },
                     {
-                        title: addFileMessage,
+                        title: intl.formatMessage(addFileMessage),
                         img: fileUploadIcon,
                         onClick: this.handleFileUploadClick,
                         fileAccept: '.svg, .png, .jpg, .jpeg',
                         fileChange: this.handleCostumeUpload,
                         fileInput: this.setFileInput
                     },
-                    // {
-                    //     title: messages.addSurpriseCostumeMsg,
-                    //     img: surpriseIcon,
-                    //     onClick: addSurpriseFunc
-                    // },
                     {
-                        title: messages.addBlankCostumeMsg,
+                        title: intl.formatMessage(messages.addSurpriseCostumeMsg),
+                        img: surpriseIcon,
+                        onClick: addSurpriseFunc
+                    },
+                    {
+                        title: intl.formatMessage(messages.addBlankCostumeMsg),
                         img: paintIcon,
                         onClick: this.handleNewBlankCostume
                     },
                     {
-                        title: addLibraryMessage,
+                        title: intl.formatMessage(addLibraryMessage),
                         img: searchIcon,
                         onClick: addLibraryFunc
                     }
                 ]}
                 dragType={DragConstants.COSTUME}
+                isRtl={isRtl}
                 items={costumeData}
                 selectedItemIndex={this.state.selectedCostumeIndex}
                 onDeleteClick={target && target.costumes && target.costumes.length > 1 ?
@@ -304,6 +331,8 @@ CostumeTab.propTypes = {
     cameraModalVisible: PropTypes.bool,
     dispatchUpdateRestore: PropTypes.func,
     editingTarget: PropTypes.string,
+    intl: intlShape,
+    isRtl: PropTypes.bool,
     onActivateSoundsTab: PropTypes.func.isRequired,
     onNewCostumeFromCameraClick: PropTypes.func.isRequired,
     onNewLibraryBackdropClick: PropTypes.func.isRequired,
@@ -328,6 +357,7 @@ CostumeTab.propTypes = {
 
 const mapStateToProps = state => ({
     editingTarget: state.scratchGui.targets.editingTarget,
+    isRtl: state.locales.isRtl,
     sprites: state.scratchGui.targets.sprites,
     stage: state.scratchGui.targets.stage,
     dragging: state.scratchGui.assetDrag.dragging,
@@ -356,8 +386,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default errorBoundaryHOC('Costume Tab')(
-    connect(
+    injectIntl(connect(
         mapStateToProps,
         mapDispatchToProps
-    )(CostumeTab)
+    )(CostumeTab))
 );

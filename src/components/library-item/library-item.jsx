@@ -2,13 +2,10 @@ import bindAll from 'lodash.bindall';
 import {FormattedMessage} from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
-import LazyLoad from 'react-lazy-load';
+
 import Box from '../box/box.jsx';
 import styles from './library-item.css';
 import classNames from 'classnames';
-import editIcon from '../../lib/assets/edit-icon-white.png';
-import deleteIcon from '../../lib/assets/delete-icon-white.png';
-import soundIcon from '../../lib/assets/sound-icon.png';
 
 class LibraryItem extends React.PureComponent {
     constructor (props) {
@@ -19,18 +16,8 @@ class LibraryItem extends React.PureComponent {
             'handleFocus',
             'handleKeyPress',
             'handleMouseEnter',
-            'handleMouseLeave',
-            'handleEdit',
-            'handleDelete'
+            'handleMouseLeave'
         ]);
-    }
-    handleDelete(e){
-        this.props.onDelete(this.props.resourceId);
-        e.stopPropagation();
-    }
-    handleEdit(e){
-        this.props.onEdit(this.props.resourceId);
-        e.stopPropagation();
     }
     handleBlur () {
         this.props.onBlur(this.props.id);
@@ -96,8 +83,8 @@ class LibraryItem extends React.PureComponent {
                 className={styles.libraryItem}
                 role="button"
                 tabIndex="0"
-                onClick={this.handleClick}
                 onBlur={this.handleBlur}
+                onClick={this.handleClick}
                 onFocus={this.handleFocus}
                 onKeyPress={this.handleKeyPress}
                 onMouseEnter={this.handleMouseEnter}
@@ -106,27 +93,10 @@ class LibraryItem extends React.PureComponent {
                 {/* Layers of wrapping is to prevent layout thrashing on animation */}
                 <Box className={styles.libraryItemImageContainerWrapper}>
                     <Box className={styles.libraryItemImageContainer}>
-                        <LazyLoad width="100%" height="100%" className={styles.libraryItemImageContainer}>
-                            <img
-                                className={classNames(
-                                    {[styles.libraryItemBg]: this.props.type == 1},
-                                    {[styles.libraryItemImage]: this.props.type !== 1}
-                                )}
-                                src={this.props.type == 4 ? soundIcon : this.props.iconURL}
-                                crossOrigin="anonymous"
-                            />
-                        </LazyLoad>
-                        {
-                            this.props.isEdit &&
-                            <Box className={styles.editArea}>
-                                <Box className={styles.editItem} onClick={this.handleEdit}>
-                                    <img className={styles.editItemImg} src={editIcon}/> 编辑
-                                </Box>
-                                <Box className={styles.editItem} onClick={this.handleDelete}>
-                                    <img className={styles.editItemImg} src={deleteIcon}/> 删除
-                                </Box>
-                            </Box>
-                        }
+                        <img
+                            className={styles.libraryItemImage}
+                            src={this.props.iconURL}
+                        />
                     </Box>
                 </Box>
                 <span className={styles.libraryItemName}>{this.props.name}</span>

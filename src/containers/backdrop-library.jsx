@@ -1,9 +1,9 @@
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
+import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import {connect} from 'react-redux';
 import VM from 'scratch-vm';
-import request from '../lib/request';
 
 import {
     activateTab,
@@ -11,121 +11,26 @@ import {
 } from '../reducers/editor-tab';
 
 import analytics from '../lib/analytics';
+import backdropLibraryContent from '../lib/libraries/backdrops.json';
+import backdropTags from '../lib/libraries/backdrop-tags';
 import LibraryComponent from '../components/library/library.jsx';
-import {setWork} from '../reducers/scratch';
+
+const messages = defineMessages({
+    libraryTitle: {
+        defaultMessage: 'Choose a Backdrop',
+        description: 'Heading for the backdrop library',
+        id: 'gui.costumeLibrary.chooseABackdrop'
+    }
+});
 
 
-const PUBLIC_RESOURCE = 1;
-const PERSONAL_RESOURCE = 0;
-const DEFAULT_RESOURCE = 2;
-const BackdropType = 1;
-const Personal = 1;
-const notPersonal = 0;
 class BackdropLibrary extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleItemSelect',
-            'handleChange',
-            'getResource',
-            'getDefault',
-            'getType',
-            'getUserResource'
+            'handleItemSelect'
         ]);
-        this.state = {
-            backdrop: [],
-            tags: null
-        };
     }
-
-    componentDidMount () {
-        this.getType(BackdropType);// 获取类别 type, platFormId, userToken
-        this.checkResource();
-        // this.getResource(1,1);    // 获取素材 type, platFormId, userToken, typeId
-    }
-
-    getDefault (){
-        request.default_request(request.GET, null, '/backdrops.json', result => {
-            if (result) {
-                this.setState({backdrop: result});
-            }
-        }, '//cdn.imayuan.com');
-    }
-
-    getResource (type, isPersonal){
-        let work = this.props.work;
-        request.default_request(request.GET, null, `/api/resource/getResourceByType?type=${type}&isPersonal=${isPersonal}`, result => {
-            if (result.code !== request.NotFindError && result.result) {
-                localStorage.setItem('scripts1', JSON.stringify(result.result));
-                localStorage.setItem('scriptsMd1', result.msg);
-                this.setState({backdrop: result.result});
-            }
-        });
-    }
-
-    getUserResource (type){
-        // 获取个人素材
-        this.setState({backdrop: []});
-        request.default_request(request.GET, null, `/api/resource/getUserResByType?type=${type}`, result => {
-            if (result.result) {
-                this.setState({backdrop: result.result});
-            }
-        });
-    }
-
-    getType (type){
-        let work = this.props.work;
-        if(work.userToken) {
-            request.default_request(request.GET, null, `/api/scratch/type?type=${type}&platFormId=${work.platFormId}`, result => {
-                if (result.code !== request.NotFindError && result.result) {
-                    let tags = [];
-                    result.result.map(tag => {
-                        tags.push({id: tag.typeId, title: tag.name});
-                    });
-                    this.setState({tags: tags});
-                }
-            });
-        }
-    }
-
-    checkResource (){
-        let work = this.props.work;
-        if(work.userToken) {
-            // 校验md5是否失效
-            // 若失效,则请求获取资源且存入localstorage
-            // 若未失效,则直接从localstorage中获取资源
-            const scriptsMd1 = localStorage.getItem('scriptsMd1');
-            if (scriptsMd1 !== null && scriptsMd1 !== '') {
-                request.default_request(request.GET, null,
-                    `/api/resource/checkResource?type=${BackdropType}&value=${scriptsMd1}`, result => {
-                        if (result) {
-                            this.setState({backdrop: JSON.parse(localStorage.getItem('scripts1'))});
-                        } else {
-                            this.getResource(BackdropType, notPersonal);
-                        }
-                    });
-            } else {
-                this.getResource(BackdropType, notPersonal);
-            }
-        } else {
-            this.getDefault();
-        }
-    }
-
-    handleChange (type){
-        // 课程素材{type=1},默认素材{type=2}切换
-        if (type == PUBLIC_RESOURCE){
-            // this.getResource(1,1);
-            this.checkResource();
-            } else if (type == DEFAULT_RESOURCE) {
-            this.getDefault();
-        } else {
-            // 获取个人
-            this.getUserResource(BackdropType);
-        }
-    }
-
-
     handleItemSelect (item) {
         const vmBackdrop = {
             name: item.name,
@@ -143,43 +48,37 @@ class BackdropLibrary extends React.Component {
             label: item.name
         });
     }
-
     render () {
         return (
             <LibraryComponent
-                data={this.state.backdrop}
+                data={backdropLibraryContent}
                 id="backdropLibrary"
-                tags={this.state.tags}
-                title="选择背景"
-                type={BackdropType}
-                iLogin={this.props.work.userToken ? true : false}
+                tags={backdropTags}
+                title={this.props.intl.formatMessage(messages.libraryTitle)}
                 onItemSelected={this.handleItemSelect}
                 onRequestClose={this.props.onRequestClose}
-                onTabChange={this.handleChange}
-                handleReload={() => this.getUserResource(BackdropType)}
             />
         );
     }
 }
 
 BackdropLibrary.propTypes = {
+    intl: intlShape.isRequired,
     onActivateTab: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func,
     stageID: PropTypes.string.isRequired,
-    vm: PropTypes.instanceOf(VM).isRequired,
-    work: PropTypes.object
+    vm: PropTypes.instanceOf(VM).isRequired
 };
 
 const mapStateToProps = state => ({
-    stageID: state.scratchGui.targets.stage.id,
-    work: state.scratchGui.scratch.work
+    stageID: state.scratchGui.targets.stage.id
 });
 
 const mapDispatchToProps = dispatch => ({
     onActivateTab: tab => dispatch(activateTab(tab))
 });
 
-export default connect(
+export default injectIntl(connect(
     mapStateToProps,
     mapDispatchToProps
-)(BackdropLibrary);
+)(BackdropLibrary));

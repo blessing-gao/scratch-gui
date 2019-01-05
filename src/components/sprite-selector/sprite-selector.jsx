@@ -7,7 +7,7 @@ import SpriteInfo from '../../containers/sprite-info.jsx';
 import SpriteList from './sprite-list.jsx';
 import ActionMenu from '../action-menu/action-menu.jsx';
 import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants';
-import RtlLocales from '../../lib/rtl-locales';
+import {isRtl} from 'scratch-l10n';
 
 import styles from './sprite-selector.css';
 
@@ -17,12 +17,28 @@ import spriteIcon from '../action-menu/icon--sprite.svg';
 import surpriseIcon from '../action-menu/icon--surprise.svg';
 import searchIcon from '../action-menu/icon--search.svg';
 
-const messages = {
-    addSpriteFromLibrary: '选择角色',
-    addSpriteFromPaint: '绘制',
-    addSpriteFromSurprise: '随机',
-    addSpriteFromFile: '上传'
-};
+const messages = defineMessages({
+    addSpriteFromLibrary: {
+        id: 'gui.spriteSelector.addSpriteFromLibrary',
+        description: 'Button to add a sprite in the target pane from library',
+        defaultMessage: 'Choose a Sprite'
+    },
+    addSpriteFromPaint: {
+        id: 'gui.spriteSelector.addSpriteFromPaint',
+        description: 'Button to add a sprite in the target pane from paint',
+        defaultMessage: 'Paint'
+    },
+    addSpriteFromSurprise: {
+        id: 'gui.spriteSelector.addSpriteFromSurprise',
+        description: 'Button to add a random sprite in the target pane',
+        defaultMessage: 'Surprise'
+    },
+    addSpriteFromFile: {
+        id: 'gui.spriteSelector.addSpriteFromFile',
+        description: 'Button to add a sprite in the target pane from file',
+        defaultMessage: 'Upload Sprite'
+    }
+});
 
 const SpriteSelectorComponent = function (props) {
     const {
@@ -103,30 +119,28 @@ const SpriteSelectorComponent = function (props) {
                 img={spriteIcon}
                 moreButtons={[
                     {
-                        title: messages.addSpriteFromFile,
+                        title: intl.formatMessage(messages.addSpriteFromFile),
                         img: fileUploadIcon,
                         onClick: onFileUploadClick,
                         fileAccept: '.svg, .png, .jpg, .jpeg, .sprite2, .sprite3',
                         fileChange: onSpriteUpload,
                         fileInput: spriteFileInput
-                    },
-                    // {
-                    //     title: messages.addSpriteFromSurprise,
-                    //     img: surpriseIcon,
-                    //     onClick: onSurpriseSpriteClick // TODO need real function for this
-                    // },
-                    {
-                        title: messages.addSpriteFromPaint,
+                    }, {
+                        title: intl.formatMessage(messages.addSpriteFromSurprise),
+                        img: surpriseIcon,
+                        onClick: onSurpriseSpriteClick // TODO need real function for this
+                    }, {
+                        title: intl.formatMessage(messages.addSpriteFromPaint),
                         img: paintIcon,
                         onClick: onPaintSpriteClick // TODO need real function for this
                     }, {
-                        title: messages.addSpriteFromLibrary,
+                        title: intl.formatMessage(messages.addSpriteFromLibrary),
                         img: searchIcon,
                         onClick: onNewSpriteClick
                     }
                 ]}
-                title={messages.addSpriteFromLibrary}
-                tooltipPlace={RtlLocales.indexOf(intl.locale) === -1 ? 'left' : 'right'}
+                title={intl.formatMessage(messages.addSpriteFromLibrary)}
+                tooltipPlace={isRtl(intl.locale) ? 'right' : 'left'}
                 onClick={onNewSpriteClick}
             />
         </Box>

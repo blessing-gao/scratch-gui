@@ -1,6 +1,6 @@
 import {BitmapAdapter} from 'scratch-svg-renderer';
 import log from './log.js';
-import request ,{getQueryString, getTargetId} from './request';
+
 /**
  * Extract the file name given a string of the form fileName + ext
  * @param {string} nameExt File name + extension (e.g. 'my_image.png')
@@ -29,6 +29,7 @@ const handleFileUpload = function (fileInput, onload) {
         fileInput.value = null;
         const fileType = thisFile.type;
         const fileName = extractFileName(thisFile.name);
+
         onload(reader.result, fileType, fileName);
     };
     if (fileInput.files) {
@@ -50,7 +51,7 @@ const handleFileUpload = function (fileInput, onload) {
  */
 
 /**
- * Cache an asset (costume, sound) in storage and return an object representation
+ * Create an asset (costume, sound) with storage and return an object representation
  * of the asset to track in the VM.
  * @param {ScratchStorage} storage The storage to cache the asset in
  * @param {string} fileName The name of the asset
@@ -61,18 +62,21 @@ const handleFileUpload = function (fileInput, onload) {
  * @return {VMAsset} An object representing this asset and relevant information
  * which can be used to look up the data in storage
  */
-const cacheAsset = function (storage, fileName, assetType, dataFormat, data) {
-    const md5 = storage.builtinHelper.cache(
+const createVMAsset = function (storage, fileName, assetType, dataFormat, data) {
+    const asset = storage.createAsset(
         assetType,
         dataFormat,
-        data
+        data,
+        null,
+        true // generate md5
     );
 
     return {
         name: fileName,
         dataFormat: dataFormat,
-        md5: `${md5}.${dataFormat}`,
-        assetId: md5
+        asset: asset,
+        md5: `${asset.assetId}.${dataFormat}`,
+        assetId: asset.assetId
     };
 };
 
@@ -113,23 +117,16 @@ const costumeUpload = function (fileData, fileType, costumeName, storage, handle
 
     const bitmapAdapter = new BitmapAdapter();
     const addCostumeFromBuffer = function (dataBuffer) {
-        const vmCostume = cacheAsset(
+        const vmCostume = createVMAsset(
             storage,
             costumeName,
             assetType,
             costumeFormat,
             dataBuffer
         );
-        // todo 上传切面，此处已经完成对新造型命名，接下来出入文件上传操作，新文件名从vmCostume.md5中读取，文件流是filedata
-        const reqData = {
-            filename: vmCostume.md5,
-            file: new Blob([fileData])
-        };
-        request.file_request(request.POST, reqData, '/api/aliyun/fileUpload', result => {
-            // console.log(result);
-        });
         handleCostume(vmCostume);
     };
+
     if (costumeFormat === storage.DataFormat.SVG) {
         // Must pass in file data as a Uint8Array,
         // passing in an array buffer causes the sprite/costume
@@ -176,24 +173,18 @@ const soundUpload = function (fileData, fileType, soundName, storage, handleSoun
         return;
     }
 
-    const vmSound = cacheAsset(
+    const vmSound = createVMAsset(
         storage,
         soundName,
         storage.AssetType.Sound,
         soundFormat,
         new Uint8Array(fileData));
-    // todo 上传切面，此处已经完成对新音乐命名，接下来出入文件上传操作，vmSound.md5中读取，文件流是filedata
-    const reqData = {
-        filename: vmSound.md5,
-        file: new Blob([fileData])
-    };
-    request.file_request(request.POST, reqData, '/api/aliyun/fileUpload', result => {
-        // console.log(result);
-    });
+
     handleSound(vmSound);
 };
 
-const spriteUpload = function (fileData, fileType, spriteName, storage, handleSprite) {
+const spriteUpload = function (fileData, fileType, spriteName, storage, handleSprite, costumeSuffix) {
+    const costumeName = costumeSuffix || 'costume1';
     switch (fileType) {
     case '':
     case 'application/zip': { // We think this is a .sprite2 or .sprite3 file
@@ -204,7 +195,7 @@ const spriteUpload = function (fileData, fileType, spriteName, storage, handleSp
     case 'image/png':
     case 'image/jpeg': {
         // Make a sprite from an image by making it a costume first
-        costumeUpload(fileData, fileType, `${spriteName}-costume1`, storage, (vmCostume => {
+        costumeUpload(fileData, fileType, `${spriteName}-${costumeName}`, storage, (vmCostume => {
             const newSprite = {
                 name: spriteName,
                 isStage: false,
@@ -222,7 +213,6 @@ const spriteUpload = function (fileData, fileType, spriteName, storage, handleSp
                 sounds: [] // TODO are all of these necessary?
             };
             // TODO probably just want sprite upload to handle this object directly
-
             handleSprite(JSON.stringify(newSprite));
         }));
         return;
