@@ -139,9 +139,9 @@ const GUIComponent = props => {
                 dir={isRtl ? 'rtl' : 'ltr'}
                 {...componentProps}
             >
-                {previewInfoVisible ? (
-                    <PreviewModal />
-                ) : null}
+                {/* {previewInfoVisible ? (*/}
+                {/* <PreviewModal />*/}
+                {/* ) : null}*/}
                 {loading ? (
                     <Loader />
                 ) : null}

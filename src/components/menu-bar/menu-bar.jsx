@@ -59,7 +59,7 @@ import remixIcon from './icon--remix.svg';
 import dropdownCaret from './dropdown-caret.svg';
 import languageIcon from '../language-selector/language-icon.svg';
 
-import scratchLogo from './scratch-logo.svg';
+import scratchLogo from './logo.png';
 
 const ariaMessages = defineMessages({
     language: {
@@ -294,12 +294,12 @@ class MenuBar extends React.Component {
                     <div className={styles.fileGroup}>
                         <div className={classNames(styles.menuBarItem)}>
                             <a
-                                href="https://scratch.mit.edu"
+                                href="//imayuan.com"
                                 rel="noopener noreferrer"
                                 target="_blank"
                             >
                                 <img
-                                    alt="Scratch"
+                                    alt="码猿网"
                                     className={styles.scratchLogo}
                                     draggable={false}
                                     src={scratchLogo}
@@ -596,25 +596,6 @@ class MenuBar extends React.Component {
                     ) : (
                         // ******** no login session is available, so don't show login stuff
                         <React.Fragment>
-                            <div className={classNames(styles.menuBarItem, styles.feedbackButtonWrapper)}>
-                                <a
-                                    className={styles.feedbackLink}
-                                    href="https://scratch.mit.edu/discuss/topic/312261/"
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                                >
-                                    <Button
-                                        className={styles.feedbackButton}
-                                        iconSrc={feedbackIcon}
-                                    >
-                                        <FormattedMessage
-                                            defaultMessage="Give Feedback"
-                                            description="Label for feedback form modal button"
-                                            id="gui.menuBar.giveFeedback"
-                                        />
-                                    </Button>
-                                </a>
-                            </div>
                             {this.props.showComingSoon ? (
                                 <React.Fragment>
                                     <MenuBarItemTooltip id="mystuff">
@@ -635,7 +616,7 @@ class MenuBar extends React.Component {
                                         id="account-nav"
                                         place={this.props.isRtl ? 'right' : 'left'}
                                     >
-                                        <div
+                                         <div
                                             className={classNames(
                                                 styles.menuBarItem,
                                                 styles.hoverable,

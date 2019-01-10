@@ -2,6 +2,7 @@ import bindAll from 'lodash.bindall';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {getQueryString} from './request';
 
 import {
     defaultProjectId,
@@ -40,8 +41,11 @@ const HashParserHOC = function (WrappedComponent) {
             window.removeEventListener('hashchange', this.handleHashChange);
         }
         handleHashChange () {
-            const hashMatch = window.location.hash.match(/#(\d+)/);
-            const hashProjectId = hashMatch === null ? defaultProjectId : hashMatch[1];
+            // 控制获取作品ID的方式
+            // const hashMatch = window.location.hash.match(/#(\d+)/);
+            const hashMatch = getQueryString('id');
+            const hashProjectId = hashMatch === null ? defaultProjectId : hashMatch;
+            console.log(hashProjectId)
             this.props.setProjectId(hashProjectId.toString());
             if (hashProjectId !== defaultProjectId) {
                 this.setState({hideIntro: true});

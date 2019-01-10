@@ -10,7 +10,7 @@
  */
 const emptyCostume = name => ({
     name: name,
-    md5: 'cd21514d0531fdffb22204e0ec5ed84a.svg',
+    md5: 'aea5d949532a4142b32728c14384cd6d.svg',
     rotationCenterX: 0,
     rotationCenterY: 0,
     bitmapResolution: 1,
@@ -28,20 +28,13 @@ const emptyCostume = name => ({
 const emptySprite = (name, soundName, costumeName) => ({
     objName: name,
     sounds: [
-        {
-            soundName: soundName,
-            soundID: -1,
-            md5: '83a9787d4cb6f3b7632b4ddfebf74367.wav',
-            sampleCount: 258,
-            rate: 11025,
-            format: ''
-        }
+
     ],
     costumes: [
         {
             costumeName: costumeName,
             baseLayerID: -1,
-            baseLayerMD5: 'cd21514d0531fdffb22204e0ec5ed84a.svg',
+            baseLayerMD5: 'aea5d949532a4142b32728c14384cd6d.svg',
             bitmapResolution: 1,
             rotationCenterX: 0,
             rotationCenterY: 0

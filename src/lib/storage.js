@@ -31,7 +31,7 @@ class Storage extends ScratchStorage {
         this.projectHost = projectHost;
     }
     getProjectGetConfig (projectAsset) {
-        return `${this.projectHost}/internalapi/project/${projectAsset.assetId}/get/`;
+        return `${this.projectHost}/${projectAsset.assetId}.json`;
     }
     getProjectCreateConfig () {
         return {
@@ -49,7 +49,7 @@ class Storage extends ScratchStorage {
         this.assetHost = assetHost;
     }
     getAssetGetConfig (asset) {
-        return `${this.assetHost}/internalapi/asset/${asset.assetId}.${asset.dataFormat}/get/`;
+        return `${this.assetHost}/${asset.assetId}.${asset.dataFormat}`;
     }
     setTranslatorFunction (translator) {
         this.translator = translator;

@@ -51,7 +51,7 @@ class SBFileUploader extends React.Component {
     getProjectTitleFromFilename (fileInputFilename) {
         if (!fileInputFilename) return '';
         // only parse title from files like "filename.sb2" or "filename.sb3"
-        const matches = fileInputFilename.match(/^(.*)\.sb[23]$/);
+        const matches = fileInputFilename.match(/^(.*)\.(sb[23]|my)$/);
         if (!matches) return '';
         return matches[1].substring(0, 100); // truncate project title to max 100 chars
     }
@@ -98,7 +98,7 @@ class SBFileUploader extends React.Component {
     renderFileInput () {
         return (
             <input
-                accept=".sb2,.sb3"
+                accept=".sb2,.sb3,.my"
                 ref={this.setFileInput}
                 style={{display: 'none'}}
                 type="file"
