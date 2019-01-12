@@ -459,15 +459,10 @@ class MenuBar extends React.Component {
                     </div>
                     <Divider className={classNames(styles.divider)} />
                     <div className={classNames(styles.menuBarItem, styles.growable)}>
-                        <MenuBarItemTooltip
-                            enable
-                            id="title-field"
-                        >
-                            <ProjectTitleInput
-                                className={classNames(styles.titleFieldGrowable)}
-                                onUpdateProjectTitle={this.props.onUpdateProjectTitle}
-                            />
-                        </MenuBarItemTooltip>
+                        <ProjectTitleInput
+                            className={classNames(styles.titleFieldGrowable)}
+                            onUpdateProjectTitle={this.props.onUpdateProjectTitle}
+                        />
                     </div>
                     <div className={classNames(styles.menuBarItem)}>
                         {this.props.canShare ? shareButton : (
@@ -478,42 +473,6 @@ class MenuBar extends React.Component {
                             ) : []
                         )}
                         {this.props.canRemix ? remixButton : []}
-                    </div>
-                    <div className={classNames(styles.menuBarItem, styles.communityButtonWrapper)}>
-                        {this.props.enableCommunity ? (
-                            <Button
-                                className={classNames(
-                                    styles.menuBarButton,
-                                    styles.communityButton
-                                )}
-                                iconClassName={styles.communityButtonIcon}
-                                iconSrc={communityIcon}
-                                onClick={this.props.onSeeCommunity}
-                            >
-                                <FormattedMessage
-                                    defaultMessage="See Community"
-                                    description="Label for see community button"
-                                    id="gui.menuBar.seeCommunity"
-                                />
-                            </Button>
-                        ) : (this.props.showComingSoon ? (
-                            <MenuBarItemTooltip id="community-button">
-                                <Button
-                                    className={classNames(
-                                        styles.menuBarButton,
-                                        styles.communityButton
-                                    )}
-                                    iconClassName={styles.communityButtonIcon}
-                                    iconSrc={communityIcon}
-                                >
-                                    <FormattedMessage
-                                        defaultMessage="See Community"
-                                        description="Label for see community button"
-                                        id="gui.menuBar.seeCommunity"
-                                    />
-                                </Button>
-                            </MenuBarItemTooltip>
-                        ) : [])}
                     </div>
                 </div>
 
@@ -616,7 +575,7 @@ class MenuBar extends React.Component {
                                         id="account-nav"
                                         place={this.props.isRtl ? 'right' : 'left'}
                                     >
-                                         <div
+                                        <div
                                             className={classNames(
                                                 styles.menuBarItem,
                                                 styles.hoverable,

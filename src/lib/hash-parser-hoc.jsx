@@ -45,7 +45,6 @@ const HashParserHOC = function (WrappedComponent) {
             // const hashMatch = window.location.hash.match(/#(\d+)/);
             const hashMatch = getQueryString('id');
             const hashProjectId = hashMatch === null ? defaultProjectId : hashMatch;
-            console.log(hashProjectId)
             this.props.setProjectId(hashProjectId.toString());
             if (hashProjectId !== defaultProjectId) {
                 this.setState({hideIntro: true});

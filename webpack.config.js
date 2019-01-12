@@ -18,7 +18,14 @@ const base = {
     devServer: {
         contentBase: path.resolve(__dirname, 'build'),
         host: '0.0.0.0',
-        port: process.env.PORT || 8601
+        port: process.env.PORT || 8601,
+        proxy: {
+            // 请求到 '/api' 下 的请求都会被代理到 target： http://localhost:8080 中
+            '/api': {
+                target: 'http://localhost:8081',
+                changeOrigin: true
+            }
+        }
     },
     output: {
         library: 'GUI',

@@ -117,8 +117,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         setProjectId: PropTypes.func
     };
     ProjectFetcherComponent.defaultProps = {
-        assetHost: 'https://cdn.imayuan.com',
-        projectHost: 'https://cdn.imayuan.com/project'
+        assetHost: '/api/project/3.0/resource',
+        projectHost: '/api/project/3.0'
     };
 
     const mapStateToProps = state => ({
