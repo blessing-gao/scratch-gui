@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import VM from 'scratch-vm';
 
-import storage from '../lib/storage';
+import storage from '../storage';
 import {
     LoadingStates,
     createProject,
@@ -17,7 +17,7 @@ import {
     getIsUpdating,
     projectError,
     updateProject
-} from '../reducers/project-state';
+} from '../../reducers/project-state';
 
 /**
  * Higher Order Component to provide behavior for saving projects.

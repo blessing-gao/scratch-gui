@@ -7,9 +7,9 @@ import {compose} from 'redux';
 
 import Box from '../components/box/box.jsx';
 import GUI from '../containers/gui.jsx';
-import HashParserHOC from '../lib/hash-parser-hoc.jsx';
-import AppStateHOC from '../lib/app-state-hoc.jsx';
-import TitledHOC from '../lib/titled-hoc.jsx';
+import HashParserHOC from '../lib/hoc/hash-parser-hoc.jsx';
+import AppStateHOC from '../lib/hoc/app-state-hoc.jsx';
+import TitledHOC from '../lib/hoc/titled-hoc.jsx';
 
 import {setPlayer} from '../reducers/mode';
 

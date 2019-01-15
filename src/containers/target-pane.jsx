@@ -19,7 +19,7 @@ import {handleFileUpload, spriteUpload} from '../lib/file-uploader.js';
 import sharedMessages from '../lib/shared-messages';
 import {emptySprite} from '../lib/empty-assets';
 import {highlightTarget} from '../reducers/targets';
-import {fetchSprite, fetchCode} from '../lib/backpack-api';
+import {fetchSprite, fetchCode} from '../lib/service/backpack-api';
 
 class TargetPane extends React.Component {
     constructor (props) {

@@ -1,6 +1,8 @@
 import log from './log.js';
 
-
+/**
+ * 云变量的支持
+ */
 class CloudProvider {
     /**
      * A cloud data provider which creates and manages a web socket connection

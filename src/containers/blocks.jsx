@@ -14,9 +14,9 @@ import BlocksComponent from '../components/blocks/blocks.jsx';
 import ExtensionLibrary from './extension-library.jsx';
 import extensionData from '../lib/libraries/extensions/index.jsx';
 import CustomProcedures from './custom-procedures.jsx';
-import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
+import errorBoundaryHOC from '../lib/hoc/error-boundary-hoc.jsx';
 import {STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
-import DropAreaHOC from '../lib/drop-area-hoc.jsx';
+import DropAreaHOC from '../lib/hoc/drop-area-hoc.jsx';
 import DragConstants from '../lib/drag-constants';
 
 import {connect} from 'react-redux';

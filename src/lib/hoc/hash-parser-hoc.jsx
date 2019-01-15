@@ -2,13 +2,13 @@ import bindAll from 'lodash.bindall';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getQueryString} from './request';
+import {getQueryString} from '../config';
 
 import {
     defaultProjectId,
     getIsFetchingWithoutId,
     setProjectId
-} from '../reducers/project-state';
+} from '../../reducers/project-state';
 
 /* Higher Order Component to get the project id from location.hash
  * @param {React.Component} WrappedComponent: component to render

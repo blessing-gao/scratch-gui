@@ -2,7 +2,7 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import {indexForPositionOnList} from './drag-utils';
+import {indexForPositionOnList} from '../drag-utils';
 
 const SortableHOC = function (WrappedComponent) {
     class SortableWrapper extends React.Component {

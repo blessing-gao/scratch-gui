@@ -1,5 +1,5 @@
 import GUI from './containers/gui.jsx';
-import AppStateHOC from './lib/app-state-hoc.jsx';
+import AppStateHOC from './lib/hoc/app-state-hoc.jsx';
 import {detectTutorialId} from './lib/tutorial-from-url';
 import GuiReducer, {guiInitialState, guiMiddleware, initFullScreen, initPlayer, initTutorialCard} from './reducers/gui';
 import LocalesReducer, {localesInitialState, initLocale} from './reducers/locales';

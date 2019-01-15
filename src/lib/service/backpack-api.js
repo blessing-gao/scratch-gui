@@ -1,8 +1,8 @@
 import xhr from 'xhr';
-import costumePayload from './backpack/costume-payload';
-import soundPayload from './backpack/sound-payload';
-import spritePayload from './backpack/sprite-payload';
-import codePayload from './backpack/code-payload';
+import costumePayload from '../backpack/costume-payload';
+import soundPayload from '../backpack/sound-payload';
+import spritePayload from '../backpack/sprite-payload';
+import codePayload from '../backpack/code-payload';
 
 // Add a new property for the full thumbnail url, which includes the host.
 // Also include a full body url for loading sprite zips

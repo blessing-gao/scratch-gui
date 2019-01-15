@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers, compose} from 'redux';
-import ConnectedIntlProvider from './connected-intl-provider.jsx';
+import ConnectedIntlProvider from '../connected-intl-provider.jsx';
 
-import localesReducer, {initLocale, localesInitialState} from '../reducers/locales';
+import localesReducer, {initLocale, localesInitialState} from '../../reducers/locales';
 
-import {setPlayer, setFullScreen} from '../reducers/mode.js';
+import {setPlayer, setFullScreen} from '../../reducers/mode.js';
 
 import locales from 'scratch-l10n';
-import {detectLocale} from './detect-locale';
-import {detectTutorialId} from './tutorial-from-url';
+import {detectLocale} from '../detect-locale';
+import {detectTutorialId} from '../tutorial-from-url';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -45,7 +45,7 @@ const AppStateHOC = function (WrappedComponent, localesOnly) {
             } else {
                 // You are right, this is gross. But it's necessary to avoid
                 // importing unneeded code that will crash unsupported browsers.
-                const guiRedux = require('../reducers/gui');
+                const guiRedux = require('../../reducers/gui');
                 const guiReducer = guiRedux.default;
                 const {
                     guiInitialState,

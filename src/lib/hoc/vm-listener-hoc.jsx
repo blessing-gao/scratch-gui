@@ -5,12 +5,12 @@ import VM from 'scratch-vm';
 
 import {connect} from 'react-redux';
 
-import {updateTargets} from '../reducers/targets';
-import {updateBlockDrag} from '../reducers/block-drag';
-import {updateMonitors} from '../reducers/monitors';
-import {setRunningState, setTurboState} from '../reducers/vm-status';
-import {showAlert} from '../reducers/alerts';
-import {updateMicIndicator} from '../reducers/mic-indicator';
+import {updateTargets} from '../../reducers/targets';
+import {updateBlockDrag} from '../../reducers/block-drag';
+import {updateMonitors} from '../../reducers/monitors';
+import {setRunningState, setTurboState} from '../../reducers/vm-status';
+import {showAlert} from '../../reducers/alerts';
+import {updateMicIndicator} from '../../reducers/mic-indicator';
 
 /*
  * Higher Order Component to manage events emitted by the VM

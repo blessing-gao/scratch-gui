@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {compose} from 'redux';
 
-import AppStateHOC from '../lib/app-state-hoc.jsx';
+import AppStateHOC from '../lib/hoc/app-state-hoc.jsx';
 import GUI from '../containers/gui.jsx';
-import HashParserHOC from '../lib/hash-parser-hoc.jsx';
-import TitledHOC from '../lib/titled-hoc.jsx';
+import HashParserHOC from '../lib/hoc/hash-parser-hoc.jsx';
+import TitledHOC from '../lib/hoc/titled-hoc.jsx';
 
 /*
  * Render the GUI playground. This is a separate function because importing anything

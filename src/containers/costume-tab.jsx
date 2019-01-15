@@ -9,7 +9,7 @@ import PaintEditorWrapper from './paint-editor-wrapper.jsx';
 import CameraModal from './camera-modal.jsx';
 import {connect} from 'react-redux';
 import {handleFileUpload, costumeUpload} from '../lib/file-uploader.js';
-import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
+import errorBoundaryHOC from '../lib/hoc/error-boundary-hoc.jsx';
 import DragConstants from '../lib/drag-constants';
 import {emptyCostume} from '../lib/empty-assets';
 import sharedMessages from '../lib/shared-messages';

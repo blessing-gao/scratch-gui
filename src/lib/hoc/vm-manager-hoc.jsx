@@ -5,14 +5,14 @@ import {connect} from 'react-redux';
 
 import VM from 'scratch-vm';
 import AudioEngine from 'scratch-audio';
-import CloudProvider from '../lib/cloud-provider';
+import CloudProvider from '../cloud-provider';
 
 import {
     LoadingStates,
     getIsLoadingWithId,
     onLoadedProject,
     projectError
-} from '../reducers/project-state';
+} from '../../reducers/project-state';
 
 /*
  * Higher Order Component to manage events emitted by the VM

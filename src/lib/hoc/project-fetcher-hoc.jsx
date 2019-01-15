@@ -11,18 +11,22 @@ import {
     onFetchedProjectData,
     projectError,
     setProjectId
-} from '../reducers/project-state';
+} from '../../reducers/project-state';
 
-import analytics from './analytics';
-import log from './log';
-import storage from './storage';
+import analytics from '../analytics';
+import log from '../log';
+import storage from '../storage';
+import {getProjectInfo} from '../service/project-api';
+import {setProject} from '../../reducers/project-info';
 
 /* Higher Order Component to provide behavior for loading projects by id. If
  * there's no id, the default project is loaded.
  * @param {React.Component} WrappedComponent component to receive projectData prop
  * @returns {React.Component} component with project loading behavior
  */
+
 const ProjectFetcherHOC = function (WrappedComponent) {
+
     class ProjectFetcherComponent extends React.Component {
         constructor (props) {
             super(props);
@@ -56,6 +60,14 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             }
         }
         fetchProject (projectId, loadingState) {
+            if (projectId !== '0'){
+                getProjectInfo(projectId).then(contents => {
+                    this.props.onUpdateProject(contents.result);
+                })
+                    .catch(error => {
+                        throw error;
+                    });
+            }
             return storage
                 .load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
                 .then(projectAsset => {
@@ -111,6 +123,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         loadingState: PropTypes.oneOf(LoadingStates),
         onError: PropTypes.func,
         onFetchedProjectData: PropTypes.func,
+        onUpdateProject: PropTypes.func,
         projectHost: PropTypes.string,
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         reduxProjectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -130,7 +143,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         onError: error => dispatch(projectError(error)),
         onFetchedProjectData: (projectData, loadingState) =>
             dispatch(onFetchedProjectData(projectData, loadingState)),
-        setProjectId: projectId => dispatch(setProjectId(projectId))
+        setProjectId: projectId => dispatch(setProjectId(projectId)),
+        onUpdateProject: project => dispatch(setProject(project))
     });
     // Allow incoming props to override redux-provided props. Used to mock in tests.
     const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign(

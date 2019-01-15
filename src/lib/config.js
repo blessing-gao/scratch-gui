@@ -1,62 +1,28 @@
 /* eslint-disable func-style,require-jsdoc */
 require('es6-promise').polyfill();
-require('isomorphic-fetch');
+// require('isomorphic-fetch');
 import Cookies from 'universal-cookie';
 /**
  * Created by 26928 on 2017-10-17.
  */
 const cookies = new Cookies();
-export const ASSET_SERVER = '//owkomi1zd.bkt.clouddn.com/';
 export const COVER_SERVER = '//cdn.imayuan.com/cover/';
 export function getHost () {
-    // console.log(`${window.location.protocol}//${window.location.host}`);
     return '';
-    // return `${window.location.protocol}//${window.location.host}`;
-    // return 'http://192.168.1.100:8081';
 }
+
 export function getQueryString (name) {
     const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
     const r = window.location.search.substr(1).match(reg);
     if (r !== null) return decodeURIComponent(r[2]);
     return null;
 }
-export function getTargetId(url = window.location.href) {
-    if(url.indexOf("#") < 0) return null;
+export function getTargetId (url = window.location.href) {
+    if (url.indexOf('#') < 0) return null;
     const arr = url.split(/\#|\?/);
-    if(arr.length > 1) return arr[1];
+    if (arr.length > 1) return arr[1];
     return null;
 }
-// base64加密开始
-var keyStr = "ABCDEFGHIJKLMNOP" + "QRSTUVWXYZabcdef" + "ghijklmnopqrstuv"
-    + "wxyz0123456789+/" + "=";
-
-export function encode64(input) {
-    var output = "";
-    var chr1, chr2, chr3 = "";
-    var enc1, enc2, enc3, enc4 = "";
-    var i = 0;
-    do {
-        chr1 = input.charCodeAt(i++);
-        chr2 = input.charCodeAt(i++);
-        chr3 = input.charCodeAt(i++);
-        enc1 = chr1 >> 2;
-        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-        enc4 = chr3 & 63;
-        if (isNaN(chr2)) {
-            enc3 = enc4 = 64;
-        } else if (isNaN(chr3)) {
-            enc4 = 64;
-        }
-        output = output + keyStr.charAt(enc1) + keyStr.charAt(enc2)
-            + keyStr.charAt(enc3) + keyStr.charAt(enc4);
-        chr1 = chr2 = chr3 = "";
-        enc1 = enc2 = enc3 = enc4 = "";
-    } while (i < input.length);
-
-    return output;
-};
-
 
 export default {
     POST: 'POST',
@@ -81,7 +47,7 @@ export default {
             const obj = new XMLHttpRequest();
             obj.open(func, HOST + path, asyn);
             obj.setRequestHeader('token', cookies.get('token'));
-            obj.setRequestHeader('platForm', cookies.get('platFormId') || "mayuan");
+            obj.setRequestHeader('platForm', cookies.get('platFormId') || 'mayuan');
             obj.setRequestHeader('Content-type', header ? header : 'application/x-www-form-urlencoded;'); // 添加http头，发送信息至服务器时内容编码类型
             obj.send(data);
             obj.onreadystatechange = function () {
@@ -157,14 +123,14 @@ export default {
                 var formData = new FormData();
                 if (typeof data === 'object'){
                     for (const k in data){
-                        formData.append(k,data[k]);
+                        formData.append(k, data[k]);
                     }
                 }
             }
             const obj = new XMLHttpRequest();
             obj.open(func, HOST + path, asyn);
             obj.setRequestHeader('token', cookies.get('token'));
-            obj.setRequestHeader('platForm', cookies.get('platFormId') || "mayuan");
+            obj.setRequestHeader('platForm', cookies.get('platFormId') || 'mayuan');
             obj.send(formData);
             obj.onreadystatechange = function () {
                 if (obj.readyState == XMLHttpRequest.DONE){
@@ -191,7 +157,7 @@ export default {
         }
     },
     promise_request: function (url, data, method = 'GET', options = {}) {
-        return new Promise(function (resolve, reject) {
+        return new Promise(((resolve, reject) => {
             if (typeof data === 'object'){
                 const arrs = [];
                 for (const k in data){
@@ -199,32 +165,32 @@ export default {
                 }
                 data = arrs.join('&');
             }
-            let params = {
+            const params = {
                 method: method
             };
             if (method === 'GET') { // 如果是GET请求，拼接url
-                url += '?' + data;
+                url += `?${data}`;
             } else {
                 params.body = data;
             }
-            if(options.cookie!=undefined){
-                params.credentials='include'
+            if (options.cookie != undefined){
+                params.credentials = 'include';
             }
-            if(options.headers!=undefined && typeof options.headers=="object"){
-                params.headers=new Headers(options.headers);
-            }else{
-                params.headers=new Headers({
+            if (options.headers != undefined && typeof options.headers === 'object'){
+                params.headers = new Headers(options.headers);
+            } else {
+                params.headers = new Headers({
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded'
                 });
             }
-            fetch(url, params).then((res) => {
+            fetch(url, params).then(res => {
                 if (res.status >= 200 && res.status < 300) {
                     resolve(res);
-                }else {
+                } else {
                     reject(res);
                 }
             });
-        })
+        }));
     }
 };

@@ -3,7 +3,7 @@ import configureStore from 'redux-mock-store';
 
 import {mountWithIntl} from '../../helpers/intl-helpers.jsx';
 
-import ProjectFetcherHOC from '../../../src/lib/project-fetcher-hoc.jsx';
+import ProjectFetcherHOC from '../../../src/lib/hoc/project-fetcher-hoc.jsx';
 import storage from '../../../src/lib/storage';
 import {LoadingState} from '../../../src/reducers/project-state';
 

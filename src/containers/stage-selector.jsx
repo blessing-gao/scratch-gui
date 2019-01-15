@@ -9,10 +9,10 @@ import {openBackdropLibrary} from '../reducers/modals';
 import {activateTab, COSTUMES_TAB_INDEX} from '../reducers/editor-tab';
 import {setHoveredSprite} from '../reducers/hovered-target';
 import DragConstants from '../lib/drag-constants';
-import DropAreaHOC from '../lib/drop-area-hoc.jsx';
+import DropAreaHOC from '../lib/hoc/drop-area-hoc.jsx';
 import {emptyCostume} from '../lib/empty-assets';
 import sharedMessages from '../lib/shared-messages';
-import {fetchCode} from '../lib/backpack-api';
+import {fetchCode} from '../lib/service/backpack-api';
 
 import StageSelectorComponent from '../components/stage-selector/stage-selector.jsx';
 

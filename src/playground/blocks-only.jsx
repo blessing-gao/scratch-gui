@@ -5,8 +5,8 @@ import {connect} from 'react-redux';
 import Controls from '../containers/controls.jsx';
 import Blocks from '../containers/blocks.jsx';
 import GUI from '../containers/gui.jsx';
-import HashParserHOC from '../lib/hash-parser-hoc.jsx';
-import AppStateHOC from '../lib/app-state-hoc.jsx';
+import HashParserHOC from '../lib/hoc/hash-parser-hoc.jsx';
+import AppStateHOC from '../lib/hoc/app-state-hoc.jsx';
 
 import styles from './blocks-only.css';
 

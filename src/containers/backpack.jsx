@@ -10,9 +10,9 @@ import {
     costumePayload,
     spritePayload,
     codePayload
-} from '../lib/backpack-api';
+} from '../lib/service/backpack-api';
 import DragConstants from '../lib/drag-constants';
-import DropAreaHOC from '../lib/drop-area-hoc.jsx';
+import DropAreaHOC from '../lib/hoc/drop-area-hoc.jsx';
 
 import {connect} from 'react-redux';
 import storage from '../lib/storage';

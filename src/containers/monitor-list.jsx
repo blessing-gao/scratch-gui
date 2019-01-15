@@ -6,7 +6,7 @@ import {injectIntl, intlShape} from 'react-intl';
 import {connect} from 'react-redux';
 import {moveMonitorRect} from '../reducers/monitor-layout';
 
-import errorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
+import errorBoundaryHOC from '../lib/hoc/error-boundary-hoc.jsx';
 import OpcodeLabels from '../lib/opcode-labels';
 
 import MonitorListComponent from '../components/monitor-list/monitor-list.jsx';

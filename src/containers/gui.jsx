@@ -4,15 +4,15 @@ import {compose} from 'redux';
 import {connect} from 'react-redux';
 import ReactModal from 'react-modal';
 import VM from 'scratch-vm';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 
-import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
+import ErrorBoundaryHOC from '../lib/hoc/error-boundary-hoc.jsx';
 import {openExtensionLibrary} from '../reducers/modals';
 import {
     getIsError,
     getIsShowingProject
 } from '../reducers/project-state';
-import {setProjectTitle} from '../reducers/project-title';
+import {setProject} from '../reducers/project-info';
 import {
     activateTab,
     BLOCKS_TAB_INDEX,
@@ -25,23 +25,15 @@ import {
     closeBackdropLibrary
 } from '../reducers/modals';
 
-import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
+import FontLoaderHOC from '../lib/hoc/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
-import ProjectFetcherHOC from '../lib/project-fetcher-hoc.jsx';
-import ProjectSaverHOC from '../lib/project-saver-hoc.jsx';
+import ProjectFetcherHOC from '../lib/hoc/project-fetcher-hoc.jsx';
+import ProjectSaverHOC from '../lib/hoc/project-saver-hoc.jsx';
 import storage from '../lib/storage';
-import vmListenerHOC from '../lib/vm-listener-hoc.jsx';
-import vmManagerHOC from '../lib/vm-manager-hoc.jsx';
+import vmListenerHOC from '../lib/hoc/vm-listener-hoc.jsx';
+import vmManagerHOC from '../lib/hoc/vm-manager-hoc.jsx';
 
 import GUIComponent from '../components/gui/gui.jsx';
-
-const messages = defineMessages({
-    defaultProjectTitle: {
-        id: 'gui.gui.defaultProjectTitle',
-        description: 'Default title for project',
-        defaultMessage: 'Scratch Project'
-    }
-});
 
 class GUI extends React.Component {
     componentDidMount () {
@@ -56,13 +48,15 @@ class GUI extends React.Component {
             this.setReduxTitle(this.props.projectTitle);
         }
     }
+
+
     setReduxTitle (newTitle) {
         if (newTitle === null || typeof newTitle === 'undefined') {
             this.props.onUpdateReduxProjectTitle(
-                this.props.intl.formatMessage(messages.defaultProjectTitle)
+                {name: 'Scratch作品'}
             );
         } else {
-            this.props.onUpdateReduxProjectTitle(newTitle);
+            this.props.onUpdateReduxProjectTitle({name: newTitle});
         }
     }
     render () {
@@ -169,7 +163,7 @@ const mapDispatchToProps = dispatch => ({
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
-    onUpdateReduxProjectTitle: title => dispatch(setProjectTitle(title))
+    onUpdateReduxProjectTitle: project => dispatch(setProject(project))
 });
 
 const ConnectedGUI = injectIntl(connect(

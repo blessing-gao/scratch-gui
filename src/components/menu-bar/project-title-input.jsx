@@ -3,21 +3,12 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import React from 'react';
-import {defineMessages, intlShape, injectIntl} from 'react-intl';
 
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
 import Input from '../forms/input.jsx';
 const BufferedInput = BufferedInputHOC(Input);
 
 import styles from './project-title-input.css';
-
-const messages = defineMessages({
-    projectTitlePlaceholder: {
-        id: 'gui.gui.projectTitlePlaceholder',
-        description: 'Placeholder for project title when blank',
-        defaultMessage: 'Project title here'
-    }
-});
 
 class ProjectTitleInput extends React.Component {
     constructor (props) {
@@ -38,10 +29,10 @@ class ProjectTitleInput extends React.Component {
             <BufferedInput
                 className={classNames(styles.titleField, this.props.className)}
                 maxLength="100"
-                placeholder={this.props.intl.formatMessage(messages.projectTitlePlaceholder)}
+                placeholder={'在此填写项目标题'}
                 tabIndex="0"
                 type="text"
-                value={this.props.projectTitle}
+                value={this.props.project.name}
                 onSubmit={this.handleUpdateProjectTitle}
             />
         );
@@ -50,18 +41,19 @@ class ProjectTitleInput extends React.Component {
 
 ProjectTitleInput.propTypes = {
     className: PropTypes.string,
-    intl: intlShape.isRequired,
     onUpdateProjectTitle: PropTypes.func,
-    projectTitle: PropTypes.string
+    project: PropTypes.shape({
+        name: PropTypes.string
+    })
 };
 
 const mapStateToProps = state => ({
-    projectTitle: state.scratchGui.projectTitle
+    project: state.scratchGui.projectInfo
 });
 
 const mapDispatchToProps = () => ({});
 
-export default injectIntl(connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ProjectTitleInput));
+)(ProjectTitleInput);
