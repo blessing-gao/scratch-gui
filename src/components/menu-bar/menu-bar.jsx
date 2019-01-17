@@ -19,6 +19,8 @@ import LoginDropdown from './login-dropdown.jsx';
 import SB3Downloader from '../../containers/sb3-downloader.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
+import ProjectSaveContainer from '../../models/project-save/container.jsx';
+import AccountContainer from '../../models/account/container.jsx';
 
 import {openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
@@ -422,103 +424,35 @@ class MenuBar extends React.Component {
                         </div>
                     </div>
                     <Divider className={classNames(styles.divider)} />
-                    <div
-                        aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
-                        className={classNames(styles.menuBarItem, styles.hoverable)}
-                        onClick={this.props.onOpenTipLibrary}
-                    >
-                        <img
-                            className={styles.helpIcon}
-                            src={helpIcon}
-                        />
-                        <FormattedMessage {...ariaMessages.tutorials} />
-                    </div>
-                    <Divider className={classNames(styles.divider)} />
                     <div className={classNames(styles.menuBarItem, styles.growable)}>
                         <ProjectTitleInput
                             className={classNames(styles.titleFieldGrowable)}
                             onUpdateProjectTitle={this.props.onUpdateProjectTitle}
                         />
                     </div>
-
+                    <ProjectSaveContainer />
                     <div className={classNames(styles.menuBarItem)}>
                         {this.props.canRemix ? remixButton : []}
                     </div>
+                    <Divider className={classNames(styles.divider)} />
                 </div>
-
-                {/* show the proper UI in the account menu, given whether the user is
-                logged in, and whether a session is available to log in with */}
                 <div className={styles.accountInfoGroup}>
-                    { this.props.work.userToken ? (
-                        <div>
-                            <div
-                                className={classNames(
-                                    styles.menuBarItem,
-                                    styles.hoverable,
-                                    styles.mystuffButton
-                                )}
-                                onClick={this.props.onOpenWorkLibrary}
-                            >
-                                <img
-                                    className={styles.mystuffIcon}
-                                    src={mystuffIcon}
-                                    title="我的作品库"
-                                />
-                                <span>我的作品库</span>
-                            </div>
-                            <Divider className={classNames(styles.divider)} />
-                            <div
-                                className={classNames(styles.menuBarItem, styles.hoverable, {
-                                    [styles.active]: this.props.fileMenuOpen
-                                })}
-                                onMouseUp={this.props.onClickUser}
-                            >
-                                <div
-                                    className={classNames(
-                                        styles.menuBarItem,
-                                        styles.accountNavMenu
-                                    )}
-                                >
-                                    <img
-                                        className={styles.profileIcon}
-                                        src={this.props.work.picUrl || scratchLogo}
-                                    />
-                                    <span>{this.props.work.nickname || 'mayuan'}</span>
-                                    <img
-                                        className={styles.dropdownCaretIcon}
-                                        src={dropdownCaret}
-                                    />
-                                </div>
-                                {/*<MenuBarMenu*/}
-                                    {/*open={this.props.userMenuOpen}*/}
-                                    {/*place="left"*/}
-                                    {/*onRequestClose={this.props.onRequestCloseUser}*/}
-                                {/*>*/}
-                                    {/*<MenuSection>*/}
-                                        {/*<MenuItem onClick={this.handleSignOff}>*/}
-                                                {/*退出*/}
-                                        {/*</MenuItem>*/}
-                                    {/*</MenuSection>*/}
-                                {/*</MenuBarMenu>*/}
-                            </div>
-                        </div>
-                    ) :
-                        <div
-                            className={classNames(
-                                styles.menuBarItem,
-                                styles.hoverable,
-                                styles.accountNavMenu
-                            )}
-                            onClick={this.props.onOpenLoginModal}
-                        >
-                            <img
-                                className={styles.profileIcon}
-                                src={scratchLogo}
-                            />
-                            <a className={styles.loginName}>登录</a>
-                        </div>
-
-                    }
+                    <div
+                        className={classNames(
+                            styles.menuBarItem,
+                            styles.hoverable,
+                            styles.mystuffButton
+                        )}
+                    >
+                        <img
+                            className={styles.mystuffIcon}
+                            src={mystuffIcon}
+                            title="作品库"
+                        />
+                        <span>我的作品库</span>
+                    </div>
+                    <Divider className={classNames(styles.divider)} />
+                    <AccountContainer />
                 </div>
             </Box>
         );
@@ -554,7 +488,6 @@ MenuBar.propTypes = {
     onClickSaveAsCopy: PropTypes.func,
     onClickUser: PropTypes.func,
     onLogOut: PropTypes.func,
-
     onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
     onOpenWorkLibrary: PropTypes.func,
@@ -568,13 +501,9 @@ MenuBar.propTypes = {
     onToggleLoginOpen: PropTypes.func,
     onUpdateProjectTitle: PropTypes.func,
     renderLogin: PropTypes.func,
-    work: PropTypes.object
 };
 
 MenuBar.defaultProps = {
-    work: {
-        userToken: '123'
-    },
     onOpenWorkLibrary: () => {},
     onClickUser: () => {},
     onOpenLoginModal: () => {}

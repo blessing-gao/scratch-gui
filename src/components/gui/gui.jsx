@@ -32,6 +32,8 @@ import Alerts from '../../containers/alerts.jsx';
 import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 
+import LoginModalContainer from '../../models/login/container.jsx';
+
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
 
@@ -40,6 +42,7 @@ import addExtensionIcon from './icon--extensions.svg';
 import codeIcon from './icon--code.svg';
 import costumesIcon from './icon--costumes.svg';
 import soundsIcon from './icon--sounds.svg';
+
 
 const messages = defineMessages({
     addExtension: {
@@ -95,6 +98,7 @@ const GUIComponent = props => {
         onSeeCommunity,
         onShare,
         previewInfoVisible,
+        loginModalVisible,
         showComingSoon,
         soundsTabVisible,
         stageSizeMode,
@@ -144,6 +148,9 @@ const GUIComponent = props => {
                 {/* ) : null}*/}
                 {loading ? (
                     <Loader />
+                ) : null}
+                {loginModalVisible ? (
+                    <LoginModalContainer />
                 ) : null}
                 {importInfoVisible ? (
                     <ImportModal />
@@ -346,6 +353,7 @@ GUIComponent.propTypes = {
     isRtl: PropTypes.bool,
     isShared: PropTypes.bool,
     loading: PropTypes.bool,
+    loginModalVisible: PropTypes.bool,
     onActivateCostumesTab: PropTypes.func,
     onActivateSoundsTab: PropTypes.func,
     onActivateTab: PropTypes.func,

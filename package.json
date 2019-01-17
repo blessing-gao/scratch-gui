@@ -137,6 +137,7 @@
     }
   },
   "dependencies": {
-    "net": "^1.0.2"
+    "net": "^1.0.2",
+    "react-lazy-load": "^3.0.13"
   }
 }

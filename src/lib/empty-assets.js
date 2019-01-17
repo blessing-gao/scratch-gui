@@ -4,13 +4,14 @@
  */
 
 /**
+ * 用于初始化一个新的造型、角色、背景
  * Generate a blank costume object for vm.addCostume with the provided name.
  * @param {string} name the name to use for the costume, caller should localize
  * @return {object} vm costume object
  */
 const emptyCostume = name => ({
     name: name,
-    md5: 'aea5d949532a4142b32728c14384cd6d.svg',
+    md5: 'cd21514d0531fdffb22204e0ec5ed84a.svg',
     rotationCenterX: 0,
     rotationCenterY: 0,
     bitmapResolution: 1,
@@ -34,7 +35,7 @@ const emptySprite = (name, soundName, costumeName) => ({
         {
             costumeName: costumeName,
             baseLayerID: -1,
-            baseLayerMD5: 'aea5d949532a4142b32728c14384cd6d.svg',
+            baseLayerMD5: 'cd21514d0531fdffb22204e0ec5ed84a.svg',
             bitmapResolution: 1,
             rotationCenterX: 0,
             rotationCenterY: 0

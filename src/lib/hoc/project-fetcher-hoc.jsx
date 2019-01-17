@@ -60,6 +60,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             }
         }
         fetchProject (projectId, loadingState) {
+            // 加载作品数据
             if (projectId !== '0'){
                 getProjectInfo(projectId).then(contents => {
                     this.props.onUpdateProject(contents.result);
@@ -130,7 +131,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         setProjectId: PropTypes.func
     };
     ProjectFetcherComponent.defaultProps = {
-        assetHost: '/api/project/3.0/resource',
+        assetHost: '//cdn.imayuan.com/',
         projectHost: '/api/project/3.0'
     };
 
