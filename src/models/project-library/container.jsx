@@ -6,6 +6,7 @@ import {closeProjectModal} from '../../reducers/modals';
 import {connect} from 'react-redux';
 import {getUserProjects, getProjectTags} from '../../lib/service/project-api';
 
+const PROJECT_TYPE = 5;
 class ProjectLibrary extends React.Component {
     constructor (props) {
         super(props);
@@ -33,7 +34,7 @@ class ProjectLibrary extends React.Component {
     }
 
     componentDidMount () {
-        this.getType(5); // 获取类别 type, platFormId, userToken
+        this.getType(PROJECT_TYPE); // 获取类别 type, platFormId, userToken
         this.getProjects();
     }
 
@@ -90,7 +91,6 @@ class ProjectLibrary extends React.Component {
     }
 
     handleTagClick (tag){
-        console.log(tag);
         const tags = this.state.tags;
         let type = 0;
         for (const i in tags){
@@ -101,7 +101,6 @@ class ProjectLibrary extends React.Component {
                 tags[i].active = false;
             }
         }
-        console.log(tags)
         this.setState({searchType: type, tags: tags}, () => {
             this.getProjects(1);
         });

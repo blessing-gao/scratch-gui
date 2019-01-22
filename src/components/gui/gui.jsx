@@ -18,8 +18,10 @@ import StageWrapper from '../../containers/stage-wrapper.jsx';
 import Loader from '../loader/loader.jsx';
 import Box from '../box/box.jsx';
 import MenuBar from '../menu-bar/menu-bar.jsx';
-import CostumeLibrary from '../../containers/costume-library.jsx';
-import BackdropLibrary from '../../containers/backdrop-library.jsx';
+// import CostumeLibrary from '../../containers/costume-library.jsx';
+import CostumeLibrary from '../../models/resource-library/costume-library.jsx';
+// import BackdropLibrary from '../../containers/backdrop-library.jsx';
+import BackdropLibrary from '../../models/resource-library/backdrop-library.jsx';
 import Watermark from '../../containers/watermark.jsx';
 
 import Backpack from '../../containers/backpack.jsx';

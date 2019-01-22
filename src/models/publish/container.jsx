@@ -6,7 +6,7 @@ import PublishComponent from './component.jsx';
 import {getProjectTags} from '../../lib/service/project-api';
 import {closePublishModal} from '../../reducers/modals';
 
-
+const PROJECT_TYPE = 5;
 class PublishContainer extends React.PureComponent {
     constructor (props) {
         super(props);
@@ -17,10 +17,18 @@ class PublishContainer extends React.PureComponent {
         };
     }
     componentDidMount () {
-        getProjectTags().then(data => {
-            this.setState({
-                tags: data.restlt
-            });
+        getProjectTags(PROJECT_TYPE).then(data => {
+            if (data.code === 0 && data.result) {
+                const tags = [];
+                data.result.map(tag => {
+                    tags.push({id: tag.typeId, title: tag.name});
+                    return tag;
+                });
+                if (tags){
+                    this.setState({tags: tags});
+                }
+
+            }
         });
     }
 

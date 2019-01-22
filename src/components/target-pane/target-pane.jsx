@@ -3,7 +3,8 @@ import React from 'react';
 
 import VM from 'scratch-vm';
 
-import SpriteLibrary from '../../containers/sprite-library.jsx';
+// import SpriteLibrary from '../../containers/sprite-library.jsx';
+import SpriteLibrary from '../../models/resource-library/sprite-library.jsx';
 import SpriteSelectorComponent from '../sprite-selector/sprite-selector.jsx';
 import StageSelector from '../../containers/stage-selector.jsx';
 import {STAGE_DISPLAY_SIZES} from '../../lib/layout-constants';

@@ -40,6 +40,7 @@ const getProjectTags = type => new Promise((resolve, reject) => {
         return resolve(JSON.parse(response.body));
     });
 });
+
 // 删除作品
 const deleteProject = id => new Promise((resolve, reject) => {
     xhr({
@@ -53,9 +54,44 @@ const deleteProject = id => new Promise((resolve, reject) => {
     });
 });
 
+// 上传素材
+const uploadResource = data => new Promise((resolve, reject) => {
+    const formData = new FormData();
+    if (typeof data === 'object'){
+        for (const k in data){
+            formData.append(k, data[k]);
+        }
+    }
+    xhr({
+        method: 'POST',
+        uri: `${getHost()}/api/aliyun/fileUpload`,
+        body: formData
+    }, (error, response) => {
+        if (error || response.statusCode !== 200) {
+            return reject(error);
+        }
+        return resolve(response.body);
+    });
+});
+
+const saveUserResource = data => new Promise((resolve, reject) => {
+    xhr({
+        method: 'POST',
+        uri: `${getHost()}/api/resource/saveUserResource`,
+        json: data
+    }, (error, response) => {
+        if (error || response.statusCode !== 200) {
+            return reject(error);
+        }
+        return resolve(response.body);
+    });
+});
+
 export {
     getProjectInfo,
     getUserProjects,
     getProjectTags,
-    deleteProject
+    deleteProject,
+    uploadResource,
+    saveUserResource
 };

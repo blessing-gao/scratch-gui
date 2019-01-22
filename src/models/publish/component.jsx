@@ -46,7 +46,7 @@ const PublishComponent = props => (
                     <Box>
                         <p className={styles.classTitle}>作品分类:</p>
                         <div className={styles.classBox}>
-                            {props.tags.map((tagProps, id) => (
+                            {props.tags.map(tagProps => (
                                 <span
                                     className={classNames(
                                         styles.classBtn
@@ -75,7 +75,6 @@ const PublishComponent = props => (
                     取消
                 </button>
                 <button
-                    className={styles.okButton}
                     className={
                         classNames(styles.okButton
                             // (this.props.iDisable && styles.okButtonDisable)

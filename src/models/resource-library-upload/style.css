@@ -1,0 +1,204 @@
+@import "../../css/colors.css";
+@import "../../css/units.css";
+
+.modal-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 520;
+    background: rgba(0,0,0,.3);
+}
+
+.upload-btn{
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+}
+
+.upload-btn img{
+    margin-left: 2.4rem;
+    width: calc(100% - 2.4rem);
+    cursor: pointer;
+}
+
+.close-btn{
+    width: .8rem;
+    height: .8rem;
+    float: right;
+    cursor: pointer;
+    background-size: 100% 100%;
+    background-image: url("../../lib/assets/resource-library/close-icon.png");
+}
+
+.close-btn:hover{
+    background-image: url("../../lib/assets/resource-library/close-icon-active.png");
+}
+
+.upload-box{
+    flex: 1;
+    background-color: rgba(244,248,255,1);
+    background-repeat: no-repeat;
+    background-size: 70%;
+    background-position: center;
+    border: .1rem dashed rgba(216,232,255,1);
+    border-radius: 6px;
+    background-image: url("../../lib/assets/resource-library/upload-icon.png");
+    cursor: pointer;
+}
+
+.modal-inner{
+    clear: both;
+    display: flex;
+    padding: .6rem .8rem;
+}
+
+.modal-divider{
+    border-right: .15rem solid #F4F4F4;
+    margin: 0 1rem;
+}
+
+.modal-left{
+    width: 12rem;
+}
+
+.modal-right{
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.class-title{
+    color: #5F5F5F;
+    font-size: .8rem;
+    width: 2.4rem;
+    line-height: 2rem;
+}
+
+.class-item{
+    display: flex;
+    margin-bottom: .9rem;
+}
+
+.class-box{
+    flex: 1;
+}
+
+.class-btn{
+    background: #f3f3f3;
+    color: #B4B4B4;
+    height: 2rem;
+    display: inline-block;
+    line-height: 2rem;
+    font-size: .8rem;
+    border-radius: 1rem;
+    margin-bottom: .8rem;
+    width: 26%;
+    text-align: center;
+    margin-right: 11%;
+    cursor: pointer;
+    transition: all .3s;
+    letter-spacing: .1rem;
+}
+
+.class-btn:nth-child(3n){
+    margin-right: 0;
+}
+
+.active-btn{
+    background: #3CB3FF;
+    color: #fff;
+}
+
+.uploadCover{
+    height: 9.6rem;
+}
+
+.uploadSound{
+    height: 3rem;
+}
+
+.uploadModel{
+    height: 3rem;
+}
+
+.input{
+    flex: 1;
+    border: 1px solid rgba(231,231,231,1);
+    border-radius: 5px;
+    line-height: 2rem;
+    text-indent: .6rem;
+    outline: none;
+    font-size: .8rem;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #BBBBBB;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #BBBBBB;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #BBBBBB;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color:    #BBBBBB;
+}
+
+.file-input{
+    display: none;
+}
+
+.img-list{
+    padding-left: 2.4rem;
+    overflow: auto;
+    margin-bottom: .6rem;
+    max-height: 3.3rem;
+}
+
+.cover-box{
+    height: 9.6rem;
+    background: rgba(244,248,255,1);
+    border: 1px solid rgba(231,231,231,1);
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.cover-bg{
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.cover-img{
+    max-width: 60%;
+    max-height: 60%;
+}
+
+.cover-del-btn{
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 27%;
+    background-color: rgba(0,41,76,.7);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("../../lib/assets/resource-library/delete-icon-white.png");
+}
+
+.cover-box:hover .cover-del-btn{
+    display: block;
+}
+
+.is-required{
+    color: #fe554c;
+}

@@ -1,0 +1,164 @@
+@import "../../css/colors.css";
+@import "../../css/units.css";
+
+.library-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-basis: 160px;
+    max-width: 160px;
+    /*height: 160px;*/
+    /*margin: $space;*/
+    margin: .8rem;
+    /*padding: 1rem 1rem 0 1rem;*/
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: $text-primary;
+    background: white;
+    /*border-width: 2px;*/
+    /*border-style: solid;*/
+    /*border-color: $ui-black-transparent;*/
+    /*border-radius: $space;*/
+    text-align: center;
+    cursor: pointer;
+
+    border: 1px solid rgba(223,223,223,1);
+    box-shadow: 0px 7px 13px 0px rgba(17,68,154,0.1);
+    border-radius: 10px;
+    padding: .3rem .3rem 0;
+    outline: none;
+}
+
+.library-item:hover {
+    /*border-width: 2px;*/
+    /*border-color: $motion-primary;*/
+}
+
+.disabled {
+    opacity: .5;
+    cursor: auto;
+}
+
+.disabled:hover {
+    border-color: $ui-black-transparent;
+}
+
+.library-item-image-container-wrapper {
+    height: 138px;
+    width: 100%;
+    position: relative;
+    background: rgba(244,248,255,1);
+    border-radius: 6px;
+}
+
+.library-item-image-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.library-item-image {
+    max-width: 55%;
+    max-height: 55%;
+}
+
+.library-item-bg {
+    height: 100%;
+}
+
+.library-item-name {
+    width: 80%;
+    margin: 0.8rem 0;
+    font-size: .9rem;
+    text-align: center;
+
+    /*
+        For truncating overflowing text gracefully
+        Min-width is for a bug: https://css-tricks.com/flexbox-truncated-text
+    */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.featured-item {
+    flex-basis: 300px;
+    max-width: 300px;
+    height: auto;
+    overflow: hidden;
+    padding: 0;
+}
+
+.featured-image-container {
+    position: relative;
+}
+
+.featured-image {
+    width: 100%;
+}
+
+.featured-text {
+    font-weight: bold;
+    padding: 10px;
+    /* height: 140px; */
+    width: 300px;
+}
+
+.featured-description {
+    display: block;
+    font-weight: normal;
+    line-height: 2;
+}
+
+.coming-soon-text {
+    position: absolute;
+    background-color: $data-primary;
+    border-radius: 1rem;
+    box-shadow: 0 0 .5rem hsla(0, 0%, 0%, .25);
+    padding: .5rem 1rem;
+    font-size: .875rem;
+    font-weight: bold;
+    color: $ui-white;
+}
+
+[dir="ltr"] .coming-soon-text {
+    transform: translate(calc(2 * $space), calc(2 * $space));
+}
+
+[dir="rtl"] .coming-soon-text {
+    transform: translate(calc(-2 * $space), calc(2 * $space));
+}
+
+.edit-area{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,41,76,1);
+    opacity: 0.6;
+    color: #fff;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    display: flex;
+    height: 2.2rem;
+    line-height: 2.2rem;
+    font-size: .8rem;
+}
+
+.edit-item{
+    flex: 1;
+}
+
+.edit-item-img{
+    height: .8rem;
+}
+
+.edit-item + .edit-item{
+    border-left: 1px solid #25313c;
+}

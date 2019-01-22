@@ -15,7 +15,8 @@ import searchIcon from '../components/action-menu/icon--search.svg';
 
 import RecordModal from './record-modal.jsx';
 import SoundEditor from './sound-editor.jsx';
-import SoundLibrary from './sound-library.jsx';
+// import SoundLibrary from './sound-library.jsx';
+import SoundLibrary from '../models/resource-library/sound-library.jsx';
 
 import soundLibraryContent from '../lib/libraries/sounds.json';
 import {handleFileUpload, soundUpload} from '../lib/file-uploader.js';
@@ -216,11 +217,13 @@ class SoundTab extends React.Component {
                     fileAccept: '.wav, .mp3',
                     fileChange: this.handleSoundUpload,
                     fileInput: this.setFileInput
-                }, {
-                    title: intl.formatMessage(messages.surpriseSound),
-                    img: surpriseIcon,
-                    onClick: this.handleSurpriseSound
-                }, {
+                },
+                //     {
+                //     title: intl.formatMessage(messages.surpriseSound),
+                //     img: surpriseIcon,
+                //     onClick: this.handleSurpriseSound
+                // },
+                {
                     title: intl.formatMessage(messages.recordSound),
                     img: addSoundFromRecordingIcon,
                     onClick: onNewSoundFromRecordingClick
