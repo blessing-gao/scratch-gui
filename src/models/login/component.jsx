@@ -52,7 +52,7 @@ class LoginComponent extends React.Component {
     }
 
     handleSubmit (){
-        this.props.handleOnSave({
+        this.props.onHandleSave({
             phone: this.state.phone,
             password: this.state.password
         });
@@ -134,12 +134,12 @@ class LoginComponent extends React.Component {
 
 LoginComponent.propTypes = {
     onHandleCancel: PropTypes.func.isRequired,
-    handleOnSave: PropTypes.func.isRequired
+    onHandleSave: PropTypes.func.isRequired
 };
 
 
 LoginComponent.defaultProps = {
-    handleOnSave: () => {}
+    onHandleSave: () => {}
 };
 
 export default LoginComponent;

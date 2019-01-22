@@ -1,5 +1,6 @@
 import analytics from '../lib/analytics';
 
+
 const OPEN_MODAL = 'scratch-gui/modals/OPEN_MODAL';
 const CLOSE_MODAL = 'scratch-gui/modals/CLOSE_MODAL';
 
@@ -16,6 +17,8 @@ const MODAL_SOUND_RECORDER = 'soundRecorder';
 const MODAL_CONNECTION = 'connectionModal';
 const MODAL_TIPS_LIBRARY = 'tipsLibrary';
 const MODAL_LOGIN_MODAL = 'loginModal';
+const MODAL_PUBLISH_MODAL = 'publishModal';
+const MODAL_PROJECT_MODAL = 'projectModal';
 
 const initialState = {
     [MODAL_BACKDROP_LIBRARY]: false,
@@ -30,7 +33,9 @@ const initialState = {
     [MODAL_SOUND_RECORDER]: false,
     [MODAL_CONNECTION]: false,
     [MODAL_TIPS_LIBRARY]: false,
-    [MODAL_LOGIN_MODAL]: false
+    [MODAL_LOGIN_MODAL]: false,
+    [MODAL_PUBLISH_MODAL]: false,
+    [MODAL_PROJECT_MODAL]: false
 };
 
 const reducer = function (state, action) {
@@ -61,6 +66,7 @@ const closeModal = function (modal) {
     };
 };
 const openBackdropLibrary = function () {
+    // todo 将analytics.pageview更换为自己的行为日志模块
     analytics.pageview('/libraries/backdrops');
     return openModal(MODAL_BACKDROP_LIBRARY);
 };
@@ -112,6 +118,14 @@ const openLoginModals = function () {
     analytics.pageview('/modals/login');
     return openModal(MODAL_LOGIN_MODAL);
 };
+const openPublishModals = function () {
+    analytics.pageview('/modals/publish');
+    return openModal(MODAL_PUBLISH_MODAL);
+};
+const openProjectModals = function () {
+    analytics.pageview('/modals/project');
+    return openModal(MODAL_PROJECT_MODAL);
+};
 const closeBackdropLibrary = function () {
     return closeModal(MODAL_BACKDROP_LIBRARY);
 };
@@ -151,6 +165,12 @@ const closeConnectionModal = function () {
 const closeLoginModal = function () {
     return closeModal(MODAL_LOGIN_MODAL);
 };
+const closePublishModal = function () {
+    return closeModal(MODAL_PUBLISH_MODAL);
+};
+const closeProjectModal = function () {
+    return closeModal(MODAL_PROJECT_MODAL);
+};
 
 export {
     reducer as default,
@@ -168,6 +188,8 @@ export {
     openTipsLibrary,
     openConnectionModal,
     openLoginModals,
+    openPublishModals,
+    openProjectModals,
     closeBackdropLibrary,
     closeCameraCapture,
     closeCostumeLibrary,
@@ -180,5 +202,7 @@ export {
     closeSoundRecorder,
     closeTipsLibrary,
     closeConnectionModal,
-    closeLoginModal
+    closeLoginModal,
+    closePublishModal,
+    closeProjectModal
 };

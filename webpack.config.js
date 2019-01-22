@@ -188,7 +188,7 @@ module.exports = [
     })
 ].concat(
     process.env.NODE_ENV === 'production' || process.env.BUILD_MODE === 'dist' ? (
-        // export as library
+        // export as work-library
         defaultsDeep({}, base, {
             target: 'web',
             entry: {

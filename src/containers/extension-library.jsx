@@ -13,7 +13,7 @@ import extensionIcon from '../components/action-menu/icon--sprite.svg';
 const messages = defineMessages({
     extensionTitle: {
         defaultMessage: 'Choose an Extension',
-        description: 'Heading for the extension library',
+        description: 'Heading for the extension work-library',
         id: 'gui.extensionLibrary.chooseAnExtension'
     },
     extensionUrl: {

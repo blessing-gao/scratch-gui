@@ -1,0 +1,99 @@
+@import "../../css/units.css";
+@import "../../css/colors.css";
+
+.library-scroll-grid {
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+    background: $ui-secondary;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    height: calc(100% - $library-header-height);
+    padding: 0.5rem;
+}
+
+.library-scroll-grid.withFilterBar {
+    height: 100%;
+    /*height: calc(100% - $library-header-height - $library-filter-bar-height - 2rem);*/
+}
+
+.main{
+    display: flex;
+    flex-grow: 1;
+    height: calc(100% - $library-header-height);
+}
+
+.filter-bar {
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: flex-start;*/
+    /*align-items: center;*/
+    /*height: calc($library-filter-bar-height + 2rem); !* padding *!*/
+    /*background-color: $motion-transparent;*/
+    /*padding: 0 1rem;*/
+    /*font-size: .875rem;*/
+    width: 15%;
+    background: #E9F1FC;
+    border-right: 1px solid #c5dbfe;
+}
+
+.filter-bar-item {
+    /*margin-right: .75rem;*/
+    margin: 1rem;
+    border-radius: .4rem;
+}
+
+.filter {
+    flex-grow: 0;
+}
+
+.filter-input {
+    width: 11.5rem;
+    transition: .2s;
+}
+
+.filter-input:focus,
+.filter-input:not([value=""]) {
+    width: 18.75rem;
+}
+
+.divider {
+    transform: scaleY(1.39);
+    height: $library-filter-bar-height;
+}
+
+.tag-wrapper {
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*flex-wrap: wrap;*/
+    /*height: $library-filter-bar-height;*/
+    /*overflow: hidden;*/
+}
+
+.pages-box{
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.tag-button{
+    margin: 0;
+    background: none;
+    color: #9099A6;
+    padding-left: 2rem;
+    height: 2.8rem;
+    font-weight: 400;
+    border-left: .26rem solid #E9F1FC;
+    border-radius: 0;
+    font-size: .9rem;
+}
+
+.tag-button-active{
+    border-left-color: #4d97ff;
+    background: #d8e7ff;
+    color: #4d97ff;
+    font-weight: bold;
+    box-shadow: 0.6rem 0 0.6rem -0.6rem #81b3fa inset;
+}

@@ -33,6 +33,8 @@ import DragLayer from '../../containers/drag-layer.jsx';
 import ConnectionModal from '../../containers/connection-modal.jsx';
 
 import LoginModalContainer from '../../models/login/container.jsx';
+import PublishModalContainer from '../../models/publish/container.jsx';
+import ProjectModalContainer from '../../models/project-library/container.jsx';
 
 import layout, {STAGE_SIZE_MODES} from '../../lib/layout-constants';
 import {resolveStageSize} from '../../lib/screen-utils';
@@ -99,6 +101,8 @@ const GUIComponent = props => {
         onShare,
         previewInfoVisible,
         loginModalVisible,
+        publishModalVisible,
+        projectModalVisible,
         showComingSoon,
         soundsTabVisible,
         stageSizeMode,
@@ -151,6 +155,12 @@ const GUIComponent = props => {
                 ) : null}
                 {loginModalVisible ? (
                     <LoginModalContainer />
+                ) : null}
+                {publishModalVisible ? (
+                    <PublishModalContainer />
+                ) : null}
+                {projectModalVisible ? (
+                    <ProjectModalContainer />
                 ) : null}
                 {importInfoVisible ? (
                     <ImportModal />
@@ -370,6 +380,7 @@ GUIComponent.propTypes = {
     onToggleLoginOpen: PropTypes.func,
     onUpdateProjectTitle: PropTypes.func,
     previewInfoVisible: PropTypes.bool,
+    projectModalVisible: PropTypes.bool,
     renderLogin: PropTypes.func,
     showComingSoon: PropTypes.bool,
     soundsTabVisible: PropTypes.bool,

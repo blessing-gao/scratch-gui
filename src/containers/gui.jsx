@@ -148,6 +148,8 @@ const mapStateToProps = (state, ownProps) => {
         loadingStateVisible: state.scratchGui.modals.loadingProject,
         previewInfoVisible: state.scratchGui.modals.previewInfo && !ownProps.hideIntro,
         loginModalVisible: state.scratchGui.modals.loginModal,
+        publishModalVisible: state.scratchGui.modals.publishModal,
+        projectModalVisible: state.scratchGui.modals.projectModal,
         projectId: state.scratchGui.projectState.projectId,
         targetIsStage: (
             state.scratchGui.targets.stage &&

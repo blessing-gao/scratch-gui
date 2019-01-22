@@ -17,12 +17,12 @@ const messages = defineMessages({
     filterPlaceholder: {
         id: 'gui.library.filterPlaceholder',
         defaultMessage: 'Search',
-        description: 'Placeholder text for library search field'
+        description: 'Placeholder text for work-library search field'
     },
     allTag: {
         id: 'gui.library.allTag',
         defaultMessage: 'All',
-        description: 'Label for library tag to revert to all items after filtering by tag.'
+        description: 'Label for work-library tag to revert to all items after filtering by tag.'
     }
 });
 
@@ -200,9 +200,9 @@ class LibraryComponent extends React.Component {
 LibraryComponent.propTypes = {
     data: PropTypes.arrayOf(
         /* eslint-disable react/no-unused-prop-types, lines-around-comment */
-        // An item in the library
+        // An item in the work-library
         PropTypes.shape({
-            // @todo remove md5/rawURL prop from library, refactor to use storage
+            // @todo remove md5/rawURL prop from work-library, refactor to use storage
             md5: PropTypes.string,
             name: PropTypes.oneOfType([
                 PropTypes.string,

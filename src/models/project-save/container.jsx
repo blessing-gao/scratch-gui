@@ -7,9 +7,10 @@ import {
     updateProject,
     saveProjectAsCopy
 } from '../../reducers/project-state';
+import {openPublishModals} from '../../reducers/modals';
 
 /**
- * 本组件用于向服务器保存作品
+ * 用于向服务器保存作品
  */
 
 class ProjectSaveContainer extends React.Component {
@@ -22,14 +23,9 @@ class ProjectSaveContainer extends React.Component {
     }
 
     render () {
-        const {
-            onClickSave,
-            onClickSaveAsCopy
-        } = this.props;
         return (
             <ProjectSaveComponent
-                onClickSave={onClickSave}
-                onClickSaveAsCopy={onClickSaveAsCopy}
+                {...this.props}
             />);
     }
 
@@ -37,7 +33,8 @@ class ProjectSaveContainer extends React.Component {
 
 ProjectSaveContainer.propTypes = {
     onClickSave: PropTypes.func,
-    onClickSaveAsCopy: PropTypes.func
+    onClickSaveAsCopy: PropTypes.func,
+    onOpenPublishModal: PropTypes.func
 };
 
 const mapStateToProps = state => ({
@@ -48,7 +45,8 @@ const mapDispatchToProps = dispatch => ({
         console.log('onClickSave')
         dispatch(updateProject());
     },
-    onClickSaveAsCopy: () => dispatch(saveProjectAsCopy())
+    onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
+    onOpenPublishModal: () => dispatch(openPublishModals())
 });
 export default connect(
     mapStateToProps,

@@ -19,7 +19,7 @@ import {connect} from 'react-redux';
 const messages = defineMessages({
     libraryTitle: {
         defaultMessage: 'Choose a Sound',
-        description: 'Heading for the sound library',
+        description: 'Heading for the sound work-library',
         id: 'gui.soundLibrary.chooseASound'
     }
 });
@@ -132,7 +132,7 @@ class SoundLibrary extends React.PureComponent {
         });
     }
     render () {
-        // @todo need to use this hack to avoid library using md5 for image
+        // @todo need to use this hack to avoid work-library using md5 for image
         const soundLibraryThumbnailData = soundLibraryContent.map(sound => {
             const {
                 md5,

@@ -7,6 +7,7 @@ import classNames from 'classnames';
 
 /**
  * 向服务端保存组件
+ * // todo 全局控制上传中的冻结状态
  * @param props
  * @returns {*}
  * @constructor
@@ -36,7 +37,7 @@ const ProjectSaveComponent = props => {
             <div className={classNames(styles.menuBarItem)}>
                 <Button
                     className={classNames(styles.menuBarButton, styles.shareButton)}
-                    // onClick={this.handleRelease}
+                    onClick={props.onOpenPublishModal}
                 >
                     作品发布
                 </Button>
@@ -48,7 +49,8 @@ const ProjectSaveComponent = props => {
 
 ProjectSaveComponent.propTypes = {
     onClickSave: PropTypes.func,
-    onClickSaveAsCopy: PropTypes.func
+    onClickSaveAsCopy: PropTypes.func,
+    onOpenPublishModal: PropTypes.func
 
 };
 ProjectSaveComponent.defaultProps = {

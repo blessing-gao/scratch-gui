@@ -20,7 +20,7 @@ import searchIcon from '../action-menu/icon--search.svg';
 const messages = defineMessages({
     addSpriteFromLibrary: {
         id: 'gui.spriteSelector.addSpriteFromLibrary',
-        description: 'Button to add a sprite in the target pane from library',
+        description: 'Button to add a sprite in the target pane from work-library',
         defaultMessage: 'Choose a Sprite'
     },
     addSpriteFromPaint: {

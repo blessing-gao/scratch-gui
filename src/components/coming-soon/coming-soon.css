@@ -1,7 +1,7 @@
 /*
  * NOTE: the copious use of `important` is needed to overwrite
  * the default tooltip styling, and is required by the 3rd party
- * library being used, `react-tooltip`
+ * work-library being used, `react-tooltip`
  */
 
 @import "../../css/colors.css";

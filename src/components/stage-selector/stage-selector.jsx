@@ -17,7 +17,7 @@ import searchIcon from '../action-menu/icon--search.svg';
 const messages = defineMessages({
     addBackdropFromLibrary: {
         id: 'gui.spriteSelector.addBackdropFromLibrary',
-        description: 'Button to add a stage in the target pane from library',
+        description: 'Button to add a stage in the target pane from work-library',
         defaultMessage: 'Choose a Backdrop'
     },
     addBackdropFromPaint: {

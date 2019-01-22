@@ -18,7 +18,7 @@ import LibraryComponent from '../components/library/library.jsx';
 const messages = defineMessages({
     libraryTitle: {
         defaultMessage: 'Choose a Backdrop',
-        description: 'Heading for the backdrop library',
+        description: 'Heading for the backdrop work-library',
         id: 'gui.costumeLibrary.chooseABackdrop'
     }
 });

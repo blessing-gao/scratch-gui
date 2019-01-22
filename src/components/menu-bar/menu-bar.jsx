@@ -22,7 +22,7 @@ import TurboMode from '../../containers/turbo-mode.jsx';
 import ProjectSaveContainer from '../../models/project-save/container.jsx';
 import AccountContainer from '../../models/account/container.jsx';
 
-import {openTipsLibrary} from '../../reducers/modals';
+import {openProjectModals, openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
 import {
     getIsUpdating,
@@ -348,13 +348,7 @@ class MenuBar extends React.Component {
                                                 className={className}
                                                 onClick={loadProject}
                                             >
-                                                <FormattedMessage
-                                                    defaultMessage="Load from your computer"
-                                                    description={
-                                                        'Menu bar item for uploading a project from your computer'
-                                                    }
-                                                    id="gui.menuBar.uploadFromComputer"
-                                                />
+                                                从电脑导入
                                                 {renderFileInput()}
                                             </MenuItem>
                                         )}
@@ -364,11 +358,7 @@ class MenuBar extends React.Component {
                                             className={className}
                                             onClick={this.handleCloseFileMenuAndThen(downloadProject)}
                                         >
-                                            <FormattedMessage
-                                                defaultMessage="Save to your computer"
-                                                description="Menu bar item for downloading a project to your computer"
-                                                id="gui.menuBar.downloadToComputer"
-                                            />
+                                            保存到电脑
                                         </MenuItem>
                                     )}</SB3Downloader>
                                 </MenuSection>
@@ -443,6 +433,7 @@ class MenuBar extends React.Component {
                             styles.hoverable,
                             styles.mystuffButton
                         )}
+                        onClick={this.props.onOpenProjectModal}
                     >
                         <img
                             className={styles.mystuffIcon}
@@ -476,7 +467,6 @@ MenuBar.propTypes = {
     isShowingProject: PropTypes.bool,
     isUpdating: PropTypes.bool,
     languageMenuOpen: PropTypes.bool,
-    loginMenuOpen: PropTypes.bool,
     onClickAccount: PropTypes.func,
     onClickEdit: PropTypes.func,
     onClickFile: PropTypes.func,
@@ -489,18 +479,17 @@ MenuBar.propTypes = {
     onClickUser: PropTypes.func,
     onLogOut: PropTypes.func,
     onOpenRegistration: PropTypes.func,
+    onOpenProjectModal: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
-    onOpenWorkLibrary: PropTypes.func,
     onRequestCloseAccount: PropTypes.func,
     onRequestCloseEdit: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
-    onSeeCommunity: PropTypes.func,
     onShare: PropTypes.func,
     onToggleLoginOpen: PropTypes.func,
     onUpdateProjectTitle: PropTypes.func,
-    renderLogin: PropTypes.func,
+    renderLogin: PropTypes.func
 };
 
 MenuBar.defaultProps = {
@@ -528,6 +517,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
+    onOpenProjectModal: () => dispatch(openProjectModals()),
     onClickAccount: () => dispatch(openAccountMenu()),
     onRequestCloseAccount: () => dispatch(closeAccountMenu()),
     onClickFile: () => dispatch(openFileMenu()),

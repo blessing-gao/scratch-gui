@@ -65,10 +65,8 @@ const AccountComponent = props => (
                     src={scratchLogo}
                 />
                 <Button className={styles.login}>登录</Button>
-            </div>
-        )
+            </div>)
         }
-
     </Box>
 );
 

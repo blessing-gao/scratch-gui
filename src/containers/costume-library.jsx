@@ -12,7 +12,7 @@ import LibraryComponent from '../components/library/library.jsx';
 const messages = defineMessages({
     libraryTitle: {
         defaultMessage: 'Choose a Costume',
-        description: 'Heading for the costume library',
+        description: 'Heading for the costume work-library',
         id: 'gui.costumeLibrary.chooseACostume'
     }
 });

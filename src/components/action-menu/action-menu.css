@@ -128,7 +128,7 @@ button::-moz-focus-inner {
 
 /*
     @todo needs to be refactored with coming soon tooltip overrides.
-    The "!important"s are for the same reason as with coming soon, the library
+    The "!important"s are for the same reason as with coming soon, the work-library
     is not very easy to style.
 */
 .tooltip {
