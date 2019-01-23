@@ -234,11 +234,9 @@ class LibraryComponent extends React.Component {
                                 {tagListPrefix.concat(this.props.tags).map((tagProps, id) => (
                                     <TagButton
                                         active={this.state.selectedTag === tagProps.title.toLowerCase()}
-                                        activeClass={classNames(
-                                            styles.tagButtonActive
-                                        )}
                                         className={classNames(
                                             styles.tagButton,
+                                            styles.tagButtonActive,
                                             tagProps.className
                                         )}
                                         key={`tag-button-${id}`}
@@ -367,7 +365,15 @@ LibraryComponent.propTypes = {
     onItemSelected: PropTypes.func,
     onRequestClose: PropTypes.func,
     onTabChange: PropTypes.func,
-    tags: PropTypes.arrayOf(PropTypes.shape(TagButton.propTypes)),
+    tags: PropTypes.arrayOf(
+        PropTypes.shape(
+            {
+                active: PropTypes.bool,
+                id: PropTypes.string,
+                title: PropTypes.string
+            }
+        )
+    ),
     title: PropTypes.string.isRequired
 };
 

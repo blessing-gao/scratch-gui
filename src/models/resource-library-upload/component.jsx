@@ -187,6 +187,7 @@ class LibraryUpload extends React.PureComponent {
 
     // 打开文件上传封面
     uploadOpen (type){
+        console.log(this.coverInput);
         switch (type){
         case 'cover':
             this.coverInput.click();
@@ -401,7 +402,7 @@ class LibraryUpload extends React.PureComponent {
                                     </div> :
                                     <div
                                         className={classNames(styles.uploadBox, styles.uploadCover)}
-                                        onClick={this.uploadOpen('cover')}
+                                        onClick={this.uploadOpen.bind(this, 'cover')}
                                     >
                                         <input
                                             accept={type === SOUNT_TYPE ? 'audio/*' : 'image/*'}
@@ -419,7 +420,7 @@ class LibraryUpload extends React.PureComponent {
                                 <div className={styles.classTitle}>声音</div>
                                 <div
                                     className={classNames(styles.uploadBox, styles.uploadSound)}
-                                    onClick={this.uploadOpen('sound')}
+                                    onClick={this.uploadOpen.bind(this, 'sound')}
                                 >
                                     <input
                                         accept={'audio/*'}
@@ -439,7 +440,7 @@ class LibraryUpload extends React.PureComponent {
                                 <div className={styles.classTitle}>造型</div>
                                 <div
                                     className={classNames(styles.uploadBox, styles.uploadModel)}
-                                    onClick={this.uploadOpen('model')}
+                                    onClick={this.uploadOpen.bind(this, 'model')}
                                 >
                                     <input
                                         accept={'image/*'}
@@ -509,7 +510,6 @@ class LibraryUpload extends React.PureComponent {
 }
 
 LibraryUpload.propTypes = {
-    formData: PropTypes.string,
     id: PropTypes.string,
     type: PropTypes.number,
     visible: PropTypes.bool,

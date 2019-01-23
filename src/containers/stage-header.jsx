@@ -15,7 +15,8 @@ class StageHeader extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleKeyPress'
+            'handleKeyPress',
+            'handleScreenShot'
         ]);
     }
     componentDidMount () {
@@ -24,11 +25,21 @@ class StageHeader extends React.Component {
     componentWillUnmount () {
         document.removeEventListener('keydown', this.handleKeyPress);
     }
+
     handleKeyPress (event) {
         if (event.key === 'Escape' && this.props.isFullScreen) {
             this.props.onSetStageUnFull(false);
         }
     }
+
+    // 获取当前舞台图像
+    handleScreenShot () {
+        this.props.vm.renderer.draw();
+        const img = new Image();
+        img.src = this.props.vm.renderer.canvas.toDataURL('image/png', 0.7);
+        window.sessionStorage.setItem('coverImg', img.src);
+    }
+
     render () {
         const {
             ...props
@@ -37,6 +48,7 @@ class StageHeader extends React.Component {
             <StageHeaderComponent
                 {...props}
                 onKeyPress={this.handleKeyPress}
+                onScreenShot={this.handleScreenShot}
             />
         );
     }

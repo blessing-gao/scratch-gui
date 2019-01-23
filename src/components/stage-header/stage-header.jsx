@@ -15,7 +15,7 @@ import fullScreenIcon from './icon--fullscreen.svg';
 import largeStageIcon from './icon--large-stage.svg';
 import smallStageIcon from './icon--small-stage.svg';
 import unFullScreenIcon from './icon--unfullscreen.svg';
-
+import screenShot from './icon--screenshot.svg';
 import styles from './stage-header.css';
 
 const messages = defineMessages({
@@ -94,6 +94,19 @@ const StageHeaderComponent = function (props) {
                 <div className={styles.stageSizeToggleGroup}>
                     <div>
                         <Button
+                            className={styles.stageButton}
+                            id={'shotBtn'}
+                            onClick={props.onScreenShot}
+                        >
+                            <img
+                                className={styles.stageButtonIcon}
+                                src={screenShot}
+                                title="截图"
+                            />
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
                             className={classNames(
                                 styles.stageButton,
                                 styles.stageButtonFirst,
@@ -167,6 +180,7 @@ StageHeaderComponent.propTypes = {
     isFullScreen: PropTypes.bool.isRequired,
     isPlayerOnly: PropTypes.bool.isRequired,
     onKeyPress: PropTypes.func.isRequired,
+    onScreenShot: PropTypes.func,
     onSetStageFull: PropTypes.func.isRequired,
     onSetStageLarge: PropTypes.func.isRequired,
     onSetStageSmall: PropTypes.func.isRequired,
