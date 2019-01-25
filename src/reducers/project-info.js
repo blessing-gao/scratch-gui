@@ -5,7 +5,7 @@ const SET_PROJECT = 'scratch-gui/projectInfo/SET_PROJECT';
  */
 
 const initialState = {
-    id: null,
+    id: '0',
     name: '未命名',
     userToken: null,
     description: null,

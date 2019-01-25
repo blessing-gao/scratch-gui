@@ -31,16 +31,16 @@ const PublishComponent = props => (
                             autoFocus
                             className={styles.input}
                             placeholder={'请输入作品名称'}
-                            value={props.project.name}
-                            onChange={props.onChangeName}
+                            value={props.projectName}
+                            onChange={props.handleName}
                         />
                     </Box>
                     <Box>
                         <textarea
                             className={classNames(styles.input, styles.textarea)}
                             placeholder={'描述作品的操作说明'}
-                            value={props.project.description}
-                            onChange={props.onChangeDesc}
+                            value={props.projectDesc}
+                            onChange={props.handleDesc}
                         />
                     </Box>
                     <Box>
@@ -79,7 +79,7 @@ const PublishComponent = props => (
                         classNames(styles.okButton
                             // (this.props.iDisable && styles.okButtonDisable)
                         )}
-                    onClick={props.onHandleSave}
+                    onClick={props.handlePublish}
                     // disabled={this.props.iDisable}
                 >
                         发布
@@ -91,24 +91,17 @@ const PublishComponent = props => (
 
 PublishComponent.propTypes = {
     coverSrc: PropTypes.string,
-    onChangeDesc: PropTypes.func,
-    onChangeName: PropTypes.func,
+    handlePublish: PropTypes.func,
+    handleDesc: PropTypes.func,
+    handleName: PropTypes.func,
     onHandleCancel: PropTypes.func,
-    onHandleSave: PropTypes.func,
-    project: PropTypes.shape({
-        name: PropTypes.string,
-        description: PropTypes.string
-    }),
-    shotSrc: PropTypes.string,
+    projectName: PropTypes.string,
+    projectDesc: PropTypes.string,
     tags: PropTypes.arrayOf()
-
 };
 
 PublishComponent.defaultProps = {
-    coverSrc: null,
-    onChangeDesc: () => {},
-    onHandleSave: () => {},
-    onChangeName: () => {}
+    coverSrc: null
 };
 
 export default PublishComponent;

@@ -41,6 +41,26 @@ const getProjectTags = type => new Promise((resolve, reject) => {
     });
 });
 
+// 保存作品
+const saveProject = data => new Promise((resolve, reject) => {
+    const formData = new FormData();
+    if (typeof data === 'object'){
+        for (const k in data){
+            formData.append(k, data[k]);
+        }
+    }
+    xhr({
+        method: 'POST',
+        uri: `${getHost()}/api/project/3.0/saveWork`,
+        body: formData
+    }, (error, response) => {
+        if (error || response.statusCode !== 200) {
+            return reject(error);
+        }
+        return resolve(JSON.parse(response.body));
+    });
+});
+
 // 删除作品
 const deleteProject = id => new Promise((resolve, reject) => {
     xhr({
@@ -91,6 +111,7 @@ export {
     getProjectInfo,
     getUserProjects,
     getProjectTags,
+    saveProject,
     deleteProject,
     uploadResource,
     saveUserResource

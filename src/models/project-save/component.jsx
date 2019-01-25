@@ -21,7 +21,7 @@ const ProjectSaveComponent = props => {
             <div className={classNames(styles.menuBarItem)}>
                 <Button
                     className={classNames(styles.menuBarButton, styles.saveButton)}
-                    onClick={props.onClickSave}
+                    onClick={props.handleSave}
                 >
                     保存
                 </Button>
@@ -29,7 +29,7 @@ const ProjectSaveComponent = props => {
             <div className={classNames(styles.menuBarItem)}>
                 <Button
                     className={classNames(styles.menuBarButton, styles.saveButton)}
-                    onClick={props.onClickSaveAsCopy}
+                    onClick={props.handleSaveCopy}
                 >
                     另存
                 </Button>
@@ -48,8 +48,8 @@ const ProjectSaveComponent = props => {
 };
 
 ProjectSaveComponent.propTypes = {
-    onClickSave: PropTypes.func,
-    onClickSaveAsCopy: PropTypes.func,
+    handleSave: PropTypes.func,
+    handleSaveCopy: PropTypes.func,
     onOpenPublishModal: PropTypes.func
 
 };

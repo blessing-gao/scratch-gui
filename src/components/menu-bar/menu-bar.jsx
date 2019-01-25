@@ -14,8 +14,7 @@ import SBFileUploader from '../../containers/sb-file-uploader.jsx';
 import MenuBarMenu from './menu-bar-menu.jsx';
 import {MenuItem, MenuSection} from '../menu/menu.jsx';
 import ProjectTitleInput from './project-title-input.jsx';
-import AccountNav from '../../containers/account-nav.jsx';
-import LoginDropdown from './login-dropdown.jsx';
+
 import SB3Downloader from '../../containers/sb3-downloader.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
@@ -52,11 +51,7 @@ import {
 
 import styles from './menu-bar.css';
 
-import helpIcon from '../../lib/assets/icon--tutorials.svg';
 import mystuffIcon from './icon--mystuff.png';
-import feedbackIcon from './icon--feedback.svg';
-import profileIcon from './icon--profile.png';
-import communityIcon from './icon--see-community.svg';
 import remixIcon from './icon--remix.svg';
 import dropdownCaret from './dropdown-caret.svg';
 import languageIcon from '../language-selector/language-icon.svg';
@@ -151,20 +146,22 @@ class MenuBar extends React.Component {
             this.props.onRequestCloseEdit();
         }
     }
+
     handleClickNew () {
-        // if canSave===true and canCreateNew===true, it's safe to replace current project,
-        // since we will auto-save first. Else, confirm first.
-        const readyToReplaceProject = (this.props.canSave && this.props.canCreateNew) ||
-            confirm('作品已经保存了吗?'); // eslint-disable-line no-alert
-        this.props.onRequestCloseFile();
-        if (readyToReplaceProject) {
-            this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
+        const r = confirm('作品已经保存了吗?');
+        if (r === true) {
+            // window.location.reload();
+            const url = '/';
+            window.location.href = url;
+        } else {
+            return;
         }
     }
     handleClickRemix () {
         this.props.onClickRemix();
     }
     handleClickSave () {
+
         this.props.onClickSave();
     }
     handleClickSaveAsCopy () {
@@ -325,6 +322,9 @@ class MenuBar extends React.Component {
                                     </MenuItem>
                                 </MenuSection>
                                 <MenuSection>
+                                    <MenuItem onClick={this.handleClickSave}>
+                                        {saveNowMessage}
+                                    </MenuItem>
                                     {this.props.canSave ? (
                                         <MenuItem onClick={this.handleClickSave}>
                                             {saveNowMessage}
@@ -478,8 +478,8 @@ MenuBar.propTypes = {
     onClickSaveAsCopy: PropTypes.func,
     onClickUser: PropTypes.func,
     onLogOut: PropTypes.func,
-    onOpenRegistration: PropTypes.func,
     onOpenProjectModal: PropTypes.func,
+    onOpenRegistration: PropTypes.func,
     onOpenTipLibrary: PropTypes.func,
     onRequestCloseAccount: PropTypes.func,
     onRequestCloseEdit: PropTypes.func,
@@ -493,7 +493,6 @@ MenuBar.propTypes = {
 };
 
 MenuBar.defaultProps = {
-    onOpenWorkLibrary: () => {},
     onClickUser: () => {},
     onOpenLoginModal: () => {}
 };

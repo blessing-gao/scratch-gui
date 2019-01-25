@@ -7,6 +7,9 @@ import Cookies from 'universal-cookie';
  */
 const cookies = new Cookies();
 export const COVER_SERVER = '//cdn.imayuan.com/cover/';
+
+// todo 创作编辑器版本，在发布上线时加入增加配置。
+export const version = '3.0';
 export function getHost () {
     return '';
 }
