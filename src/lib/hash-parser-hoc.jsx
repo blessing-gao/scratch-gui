@@ -13,6 +13,12 @@ import {
  * @param {React.Component} WrappedComponent: component to render
  * @returns {React.Component} component with hash parsing behavior
  */
+export function getQueryString (name) {
+    const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
+    const r = window.location.search.substr(1).match(reg);
+    if (r !== null) return decodeURIComponent(r[2]);
+    return null;
+}
 const HashParserHOC = function (WrappedComponent) {
     class HashParserComponent extends React.Component {
         constructor (props) {
@@ -39,9 +45,12 @@ const HashParserHOC = function (WrappedComponent) {
         componentWillUnmount () {
             window.removeEventListener('hashchange', this.handleHashChange);
         }
+
         handleHashChange () {
-            const hashMatch = window.location.hash.match(/#(\d+)/);
-            const hashProjectId = hashMatch === null ? defaultProjectId : hashMatch[1];
+            // 控制获取作品ID的方式
+            // const hashMatch = window.location.hash.match(/#(\d+)/);
+            const hashMatch = getQueryString('id');
+            const hashProjectId = hashMatch === null ? defaultProjectId : hashMatch;
             this.props.setProjectId(hashProjectId.toString());
             if (hashProjectId !== defaultProjectId) {
                 this.setState({hideIntro: true});

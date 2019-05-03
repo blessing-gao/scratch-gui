@@ -31,17 +31,17 @@ class Storage extends ScratchStorage {
         this.projectHost = projectHost;
     }
     getProjectGetConfig (projectAsset) {
-        return `${this.projectHost}/internalapi/project/${projectAsset.assetId}/get/`;
+        return `${this.projectHost}/project/${projectAsset.assetId}.json`;
     }
     getProjectCreateConfig () {
         return {
-            url: `${this.projectHost}/`,
+            url: `${this.projectHost}/create`,
             withCredentials: true
         };
     }
     getProjectUpdateConfig (projectAsset) {
         return {
-            url: `${this.projectHost}/${projectAsset.assetId}`,
+            url: `${this.projectHost}/${projectAsset.assetId}/update`,
             withCredentials: true
         };
     }
@@ -49,7 +49,7 @@ class Storage extends ScratchStorage {
         this.assetHost = assetHost;
     }
     getAssetGetConfig (asset) {
-        return `${this.assetHost}/internalapi/asset/${asset.assetId}.${asset.dataFormat}/get/`;
+        return `${this.assetHost}/${asset.assetId}.${asset.dataFormat}`;
     }
     setTranslatorFunction (translator) {
         this.translator = translator;
