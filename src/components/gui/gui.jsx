@@ -5,7 +5,7 @@ import React from 'react';
 import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 import {connect} from 'react-redux';
 import MediaQuery from 'react-responsive';
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
 import tabStyles from 'react-tabs/style/react-tabs.css';
 import VM from 'scratch-vm';
 import Renderer from 'scratch-render';
@@ -21,9 +21,6 @@ import MenuBar from '../menu-bar/menu-bar.jsx';
 import CostumeLibrary from '../../containers/costume-library.jsx';
 import BackdropLibrary from '../../containers/backdrop-library.jsx';
 import Watermark from '../../containers/watermark.jsx';
-
-import Backpack from '../../containers/backpack.jsx';
-import PreviewModal from '../../containers/preview-modal.jsx';
 import ImportModal from '../../containers/import-modal.jsx';
 import WebGlModal from '../../containers/webgl-modal.jsx';
 import TipsLibrary from '../../containers/tips-library.jsx';

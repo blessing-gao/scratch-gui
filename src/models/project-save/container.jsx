@@ -16,6 +16,7 @@ class ProjectSaveContainer extends React.Component {
         bindAll(this, [
             'onHandleSave',
             'onHandleSaveCopy',
+            'onHandleSubmit',
             'uploadProject'
         ]);
     }
@@ -48,14 +49,30 @@ class ProjectSaveContainer extends React.Component {
     }
 
     uploadProject (data) {
+        // 如果封面不存在则触发截图
+        const cover = sessionStorage.getItem('cover');
+        if (cover === null || cover === '') {
+            this.saveCover();
+        }
         this.props.saveProjectSb3().then(content => {
             data.file = content;
+            if (cover === null || cover === '') {
+                data.cover = sessionStorage.getItem('cover');
+            } else {
+                data.cover = cover;
+            }
+
             // 可控制是否上传
             saveProject(data).then(res => {
                 // 获取生成的作品id
                 this.props.setProjectId(res.data.id);
             });
         });
+    }
+
+    saveCover() {
+        const shotBtn = document.getElementById('ScreenShotButton');
+        shotBtn.click();
     }
 
     render () {

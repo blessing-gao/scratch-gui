@@ -15,6 +15,7 @@ import fullScreenIcon from './icon--fullscreen.svg';
 import largeStageIcon from './icon--large-stage.svg';
 import smallStageIcon from './icon--small-stage.svg';
 import unFullScreenIcon from './icon--unfullscreen.svg';
+import screenShot from './icon--screenshot.svg';
 
 import styles from './stage-header.css';
 
@@ -70,7 +71,7 @@ const StageHeaderComponent = function (props) {
                     style={{width: stageDimensions.width}}
                 >
                     <Controls vm={vm} />
-                    <Button
+                    {isPlayerOnly ? null : (<Button
                         className={styles.stageButton}
                         onClick={onSetStageUnFull}
                         onKeyPress={onKeyPress}
@@ -82,7 +83,7 @@ const StageHeaderComponent = function (props) {
                             src={unFullScreenIcon}
                             title={props.intl.formatMessage(messages.fullscreenControl)}
                         />
-                    </Button>
+                    </Button>)}
                 </Box>
             </Box>
         );
@@ -92,6 +93,19 @@ const StageHeaderComponent = function (props) {
                 []
             ) : (
                 <div className={styles.stageSizeToggleGroup}>
+                    <div>
+                        <Button
+                            className={styles.stageButton}
+                            id={'ScreenShotButton'}
+                            onClick={props.onScreenShot}
+                        >
+                            <img
+                                className={styles.stageButtonIcon}
+                                src={screenShot}
+                                title="截图"
+                            />
+                        </Button>
+                    </div>
                     <div>
                         <Button
                             className={classNames(
@@ -126,6 +140,20 @@ const StageHeaderComponent = function (props) {
                             />
                         </Button>
                     </div>
+                    <div>
+                        <Button
+                            className={styles.stageButton}
+                            onClick={onSetStageFull}
+                        >
+                            <img
+                                alt={props.intl.formatMessage(messages.fullStageSizeMessage)}
+                                className={styles.stageButtonIcon}
+                                draggable={false}
+                                src={fullScreenIcon}
+                                title={props.intl.formatMessage(messages.fullscreenControl)}
+                            />
+                        </Button>
+                    </div>
                 </div>
             );
         header = (
@@ -134,20 +162,6 @@ const StageHeaderComponent = function (props) {
                     <Controls vm={vm} />
                     <div className={styles.stageSizeRow}>
                         {stageControls}
-                        <div>
-                            <Button
-                                className={styles.stageButton}
-                                onClick={onSetStageFull}
-                            >
-                                <img
-                                    alt={props.intl.formatMessage(messages.fullStageSizeMessage)}
-                                    className={styles.stageButtonIcon}
-                                    draggable={false}
-                                    src={fullScreenIcon}
-                                    title={props.intl.formatMessage(messages.fullscreenControl)}
-                                />
-                            </Button>
-                        </div>
                     </div>
                 </Box>
             </Box>
@@ -167,6 +181,7 @@ StageHeaderComponent.propTypes = {
     isFullScreen: PropTypes.bool.isRequired,
     isPlayerOnly: PropTypes.bool.isRequired,
     onKeyPress: PropTypes.func.isRequired,
+    onScreenShot: PropTypes.func,
     onSetStageFull: PropTypes.func.isRequired,
     onSetStageLarge: PropTypes.func.isRequired,
     onSetStageSmall: PropTypes.func.isRequired,

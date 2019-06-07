@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import GUI from '../containers/gui.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
+
 const WrappedGui = AppStateHOC(HashParserHOC(GUI));
 
 
@@ -35,7 +36,7 @@ class Player extends React.Component {
             <div style={{display: 'flex'}}>
                 <WrappedGui
                     isPlayerOnly
-                    isFullScreen={false}
+                    isFullScreen={true}
                 />
                 <iframe
                     allowFullScreen

@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
@@ -10,49 +9,30 @@ import GUI from '../containers/gui.jsx';
 import HashParserHOC from '../lib/hash-parser-hoc.jsx';
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import TitledHOC from '../lib/titled-hoc.jsx';
-
-import {setPlayer} from '../reducers/mode';
+import styles from './player.css';
 
 if (process.env.NODE_ENV === 'production' && typeof window === 'object') {
     // Warn before navigating away
     window.onbeforeunload = () => true;
 }
 
-import styles from './player.css';
+const WrappedGui = AppStateHOC(HashParserHOC(GUI));
 
-const Player = ({isPlayerOnly, onSeeInside, projectId}) => (
+const Player = () => (
     <Box
-        className={classNames({
-            [styles.stageOnly]: isPlayerOnly
-        })}
+        className={classNames(styles.stageOnly)}
     >
-        {isPlayerOnly && <button onClick={onSeeInside}>{'See inside'}</button>}
-        <GUI
-            enableCommunity
-            isPlayerOnly={isPlayerOnly}
-            projectId={projectId}
+        <WrappedGui
+            isFullScreen
+            isPlayerOnly
         />
     </Box>
 );
 
 Player.propTypes = {
-    isPlayerOnly: PropTypes.bool,
-    onSeeInside: PropTypes.func,
-    projectId: PropTypes.string
 };
 
-const mapStateToProps = state => ({
-    isPlayerOnly: state.scratchGui.mode.isPlayerOnly
-});
-
-const mapDispatchToProps = dispatch => ({
-    onSeeInside: () => dispatch(setPlayer(false))
-});
-
-const ConnectedPlayer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Player);
+const ConnectedPlayer = connect()(Player);
 
 // note that redux's 'compose' function is just being used as a general utility to make
 // the hierarchy of HOC constructor calls clearer here; it has nothing to do with redux's
