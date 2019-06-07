@@ -2,14 +2,11 @@ import bindAll from 'lodash.bindall';
 import React from 'react';
 
 import {connect} from 'react-redux';
-import {intlShape, injectIntl} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 
-import {
-    openSpriteLibrary,
-    closeSpriteLibrary
-} from '../reducers/modals';
+import {closeSpriteLibrary, openSpriteLibrary} from '../reducers/modals';
 
-import {activateTab, COSTUMES_TAB_INDEX, BLOCKS_TAB_INDEX} from '../reducers/editor-tab';
+import {activateTab, BLOCKS_TAB_INDEX, COSTUMES_TAB_INDEX} from '../reducers/editor-tab';
 import {setReceivedBlocks} from '../reducers/hovered-target';
 import {setRestore} from '../reducers/restore-deletion';
 import DragConstants from '../lib/drag-constants';
@@ -19,7 +16,7 @@ import {handleFileUpload, spriteUpload} from '../lib/file-uploader.js';
 import sharedMessages from '../lib/shared-messages';
 import {emptySprite} from '../lib/empty-assets';
 import {highlightTarget} from '../reducers/targets';
-import {fetchSprite, fetchCode} from '../lib/backpack-api';
+import {fetchCode, fetchSprite} from '../lib/service/backpack-api';
 
 class TargetPane extends React.Component {
     constructor (props) {

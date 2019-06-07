@@ -7,7 +7,6 @@ import classNames from 'classnames';
 
 /**
  * 向服务端保存组件
- * // todo 全局控制上传中的冻结状态
  * @param props
  * @returns {*}
  * @constructor
@@ -15,31 +14,46 @@ import classNames from 'classnames';
 
 const ProjectSaveComponent = props => (
     <Box className={classNames(styles.menuBarItem)}>
-        <div className={classNames(styles.menuBarItem)}>
-            <Button
-                className={classNames(styles.menuBarButton, styles.saveButton)}
-                onClick={props.handleSave}
-            >
-                保存
-            </Button>
-        </div>
-        <div className={classNames(styles.menuBarItem)}>
-            <Button
-                className={classNames(styles.menuBarButton, styles.saveButton)}
-                onClick={props.handleSaveCopy}
-            >
-                另存
-            </Button>
-        </div>
+        {props.canSave ? (
+            <div className={classNames(styles.menuBarItem)}>
+                <Button
+                    className={classNames(styles.menuBarButton, styles.saveButton)}
+                    onClick={props.handleSave}
+                >
+                    保存
+                </Button>
+            </div>
+        ) : null}
+        {props.canCopy ? (
+            <div className={classNames(styles.menuBarItem)}>
+                <Button
+                    className={classNames(styles.menuBarButton, styles.saveButton)}
+                    onClick={props.handleSaveCopy}
+                >
+                    另存
+                </Button>
+            </div>
+        ) : null}
+        {props.canSubmit ? (
+            <div className={classNames(styles.menuBarItem)}>
+                <Button
+                    className={classNames(styles.menuBarButton, styles.saveButton)}
+                    onClick={props.handleSubmit}
+                >
+                    提交
+                </Button>
+            </div>
+        ) : null}
     </Box>
 );
 
 ProjectSaveComponent.propTypes = {
+    canCopy: PropTypes.bool,
+    canSave: PropTypes.bool,
+    canSubmit: PropTypes.bool,
     handleSave: PropTypes.func,
-    handleSaveCopy: PropTypes.func
-};
-ProjectSaveComponent.defaultProps = {
-    canSave: true
+    handleSaveCopy: PropTypes.func,
+    handleSubmit: PropTypes.func
 };
 
 export default ProjectSaveComponent;

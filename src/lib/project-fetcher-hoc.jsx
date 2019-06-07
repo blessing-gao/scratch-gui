@@ -1,21 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {intlShape, injectIntl} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 import bindAll from 'lodash.bindall';
 import {connect} from 'react-redux';
 
 import {
-    LoadingStates,
     defaultProjectId,
     getIsFetchingWithId,
+    LoadingStates,
     onFetchedProjectData,
     projectError,
+    setProjectCanCopy,
+    setProjectCanSave,
     setProjectId
 } from '../reducers/project-state';
 
-import analytics from './analytics';
 import log from './log';
 import storage from './storage';
+import {ASSET_HOST, PROJECT_HOST} from '../config';
+import {getProjectInfo} from './service/project-api';
+import {setProjectTitle} from '../reducers/project-title';
 
 /* Higher Order Component to provide behavior for loading projects by id. If
  * there's no id, the default project is loaded.
@@ -56,6 +60,19 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             }
         }
         fetchProject (projectId, loadingState) {
+            if (projectId !== defaultProjectId) {
+                getProjectInfo(projectId).then(contents => {
+                    if (contents) {
+                        if (contents.canCopy) this.props.setProjectCanCopy(contents.canCopy);
+                        if (contents.canSave) this.props.setProjectCanSave(contents.canSave);
+                        if (contents.canSubmit) this.props.setProjectCanSave(contents.canSubmit);
+                        this.props.onUpdateProjectTitle(contents.programname);
+                    }
+                })
+                    .catch(error => {
+                        throw error;
+                    });
+            }
             return storage
                 .load(storage.AssetType.Project, projectId, storage.DataFormat.JSON)
                 .then(projectAsset => {
@@ -64,15 +81,7 @@ const ProjectFetcherHOC = function (WrappedComponent) {
                     }
                 })
                 .then(() => {
-                    if (projectId !== defaultProjectId) {
-                        // if not default project, register a project load event
-                        analytics.event({
-                            category: 'project',
-                            action: 'Load Project',
-                            label: projectId,
-                            nonInteraction: true
-                        });
-                    }
+                    console.log('作品加载成功');
                 })
                 .catch(err => {
                     this.props.onError(err);
@@ -111,14 +120,17 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         loadingState: PropTypes.oneOf(LoadingStates),
         onError: PropTypes.func,
         onFetchedProjectData: PropTypes.func,
+        onUpdateProjectTitle: PropTypes.func,
         projectHost: PropTypes.string,
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         reduxProjectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        setProjectCanCopy: PropTypes.func,
+        setProjectCanSave: PropTypes.func,
         setProjectId: PropTypes.func
     };
     ProjectFetcherComponent.defaultProps = {
-        assetHost: '//cdn.imayuan.com/',
-        projectHost: '//cdn.imayuan.com'
+        assetHost: `${ASSET_HOST}`,
+        projectHost: `${PROJECT_HOST}`
     };
 
     const mapStateToProps = state => ({
@@ -130,7 +142,10 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         onError: error => dispatch(projectError(error)),
         onFetchedProjectData: (projectData, loadingState) =>
             dispatch(onFetchedProjectData(projectData, loadingState)),
-        setProjectId: projectId => dispatch(setProjectId(projectId))
+        onUpdateProjectTitle: title => dispatch(setProjectTitle(title)),
+        setProjectId: projectId => dispatch(setProjectId(projectId)),
+        setProjectCanSave: flag => dispatch(setProjectCanSave(flag)),
+        setProjectCanCopy: flag => dispatch(setProjectCanCopy(flag))
     });
     // Allow incoming props to override redux-provided props. Used to mock in tests.
     const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign(

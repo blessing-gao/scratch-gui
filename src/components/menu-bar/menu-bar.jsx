@@ -21,29 +21,29 @@ import TurboMode from '../../containers/turbo-mode.jsx';
 import {openTipsLibrary} from '../../reducers/modals';
 import {setPlayer} from '../../reducers/mode';
 import {
-    getIsUpdating,
     getIsShowingProject,
-    requestNewProject,
+    getIsUpdating,
     remixProject,
-    updateProject,
-    saveProjectAsCopy
+    requestNewProject,
+    saveProjectAsCopy,
+    updateProject
 } from '../../reducers/project-state';
 import {
-    openAccountMenu,
-    closeAccountMenu,
     accountMenuOpen,
-    openFileMenu,
-    closeFileMenu,
-    fileMenuOpen,
-    openEditMenu,
+    closeAccountMenu,
     closeEditMenu,
-    editMenuOpen,
-    openLanguageMenu,
+    closeFileMenu,
     closeLanguageMenu,
-    languageMenuOpen,
-    openLoginMenu,
     closeLoginMenu,
-    loginMenuOpen
+    editMenuOpen,
+    fileMenuOpen,
+    languageMenuOpen,
+    loginMenuOpen,
+    openAccountMenu,
+    openEditMenu,
+    openFileMenu,
+    openLanguageMenu,
+    openLoginMenu
 } from '../../reducers/menus';
 
 import styles from './menu-bar.css';
@@ -462,6 +462,17 @@ class MenuBar extends React.Component {
                         />
                     </div>
                     <ProjectSaveContainer />
+                </div>
+                <div className={styles.accountInfoGroup}>
+                    <div
+                        className={classNames(
+                            styles.menuBarItem,
+                            styles.hoverable,
+                            styles.mystuffButton
+                        )}
+                    >
+                        <span>小学生</span>
+                    </div>
                 </div>
             </Box>
         );

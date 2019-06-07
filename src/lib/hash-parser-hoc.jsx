@@ -3,11 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {
-    defaultProjectId,
-    getIsFetchingWithoutId,
-    setProjectId
-} from '../reducers/project-state';
+import {defaultProjectId, getIsFetchingWithoutId, setNewProjectId, setProjectId} from '../reducers/project-state';
 
 /* Higher Order Component to get the project id from location.hash
  * @param {React.Component} WrappedComponent: component to render
@@ -49,8 +45,12 @@ const HashParserHOC = function (WrappedComponent) {
         handleHashChange () {
             // 控制获取作品ID的方式
             // const hashMatch = window.location.hash.match(/#(\d+)/);
-            const hashMatch = getQueryString('id');
-            const hashProjectId = hashMatch === null ? defaultProjectId : hashMatch;
+            const projectId = getQueryString('id');
+            const newId = getQueryString('newId');
+            // 指定作品新保存的id
+            if (newId === null) this.props.setNewProjectId(newId);
+            const hashProjectId = projectId === null ? defaultProjectId : projectId;
+            console.log('hash')
             this.props.setProjectId(hashProjectId.toString());
             if (hashProjectId !== defaultProjectId) {
                 this.setState({hideIntro: true});
@@ -76,7 +76,9 @@ const HashParserHOC = function (WrappedComponent) {
     HashParserComponent.propTypes = {
         isFetchingWithoutId: PropTypes.bool,
         reduxProjectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        setProjectId: PropTypes.func
+        setProjectId: PropTypes.func,
+        setNewProjectId: PropTypes.func
+
     };
     const mapStateToProps = state => {
         const loadingState = state.scratchGui.projectState.loadingState;
@@ -86,7 +88,8 @@ const HashParserHOC = function (WrappedComponent) {
         };
     };
     const mapDispatchToProps = dispatch => ({
-        setProjectId: projectId => dispatch(setProjectId(projectId))
+        setProjectId: projectId => dispatch(setProjectId(projectId)),
+        setNewProjectId: newProjectId => dispatch(setNewProjectId(newProjectId))
     });
     // Allow incoming props to override redux-provided props. Used to mock in tests.
     const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign(

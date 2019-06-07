@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import bindAll from 'lodash.bindall';
 import BackpackComponent from '../components/backpack/backpack.jsx';
 import {
+    codePayload,
+    costumePayload,
+    deleteBackpackObject,
     getBackpackContents,
     saveBackpackObject,
-    deleteBackpackObject,
     soundPayload,
-    costumePayload,
-    spritePayload,
-    codePayload
-} from '../lib/backpack-api';
+    spritePayload
+} from '../lib/service/backpack-api';
 import DragConstants from '../lib/drag-constants';
 import DropAreaHOC from '../lib/drop-area-hoc.jsx';
 

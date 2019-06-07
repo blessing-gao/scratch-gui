@@ -2,7 +2,7 @@ import bindAll from 'lodash.bindall';
 import omit from 'lodash.omit';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {intlShape, injectIntl} from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
 
 import {connect} from 'react-redux';
 import {openBackdropLibrary} from '../reducers/modals';
@@ -12,12 +12,12 @@ import DragConstants from '../lib/drag-constants';
 import DropAreaHOC from '../lib/drop-area-hoc.jsx';
 import {emptyCostume} from '../lib/empty-assets';
 import sharedMessages from '../lib/shared-messages';
-import {fetchCode} from '../lib/backpack-api';
+import {fetchCode} from '../lib/service/backpack-api';
 
 import StageSelectorComponent from '../components/stage-selector/stage-selector.jsx';
 
 import backdropLibraryContent from '../lib/libraries/backdrops.json';
-import {handleFileUpload, costumeUpload} from '../lib/file-uploader.js';
+import {costumeUpload, handleFileUpload} from '../lib/file-uploader.js';
 
 const dragTypes = [
     DragConstants.COSTUME,

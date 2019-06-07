@@ -11,6 +11,10 @@ const DONE_REMIXING = 'scratch-gui/project-state/DONE_REMIXING';
 const DONE_UPDATING = 'scratch-gui/project-state/DONE_UPDATING';
 const DONE_UPDATING_BEFORE_NEW = 'scratch-gui/project-state/DONE_UPDATING_BEFORE_NEW';
 const SET_PROJECT_ID = 'scratch-gui/project-state/SET_PROJECT_ID';
+const SET_NEW_PROJECT_ID = 'scratch-gui/project-state/SET_NEW_PROJECT_ID';
+const SET_PROJECT_CAN_SAVE = 'scratch-gui/project-state/SET_PROJECT_CAN_SAVE';
+const SET_PROJECT_CAN_COPY = 'scratch-gui/project-state/SET_PROJECT_CAN_COPY';
+const SET_PROJECT_CAN_SUBMIT = 'scratch-gui/project-state/SET_PROJECT_CAN_SUBMIT';
 const START_CREATING_COPY = 'scratch-gui/project-state/START_CREATING_COPY';
 const START_CREATING_NEW = 'scratch-gui/project-state/START_CREATING_NEW';
 const START_ERROR = 'scratch-gui/project-state/START_ERROR';
@@ -85,6 +89,10 @@ const initialState = {
     error: null,
     projectData: null,
     projectId: null,
+    newProjectId: null,
+    canSave: true,
+    canCopy: true,
+    canSubmit: true,
     loadingState: LoadingState.NOT_LOADED
 };
 
@@ -203,6 +211,14 @@ const reducer = function (state, action) {
             });
         }
         return state;
+        case SET_PROJECT_CAN_SAVE:
+            return Object.assign({}, state, {
+                canSave: action.canSave
+            });
+        case SET_PROJECT_CAN_COPY:
+            return Object.assign({}, state, {
+                canCopy: action.canCopy
+            });
     case START_CREATING_NEW:
         if (state.loadingState === LoadingState.SHOWING_WITHOUT_ID) {
             return Object.assign({}, state, {
@@ -379,6 +395,27 @@ const setProjectId = id => ({
     projectId: id
 });
 
+
+const setNewProjectId = id => ({
+    type: SET_NEW_PROJECT_ID,
+    newProjectId: id
+});
+
+const setProjectCanSave = flag => ({
+    type: SET_PROJECT_CAN_SAVE,
+    canSave: flag
+});
+
+const setProjectCanCopy = flag => ({
+    type: SET_PROJECT_CAN_COPY,
+    canCopy: flag
+});
+
+const setProjectCanSubmit = flag => ({
+    type: SET_PROJECT_CAN_SUBMIT,
+    canSubmit: flag
+});
+
 const requestNewProject = needSave => {
     if (needSave) return {type: START_UPDATING_BEFORE_CREATING_NEW};
     return {type: START_FETCHING_NEW};
@@ -428,5 +465,9 @@ export {
     requestNewProject,
     saveProjectAsCopy,
     setProjectId,
+    setNewProjectId,
+    setProjectCanSave,
+    setProjectCanCopy,
+    setProjectCanSubmit,
     updateProject
 };

@@ -7,23 +7,10 @@ import VM from 'scratch-vm';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import ErrorBoundaryHOC from '../lib/error-boundary-hoc.jsx';
-import {openExtensionLibrary} from '../reducers/modals';
-import {
-    getIsError,
-    getIsShowingProject
-} from '../reducers/project-state';
+import {closeBackdropLibrary, closeCostumeLibrary, openExtensionLibrary} from '../reducers/modals';
+import {getIsError, getIsShowingProject} from '../reducers/project-state';
 import {setProjectTitle} from '../reducers/project-title';
-import {
-    activateTab,
-    BLOCKS_TAB_INDEX,
-    COSTUMES_TAB_INDEX,
-    SOUNDS_TAB_INDEX
-} from '../reducers/editor-tab';
-
-import {
-    closeCostumeLibrary,
-    closeBackdropLibrary
-} from '../reducers/modals';
+import {activateTab, BLOCKS_TAB_INDEX, COSTUMES_TAB_INDEX, SOUNDS_TAB_INDEX} from '../reducers/editor-tab';
 
 import FontLoaderHOC from '../lib/font-loader-hoc.jsx';
 import LocalizationHOC from '../lib/localization-hoc.jsx';
@@ -169,7 +156,8 @@ const mapDispatchToProps = dispatch => ({
     onActivateSoundsTab: () => dispatch(activateTab(SOUNDS_TAB_INDEX)),
     onRequestCloseBackdropLibrary: () => dispatch(closeBackdropLibrary()),
     onRequestCloseCostumeLibrary: () => dispatch(closeCostumeLibrary()),
-    onUpdateReduxProjectTitle: title => dispatch(setProjectTitle(title))
+    onUpdateReduxProjectTitle: title => dispatch(setProjectTitle(title)),
+    onUpdateProjectTitle: title => dispatch(setProjectTitle(title))
 });
 
 const ConnectedGUI = injectIntl(connect(
