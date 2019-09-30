@@ -65,7 +65,7 @@ class ProjectSaveContainer extends React.Component {
             // 可控制是否上传
             saveProject(data).then(res => {
                 // 获取生成的作品id
-                this.props.setProjectId(res.data.id);
+                this.props.setProjectId(res.id);
             });
         });
     }

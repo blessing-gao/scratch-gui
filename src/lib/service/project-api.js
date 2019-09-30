@@ -1,15 +1,15 @@
 import xhr from 'xhr';
 import {API_HOST} from '../../config';
 
-const getCurrentUser = id => new Promise((resolve, reject) => {
+const getCurrentUser = () => new Promise((resolve, reject) => {
     xhr({
-        method: 'GET',
-        uri: `${API_HOST}/api/user/getInfo?id=${id}`
+        method: 'POST',
+        uri: `${API_HOST}/api/project/getUserInfo`
     }, (error, response) => {
         if (error || response.statusCode !== 200) {
             return reject(error);
         }
-        return resolve(JSON.parse(response.body).data1);
+        return resolve(JSON.parse(response.body).data);
     });
 });
 
@@ -42,7 +42,7 @@ const saveProject = data => new Promise((resolve, reject) => {
         if (error || response.statusCode !== 200) {
             return reject(error);
         }
-        return resolve(JSON.parse(response.body));
+        return resolve(JSON.parse(response.body).data);
     });
 });
 

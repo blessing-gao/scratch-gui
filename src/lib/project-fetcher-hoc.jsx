@@ -10,15 +10,17 @@ import {
     LoadingStates,
     onFetchedProjectData,
     projectError,
+    setHeaderCover,
     setProjectCanCopy,
     setProjectCanSave,
-    setProjectId
+    setProjectId,
+    setUsername
 } from '../reducers/project-state';
 
 import log from './log';
 import storage from './storage';
 import {ASSET_HOST, PROJECT_HOST} from '../config';
-import {getProjectInfo} from './service/project-api';
+import {getCurrentUser, getProjectInfo} from './service/project-api';
 import {setProjectTitle} from '../reducers/project-title';
 
 /* Higher Order Component to provide behavior for loading projects by id. If
@@ -31,7 +33,8 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         constructor (props) {
             super(props);
             bindAll(this, [
-                'fetchProject'
+                'fetchProject',
+                'fetchUser'
             ]);
             storage.setProjectHost(props.projectHost);
             storage.setAssetHost(props.assetHost);
@@ -58,7 +61,27 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             if (this.props.isFetchingWithId && !prevProps.isFetchingWithId) {
                 this.fetchProject(this.props.reduxProjectId, this.props.loadingState);
             }
+            this.fetchUser();
         }
+
+        fetchUser() {
+            getCurrentUser().then(user => {
+                if (user !== null && typeof user !== 'undefined') {
+                    if (user.username && user.username !== null && user.username !== '') {
+                        this.props.setUsername(user.username);
+                    }
+
+                    if (user.head && user.head !== null && user.head !== '') {
+                        this.props.setHeaderCover(user.head);
+                    }
+                }
+                console.log(`当前登录用户：${user}`);
+            })
+                .catch(error => {
+                    throw error;
+                });
+        }
+
         fetchProject (projectId, loadingState) {
             if (projectId !== defaultProjectId) {
                 getProjectInfo(projectId).then(contents => {
@@ -124,9 +147,11 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         projectHost: PropTypes.string,
         projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         reduxProjectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        setHeaderCover: PropTypes.func,
         setProjectCanCopy: PropTypes.func,
         setProjectCanSave: PropTypes.func,
-        setProjectId: PropTypes.func
+        setProjectId: PropTypes.func,
+        setUsername: PropTypes.func
     };
     ProjectFetcherComponent.defaultProps = {
         assetHost: `${ASSET_HOST}`,
@@ -145,7 +170,9 @@ const ProjectFetcherHOC = function (WrappedComponent) {
         onUpdateProjectTitle: title => dispatch(setProjectTitle(title)),
         setProjectId: projectId => dispatch(setProjectId(projectId)),
         setProjectCanSave: flag => dispatch(setProjectCanSave(flag)),
-        setProjectCanCopy: flag => dispatch(setProjectCanCopy(flag))
+        setProjectCanCopy: flag => dispatch(setProjectCanCopy(flag)),
+        setUsername: username => dispatch(setUsername(username)),
+        setHeaderCover: cover => dispatch(setHeaderCover(cover))
     });
     // Allow incoming props to override redux-provided props. Used to mock in tests.
     const mergeProps = (stateProps, dispatchProps, ownProps) => Object.assign(

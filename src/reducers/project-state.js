@@ -15,6 +15,8 @@ const SET_NEW_PROJECT_ID = 'scratch-gui/project-state/SET_NEW_PROJECT_ID';
 const SET_PROJECT_CAN_SAVE = 'scratch-gui/project-state/SET_PROJECT_CAN_SAVE';
 const SET_PROJECT_CAN_COPY = 'scratch-gui/project-state/SET_PROJECT_CAN_COPY';
 const SET_PROJECT_CAN_SUBMIT = 'scratch-gui/project-state/SET_PROJECT_CAN_SUBMIT';
+const SET_USERNAME = 'scratch-gui/project-state/SET_USERNAME';
+const SET_HEADER_COVER = 'scratch-gui/project-state/SET_HEADER_COVER';
 const START_CREATING_COPY = 'scratch-gui/project-state/START_CREATING_COPY';
 const START_CREATING_NEW = 'scratch-gui/project-state/START_CREATING_NEW';
 const START_ERROR = 'scratch-gui/project-state/START_ERROR';
@@ -93,7 +95,9 @@ const initialState = {
     canSave: true,
     canCopy: true,
     canSubmit: true,
-    loadingState: LoadingState.NOT_LOADED
+    loadingState: LoadingState.NOT_LOADED,
+    username: null,
+    headerCover: null
 };
 
 const reducer = function (state, action) {
@@ -211,14 +215,14 @@ const reducer = function (state, action) {
             });
         }
         return state;
-        case SET_PROJECT_CAN_SAVE:
-            return Object.assign({}, state, {
-                canSave: action.canSave
-            });
-        case SET_PROJECT_CAN_COPY:
-            return Object.assign({}, state, {
-                canCopy: action.canCopy
-            });
+        // case SET_PROJECT_CAN_SAVE:
+        //     return Object.assign({}, state, {
+        //         canSave: action.canSave
+        //     });
+        // case SET_PROJECT_CAN_COPY:
+        //     return Object.assign({}, state, {
+        //         canCopy: action.canCopy
+        //     });
     case START_CREATING_NEW:
         if (state.loadingState === LoadingState.SHOWING_WITHOUT_ID) {
             return Object.assign({}, state, {
@@ -416,6 +420,16 @@ const setProjectCanSubmit = flag => ({
     canSubmit: flag
 });
 
+const setUsername = username => ({
+    type: SET_USERNAME,
+    username: username
+});
+
+const setHeaderCover = cover => ({
+    type: SET_HEADER_COVER,
+    headerCover: cover
+});
+
 const requestNewProject = needSave => {
     if (needSave) return {type: START_UPDATING_BEFORE_CREATING_NEW};
     return {type: START_FETCHING_NEW};
@@ -469,5 +483,7 @@ export {
     setProjectCanSave,
     setProjectCanCopy,
     setProjectCanSubmit,
+    setUsername,
+    setHeaderCover,
     updateProject
 };

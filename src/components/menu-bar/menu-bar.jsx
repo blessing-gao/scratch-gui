@@ -471,7 +471,11 @@ class MenuBar extends React.Component {
                             styles.mystuffButton
                         )}
                     >
-                        <span>小学生</span>
+                        <img
+                            className={styles.profileIcon}
+                            src={this.props.headerCove}
+                        />
+                        <span>{this.props.username === null ? '未登录' : this.props.username}</span>
                     </div>
                 </div>
             </Box>
@@ -490,6 +494,7 @@ MenuBar.propTypes = {
     editMenuOpen: PropTypes.bool,
     enableCommunity: PropTypes.bool,
     fileMenuOpen: PropTypes.bool,
+    headerCove: PropTypes.string,
     intl: intlShape,
     isRtl: PropTypes.bool,
     isShared: PropTypes.bool,
@@ -530,7 +535,6 @@ MenuBar.defaultProps = {
 
 const mapStateToProps = state => {
     const loadingState = state.scratchGui.projectState.loadingState;
-    const user = state.session && state.session.session && state.session.session.user;
     return {
         accountMenuOpen: accountMenuOpen(state),
         fileMenuOpen: fileMenuOpen(state),
@@ -540,8 +544,8 @@ const mapStateToProps = state => {
         isShowingProject: getIsShowingProject(loadingState),
         languageMenuOpen: languageMenuOpen(state),
         loginMenuOpen: loginMenuOpen(state),
-        sessionExists: state.session && typeof state.session.session !== 'undefined',
-        username: user ? user.username : null
+        username: state.scratchGui.projectState.username,
+        headerCover: state.scratchGui.projectState.headerCover
     };
 };
 
